@@ -2,6 +2,7 @@
 import * as THREE from "three";
 
 const state = () => ({
+    zoneTypes:[{id:'Y', name:'Yard'},{id:'A', name:'Area'},{id:'S', name:'Section'},{id:'Z', name:'Zone'}],
     yards: [{
         IdZone:999999999,
         Zone:'YARD1',
@@ -10,9 +11,9 @@ const state = () => ({
         ColorForeground:'#000000',
         PosXMin: 12000,
         PosXMax: 432001,
-        PosYmin: 0,
+        PosYMin: 0,
         PosYMax: 135001,
-        PosZmin: -400,
+        PosZMin: -400,
         PosZMax: 1250,
     }],
     areas:[{
@@ -23,9 +24,9 @@ const state = () => ({
         ColorForeground:'#000000',
         PosXMin: 72001,
         PosXMax: 228000,
-        PosYmin: 99001,
+        PosYMin: 99001,
         PosYMax: 135000,
-        PosZmin: 0,
+        PosZMin: 0,
         PosZMax: 1250,
     },{
         IdZone:200000000,
@@ -35,9 +36,9 @@ const state = () => ({
         ColorForeground:'#000000',
         PosXMin: 74001,
         PosXMax: 432000,
-        PosYmin: 63001,
+        PosYMin: 63001,
         PosYMax: 99000,
-        PosZmin: 0,
+        PosZMin: 0,
         PosZMax: 1250,
     },{
         IdZone:300000000,
@@ -47,9 +48,9 @@ const state = () => ({
         ColorForeground:'#000000',
         PosXMin: 12001,
         PosXMax: 408000,
-        PosYmin: 36001,
+        PosYMin: 36001,
         PosYMax: 63000,
-        PosZmin: 0,
+        PosZMin: 0,
         PosZMax: 1250,
     },{
         IdZone:400000000,
@@ -59,9 +60,9 @@ const state = () => ({
         ColorForeground:'#000000',
         PosXMin: 12001,
         PosXMax: 156000,
-        PosYmin: 1,
+        PosYMin: 1,
         PosYMax: 36000,
-        PosZmin: 0,
+        PosZMin: 0,
         PosZMax: 1250,
     }]
 })
@@ -71,7 +72,7 @@ const mutations = {
 
 function createMeshForYardElement(elem, scale, offsetX, offsetY){
     let width = (elem.PosXMax - elem.PosXMin) / scale;
-    let height = (elem.PosYMax - elem.PosYmin) / scale;
+    let height = (elem.PosYMax - elem.PosYMin) / scale;
 
     let geometry = new THREE.BoxGeometry(width, height, 0.001);
     let material = new THREE.MeshBasicMaterial({
@@ -80,9 +81,9 @@ function createMeshForYardElement(elem, scale, offsetX, offsetY){
     });
     let mesh = new THREE.Mesh(geometry, material);
 
-    mesh.position.y = elem.PosYmin / scale + height / 2 - offsetY;
+    mesh.position.y = elem.PosYMin / scale + height / 2 - offsetY;
     mesh.position.x = elem.PosXMin / scale + width / 2 - offsetX;
-    mesh.position.z = elem.PosZmin / scale;
+    mesh.position.z = elem.PosZMin / scale;
 
     return mesh;
 }

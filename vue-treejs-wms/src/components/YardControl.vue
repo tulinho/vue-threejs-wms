@@ -1,6 +1,8 @@
 <template>
-    <div>
+    <div class="yard-main">
         <div id="yard-container" class="yard-container">
+          <presentation-menu/>
+          <v-btn v-if="!showMenu" absolute top right color="blue darken-1 white--text"  @click="show(true)">Presentation Menu</v-btn>
         </div>
     </div>
 </template>
@@ -9,6 +11,7 @@
 <script>
 //import * as THREE from "three";
 import { mapState, mapActions } from "vuex";
+import PresentationMenu from "./PresentationMenu";
 
 const computedFromCamera = mapState("camera", {
   zoom: state => state.zoom,
@@ -19,13 +22,22 @@ const computedFromYard = mapState("yard", {
   yards: state => state.yards,
   areas: state => state.areas
 })
+const computedFromMenu = mapState("menu", {
+  showMenu: (state) => state.showMenu
+});
 
 const cameraMethods = mapActions("camera", ["setContainer","initialize","render", "rotateScene", "moveCamera", "zoomCamera"])
 const yardMethods = mapActions("yard", ["draw"])
+const menuMethods = mapActions("menu", ["show"])
 
 export default {
-  components: { },
-  computed: Object.assign({}, computedFromCamera, computedFromYard),
+  components: { PresentationMenu },
+  computed: Object.assign({
+    drawer:{
+      get(){ return true;},
+      set(value){ this.show(value);}
+    }
+  }, computedFromCamera, computedFromYard, computedFromMenu),
   setup() {},    
   data() {
     return {
@@ -95,7 +107,7 @@ export default {
 
       this.mouseDown = false;
     },
-  }, cameraMethods, yardMethods),
+  }, cameraMethods, menuMethods, yardMethods),
   mounted() {
     let container = document.getElementById("yard-container");
     this.setContainer(container);
@@ -131,6 +143,7 @@ canvas {
   height: calc(95vh - 200px);
   margin: auto;
   margin-top: 10px;
+  position: relative;
   width: 95vw;
 }
 </style>

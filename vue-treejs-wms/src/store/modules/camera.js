@@ -58,7 +58,7 @@ const actions = {
 
         let renderer = new THREE.WebGLRenderer({ antialias: true });
         renderer.setClearColor(context.state.clearColor);
-        renderer.setSize(context.state.container.offsetWidth - 2, context.state.container.offsetHeight - 2);
+        renderer.setSize(context.state.container.offsetWidth - 2, context.state.container.offsetHeight - 50);
   
         context.state.container.appendChild(renderer.domElement);
 
@@ -83,6 +83,12 @@ const actions = {
     moveCamera(context, {deltaX, deltaY}) {
         context.state.camera.position.x -= deltaX / 1;
         context.state.camera.position.y += deltaY / 1;
+    },
+
+    moveCameraTo(context, {x, y, z}) {
+        context.state.camera.position.x = x;
+        context.state.camera.position.y = y;
+        context.state.camera.position.z = z;
     },
 }
 
