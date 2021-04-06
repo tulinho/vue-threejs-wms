@@ -1,13 +1,13 @@
 <template>
-  <Yard/>
+  <YardControl/>
 </template>
 
 
 <script>
-import Yard from "@/components/Yard"
+import YardControl from "@/components/YardControl"
 
 export default {
-  components: { Yard },
+  components: { YardControl },
   data() {
     return {}
   },

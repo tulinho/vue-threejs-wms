@@ -5,7 +5,7 @@ const state = () => ({
         value: 1000
     },
     zoomMin: 0,
-    zoomMax: 3000
+    zoomMax: 4000
 })
 
 const mutations = {

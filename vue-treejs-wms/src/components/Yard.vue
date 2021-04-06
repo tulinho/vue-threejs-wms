@@ -123,7 +123,7 @@ export default {
         50,
         container.offsetWidth / container.offsetHeight,
         0.1,
-        2000
+        4000
       );
       camera.position.z = this.zoom;
       renderer = new THREE.WebGLRenderer({ antialias: true });

@@ -1,11 +1,13 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
 import menu from './modules/menu'
+import camera from './modules/camera'
+import yard from './modules/yard'
 
 Vue.use(Vuex)
 
 export default new Vuex.Store({
-  modules:{menu},
+  modules:{menu,camera,yard},
   state: {
     areas : [{
       IdZone:100000000,
