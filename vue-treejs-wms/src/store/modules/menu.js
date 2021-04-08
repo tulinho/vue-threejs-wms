@@ -30,6 +30,32 @@ const mutations = {
     },
 }
 
+function calculateSubLocationCenter(context, subLocation){
+    let yard = context.rootState.yard.yards[0];
+    let scale = context.rootState.camera.scale;
+    let zoom = context.rootState.camera.zoom;
+
+    let width = (subLocation.PosXMax - subLocation.PosXMin) / scale;
+    let height = (subLocation.PosYMax - subLocation.PosYMin) / scale;
+    let yardWidth = (yard.PosXMax - yard.PosXMin) / scale;
+    let yardHeight = (yard.PosYMax - yard.PosYMin) / scale;
+
+    let offsetX = (subLocation.PosXMin - yard.PosXMin) / scale ;
+    let offsetY = (subLocation.PosYMin - yard.PosYMin) / scale ;
+
+    let x = 0 - yardWidth / 2 + offsetX + width / 2;
+    let y = 0 - yardHeight / 2 + offsetY + height / 2;
+
+    let yardMaxDim = yardWidth > yardHeight ? yardWidth : yardHeight;
+    let subLocationMaxDim = width > height ? width : height;
+    let z = zoom * subLocationMaxDim / yardMaxDim;
+    return {
+        x: x,
+        y: y,
+        z: z
+    };
+}
+
 const actions = {
     show(context, payload){
         context.commit('updateShowMenu', payload);
@@ -47,30 +73,14 @@ const actions = {
     },
     focusSubLocation(context, payload){
         let subLocation = {};
-        let yard = context.rootState.yard.yards[0];
         if(context.state.location == 'Y'){
-            subLocation = context.rootState.yard.yards.find(m => m.IdZone == payload);
+            subLocation = context.rootState.yard.yards[0];
         } else {
             subLocation = context.rootState.yard.areas.find(m => m.IdZone == payload);
         }
 
-        let scale = context.rootState.camera.scale;
-        let width = (subLocation.PosXMax - subLocation.PosXMin) / scale;
-        let height = (subLocation.PosYMax - subLocation.PosYMin) / scale;
-        let yardWidth = (yard.PosXMax - yard.PosXMin) / scale;
-        let yardHeight = (yard.PosYMax - yard.PosYMin) / scale;
-  
-        let offsetX = (subLocation.PosXMin - yard.PosXMin) / scale ;
-        let offsetY = (subLocation.PosYMin - yard.PosYMin) / scale ;
-
-        let x = 0 - yardWidth / 2 + offsetX + width / 2;
-        let y = 0 - yardHeight / 2 + offsetY + height / 2;
-
-        let yardMaxDim = yardWidth > yardHeight ? yardWidth : yardHeight;
-        let subLocationMaxDim = width > height ? width : height;
-        let z = 1000 * subLocationMaxDim / yardMaxDim;
-        
-        this.dispatch('camera/moveCameraTo', { x, y, z })
+        let point = calculateSubLocationCenter(context, subLocation);        
+        this.dispatch('camera/moveCameraTo', point)
     }
 }
 

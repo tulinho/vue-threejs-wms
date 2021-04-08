@@ -7,11 +7,21 @@
     </div>
 </template>
 
-
 <script>
 //import * as THREE from "three";
 import { mapState, mapActions } from "vuex";
 import PresentationMenu from "./PresentationMenu";
+
+// import axios from 'axios';
+// axios.get("https://api.coindesk.com/v1/bpi/currentprice.json")
+//   .then(function (response) {
+//     // handle success
+//     console.log(response);
+//   })
+//   .catch(function (error) {
+//     // handle error
+//     console.log(error);
+//   })
 
 const computedFromCamera = mapState("camera", {
   zoom: state => state.zoom,

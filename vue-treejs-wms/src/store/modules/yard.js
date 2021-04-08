@@ -88,6 +88,34 @@ function createMeshForYardElement(elem, scale, offsetX, offsetY){
     return mesh;
 }
 
+function writeAreaLabel(text, parameters)
+{
+    let defaults = {
+        color: "#000000",
+        fontface: 'Arial',
+        fontsize: 15,
+        backgroundColor: "#ffffff"
+    };
+    parameters = Object.assign({}, defaults, parameters);
+	if ( parameters === undefined ) parameters = {};
+	
+	var canvas = document.createElement('canvas');
+	var context = canvas.getContext('2d');
+
+    context.fillStyle = parameters.backgroundColor;
+    context.fillRect(0, 0, canvas.width, canvas.height);
+    context.fillStyle = parameters.color;
+    context.font = "Bold " + parameters.fontsize + "em " + parameters.fontface;
+	context.fillText(text, 0, (canvas.height - parameters.fontsize), canvas.width);
+
+	var texture = new THREE.CanvasTexture(canvas);
+	var material = new THREE.MeshBasicMaterial({ map: texture, useScreenCoordinates: false });        
+    let geometry = new THREE.BoxGeometry(72, 36, 0.001);
+    let mesh = new THREE.Mesh(geometry, material);
+	return mesh;	
+}
+
+
 const actions = {
     draw(context){
         let yard = context.state.yards[0];
@@ -104,6 +132,11 @@ const actions = {
         context.state.areas.forEach((area => {
             let mesh = createMeshForYardElement(area, scale, offsetX, offsetY);
             context.rootState.camera.scene.add(mesh);
+
+            let parameters = { fontsize: 14, color: area.ColorForeground, backgroundColor: area.ColorBackground };
+            let spritey = writeAreaLabel( area.Zone, parameters);
+            spritey.position.set(mesh.position.x, mesh.position.y, mesh.position.z + 1);
+            context.rootState.camera.scene.add( spritey );
         }));
   
       }

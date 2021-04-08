@@ -7,6 +7,8 @@ import store from './store'
 import VueMaterial from 'vue-material'
 import 'vue-material/dist/vue-material.min.css'
 
+const axios = require('axios').default;
+
 Vue.use(VueMaterial)
 
 Vue.config.productionTip = false
@@ -15,5 +17,6 @@ new Vue({
   router,
   vuetify,
   store,
+  axios,
   render: h => h(App)
 }).$mount('#app')
