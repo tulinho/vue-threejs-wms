@@ -2,14 +2,16 @@ import * as THREE from "three";
 
 const state = () => ({
     clearColor:"#fffafa",
-    scale: 400,
+    scale: 250,
     camera:{},
     scene: {},
     renderer: {},
     container: {},
     mouseX: 0,
     mouseY: 0,
-    zoom: 1000
+    zoom: 1000,
+    near: 0.001,
+    far: 5000
 })
 
 const mutations = {
@@ -34,8 +36,8 @@ function createCamera(context){
     return new THREE.PerspectiveCamera(
         50,
         context.state.container.offsetWidth / context.state.container.offsetHeight,
-        0.1,
-        4000
+        context.state.near,
+        context.state.far
     );
 }
 
@@ -72,7 +74,7 @@ const actions = {
     },
 
     zoomCamera(context, payload) {
-        context.state.camera.position.z -= payload * context.state.scale / context.state.zoom;
+        context.state.camera.position.z -= payload * (context.state.camera.position.z / context.state.zoom);
     },
 
     rotateScene(context, {deltaX, deltaY}) {
@@ -81,8 +83,10 @@ const actions = {
     },
 
     moveCamera(context, {deltaX, deltaY}) {
-        context.state.camera.position.x -= deltaX / 1;
-        context.state.camera.position.y += deltaY / 1;
+        let factor = (context.state.zoom/context.state.camera.position.z);
+        factor = factor > 10 ? 10 : factor;
+        context.state.camera.position.x -= deltaX / factor;
+        context.state.camera.position.y += deltaY / factor;
     },
 
     moveCameraTo(context, {x, y, z}) {

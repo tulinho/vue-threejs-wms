@@ -46,6 +46,21 @@
             ></v-select>
           </v-list-item-content>
         </v-list-item>
+        <v-list-item>
+          <v-list-item-content>
+            <v-select
+              :items="levels"
+              v-model="selectedLevel"
+              label="Level"
+              dense
+            ></v-select>
+          </v-list-item-content>
+        </v-list-item>
+        <v-list-item>
+          <v-list-item-content>
+            <v-btn color="blue darken-1 white--text"  @click="refreshYard()">Refresh</v-btn>
+          </v-list-item-content>
+        </v-list-item>
       </v-list>
     </v-navigation-drawer>
   </div>
@@ -58,14 +73,16 @@ const computedFromMenu = mapState("menu", {
   showMenu: (state) => state.showMenu,
   selLocation: (state) => state.location,
   subLocations: (state) => state.subLocations,
-  selSubLocation: (state) => state.subLocation
+  selSubLocation: (state) => state.subLocation,
+  levels: (state) => state.levels,
+  selLevel: (state) => state.selLevel
 });
 const computedFromYard = mapState("yard", {
   zoneTypes: (state) => state.zoneTypes
 });
 
-const menuMethods = mapActions("menu", ["show", "setLocation", "setSubLocation", "focusSubLocation"]);
-const yardMethods = mapActions("yard", []);
+const menuMethods = mapActions("menu", ["show", "setLocation", "setSubLocation", "focusSubLocation", "refreshYard", "setSelectedLevel"]);
+const yardMethods = mapActions("yard", ['filterZonesByLevel']);
 
 export default {
   computed: Object.assign({ 
@@ -82,6 +99,13 @@ export default {
       set(value) { 
         this.setSubLocation(value); 
         this.focusSubLocation(value);
+      }
+    },
+    selectedLevel:{
+      get(){ this.selLevel; },
+      set(value){
+        this.setSelectedLevel(value);
+        this.filterZonesByLevel(value);
       }
     }
   }, computedFromMenu, computedFromYard),

@@ -13,10 +13,10 @@ import { mapState, mapActions } from "vuex";
 import PresentationMenu from "./PresentationMenu";
 
 // import axios from 'axios';
-// axios.get("https://api.coindesk.com/v1/bpi/currentprice.json")
+// axios.get("http://localhost:8081/YardService.svc/TrackAreas")
 //   .then(function (response) {
 //     // handle success
-//     console.log(response);
+//     console.log(response.data.value);
 //   })
 //   .catch(function (error) {
 //     // handle error
@@ -37,7 +37,7 @@ const computedFromMenu = mapState("menu", {
 });
 
 const cameraMethods = mapActions("camera", ["setContainer","initialize","render", "rotateScene", "moveCamera", "zoomCamera"])
-const yardMethods = mapActions("yard", ["draw"])
+const yardMethods = mapActions("yard", ["draw", "initializeYard"])
 const menuMethods = mapActions("menu", ["show"])
 
 export default {
@@ -122,7 +122,8 @@ export default {
     let container = document.getElementById("yard-container");
     this.setContainer(container);
     this.initialize();
-    this.draw();
+    this.initializeYard();
+    //this.draw();
     this.render();
     this.addMouseHandler(container);
   },

@@ -4,12 +4,8 @@ const state = () => ({
     location: '',
     subLocations: [],
     subLocation: '',
-
-    zoom: {
-        value: 1000
-    },
-    zoomMin: 0,
-    zoomMax: 4000
+    selLevel: 0,
+    levels: [0,1,2,3,4,5,6,7]
 })
 
 const mutations = {
@@ -27,6 +23,9 @@ const mutations = {
     },
     setSubLocation(state, payload){
         state.subLocation = payload;
+    },
+    setSelLevel(state, payload){
+        state.selLevel = payload;
     },
 }
 
@@ -64,23 +63,33 @@ const actions = {
         context.commit('setLocation', payload);
         if(payload == 'Y'){
             context.commit('setSubLocations', context.rootState.yard.yards);
-        } else {
+        } else if(payload == 'A'){
             context.commit('setSubLocations', context.rootState.yard.areas);
+        } else {
+            context.commit('setSubLocations', context.rootState.yard.sections);
         }
     },
     setSubLocation(context, payload) {
         context.commit('setSubLocation', payload);
     },
+    setSelectedLevel(context, payload) {
+        context.commit('setSelLevel', payload);
+    },
     focusSubLocation(context, payload){
         let subLocation = {};
         if(context.state.location == 'Y'){
             subLocation = context.rootState.yard.yards[0];
-        } else {
+        } else if(context.state.location == 'A') {
             subLocation = context.rootState.yard.areas.find(m => m.IdZone == payload);
+        } else {
+            subLocation = context.rootState.yard.sections.find(m => m.IdZone == payload);
         }
 
         let point = calculateSubLocationCenter(context, subLocation);        
         this.dispatch('camera/moveCameraTo', point)
+    },
+    refreshYard(){
+        this.dispatch('yard/refresh');
     }
 }
 
