@@ -1,0 +1,1421 @@
+﻿<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+      <Schema Namespace="YmModel.Store" Alias="Self" Provider="Devart.Data.Oracle" ProviderManifestToken="Oracle, 12.2.0.1" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:devart="http://devart.com/schemas/edml/StorageSchemaExtensions/1.0" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityContainer Name="YmEntitiesStoreContainer">
+          <EntitySet Name="TRACK_SECTIONs" EntityType="YmModel.Store.TRACK_SECTION" store:Type="Tables" Schema="CYM" Table="TRACK_SECTION" />
+          <EntitySet Name="TRACK_YARDs" EntityType="YmModel.Store.TRACK_YARD" store:Type="Tables" Schema="CYM" Table="TRACK_YARD" />
+          <EntitySet Name="TRACK_COORD_PIECEs" EntityType="YmModel.Store.TRACK_COORD_PIECE" store:Type="Tables" Schema="CYM" Table="TRACK_COORD_PIECE" />
+          <EntitySet Name="TRACK_ZONES_PIECEs" EntityType="YmModel.Store.TRACK_ZONES_PIECE" store:Type="Tables" Schema="CYM" Table="TRACK_ZONES_PIECE" />
+          <EntitySet Name="TRACK_ZONEs" EntityType="YmModel.Store.TRACK_ZONE" store:Type="Tables" Schema="CYM" Table="TRACK_ZONE" />
+          <EntitySet Name="TRACK_ZONE_DELETED_HISTs" EntityType="YmModel.Store.TRACK_ZONE_DELETED_HIST" store:Type="Tables" Schema="CYM" Table="TRACK_ZONE_DELETED_HIST" />
+          <EntitySet Name="TRACK_AREAs" EntityType="YmModel.Store.TRACK_AREA" store:Type="Tables" Schema="CYM" Table="TRACK_AREA" />
+          <AssociationSet Name="FK_39_TRACK_SECTION_TRACK_PK_1" Association="YmModel.Store.FK_39_TRACK_SECTION_TRACK_PK_1">
+            <End Role="TRACK_YARD" EntitySet="TRACK_YARDs" />
+            <End Role="TRACK_SECTION" EntitySet="TRACK_SECTIONs" />
+          </AssociationSet>
+          <AssociationSet Name="FK_39_TRACK_SECTION_TRACK_PK_2" Association="YmModel.Store.FK_39_TRACK_SECTION_TRACK_PK_2">
+            <End Role="TRACK_AREA" EntitySet="TRACK_AREAs" />
+            <End Role="TRACK_SECTION" EntitySet="TRACK_SECTIONs" />
+          </AssociationSet>
+          <AssociationSet Name="FK_42_TRACK_ZONES_PIECE_T_PK_2" Association="YmModel.Store.FK_42_TRACK_ZONES_PIECE_T_PK_2">
+            <End Role="TRACK_ZONE" EntitySet="TRACK_ZONEs" />
+            <End Role="TRACK_ZONES_PIECE" EntitySet="TRACK_ZONES_PIECEs" />
+          </AssociationSet>
+          <AssociationSet Name="FK_41_TRACK_ZONE_TRACK_ZO_PK_4" Association="YmModel.Store.FK_41_TRACK_ZONE_TRACK_ZO_PK_4">
+            <End Role="TRACK_ZONE" EntitySet="TRACK_ZONEs" />
+            <End Role="TRACK_ZONE1" EntitySet="TRACK_ZONEs" />
+          </AssociationSet>
+          <AssociationSet Name="FK_41_TRACK_ZONE_TRACK_ZO_PK_3" Association="YmModel.Store.FK_41_TRACK_ZONE_TRACK_ZO_PK_3">
+            <End Role="TRACK_ZONE" EntitySet="TRACK_ZONEs" />
+            <End Role="TRACK_ZONE1" EntitySet="TRACK_ZONEs" />
+          </AssociationSet>
+          <AssociationSet Name="FK_41_TRACK_ZONE_TRACK_SE_PK_1" Association="YmModel.Store.FK_41_TRACK_ZONE_TRACK_SE_PK_1">
+            <End Role="TRACK_SECTION" EntitySet="TRACK_SECTIONs" />
+            <End Role="TRACK_ZONE" EntitySet="TRACK_ZONEs" />
+          </AssociationSet>
+          <AssociationSet Name="FK_41_TRACK_ZONE_TRACK_ZO_PK_2" Association="YmModel.Store.FK_41_TRACK_ZONE_TRACK_ZO_PK_2">
+            <End Role="TRACK_ZONE" EntitySet="TRACK_ZONEs" />
+            <End Role="TRACK_ZONE1" EntitySet="TRACK_ZONEs" />
+          </AssociationSet>
+          <AssociationSet Name="FK_37_TRACK_AREA_TRACK_YA_PK_1" Association="YmModel.Store.FK_37_TRACK_AREA_TRACK_YA_PK_1">
+            <End Role="TRACK_YARD" EntitySet="TRACK_YARDs" />
+            <End Role="TRACK_AREA" EntitySet="TRACK_AREAs" />
+          </AssociationSet>
+        </EntityContainer>
+        <EntityType Name="TRACK_SECTION">
+          <Documentation>
+            <Summary>special areas (Slow Cooling Area,…) defined as an rectangle. No overlaps between sections are allowed!</Summary>
+          </Documentation>
+          <Key>
+            <PropertyRef Name="SECTION" />
+          </Key>
+          <Property Name="SECTION" Type="VARCHAR2" Nullable="false" MaxLength="20">
+            <Documentation>
+              <Summary>Identifier of the occupancy section.</Summary>
+            </Documentation>
+          </Property>
+          <Property Name="YARD" Type="VARCHAR2" Nullable="false" MaxLength="10">
+            <Documentation>
+              <Summary>referenced Yard Id</Summary>
+            </Documentation>
+          </Property>
+          <Property Name="AREA" Type="VARCHAR2" MaxLength="10">
+            <Documentation>
+              <Summary>referenced Area</Summary>
+            </Documentation>
+          </Property>
+          <Property Name="DESCRIPTION" Type="VARCHAR2" MaxLength="40">
+            <Documentation>
+              <Summary>Description abou the section</Summary>
+            </Documentation>
+          </Property>
+          <Property Name="OFFSET_X" Type="int" Nullable="false">
+            <Documentation>
+              <Summary>offset of the area measured from an Origin</Summary>
+            </Documentation>
+          </Property>
+          <Property Name="OFFSET_Y" Type="int" Nullable="false">
+            <Documentation>
+              <Summary>offset of the area measured from an Origin</Summary>
+            </Documentation>
+          </Property>
+          <Property Name="CAMERA_OFFSET_X" Type="int">
+            <Documentation>
+              <Summary>default Camera Offset in x direction</Summary>
+            </Documentation>
+          </Property>
+          <Property Name="CAMERA_OFFSET_Y" Type="int">
+            <Documentation>
+              <Summary>default Camera Offset in y direction</Summary>
+            </Documentation>
+          </Property>
+          <Property Name="CAMERA_OFFSET_Z" Type="int">
+            <Documentation>
+              <Summary>default Camera Offset in z direction</Summary>
+            </Documentation>
+          </Property>
+          <Property Name="CAMERA_ANGLE_XY" Type="double">
+            <Documentation>
+              <Summary>default Camera Angle measured from x to y in [RAD]. 0=camera looks parallel to X PI/2=camera looks prallel to Y</Summary>
+            </Documentation>
+          </Property>
+          <Property Name="CAMERA_ANGLE_YZ" Type="double">
+            <Documentation>
+              <Summary>default Camera Angle measured from y to z in [RAD]. 0=camera looks parallel to Y PI/2=camera looks prallel to Z</Summary>
+            </Documentation>
+          </Property>
+          <Property Name="MODIF_LAST" Type="TIMESTAMP" Nullable="false" Precision="6" devart:DefaultValue="SYSTIMESTAMP">
+            <Documentation>
+              <Summary>Timestamp of the last modification: insert or update. This field is assigned automatically by the data base on insertion. Do NOT set this value manually!</Summary>
+            </Documentation>
+          </Property>
+        </EntityType>
+        <EntityType Name="TRACK_YARD">
+          <Documentation>
+            <Summary>Tracking coordinates for the yard system</Summary>
+          </Documentation>
+          <Key>
+            <PropertyRef Name="YARD" />
+          </Key>
+          <Property Name="YARD" Type="VARCHAR2" Nullable="false" MaxLength="10">
+            <Documentation>
+              <Summary>YARD ID. Unique Name of the Yard</Summary>
+            </Documentation>
+          </Property>
+          <Property Name="YARD_TYPE" Type="VARCHAR2" Nullable="false" MaxLength="2">
+            <Documentation>
+              <Summary>S'=Slab 'P'=Plate 'C'=Coil</Summary>
+            </Documentation>
+          </Property>
+          <Property Name="DESCRIPTION" Type="VARCHAR2" MaxLength="40">
+            <Documentation>
+              <Summary>Description of the Yard</Summary>
+            </Documentation>
+          </Property>
+          <Property Name="OFFSET_X" Type="int" Nullable="false">
+            <Documentation>
+              <Summary>offset of the area measured from an Origin</Summary>
+            </Documentation>
+          </Property>
+          <Property Name="OFFSET_Y" Type="int" Nullable="false">
+            <Documentation>
+              <Summary>offset of the area measured from an Origin</Summary>
+            </Documentation>
+          </Property>
+          <Property Name="CAMERA_OFFSET_X" Type="int">
+            <Documentation>
+              <Summary>default Camera Offset in x direction</Summary>
+            </Documentation>
+          </Property>
+          <Property Name="CAMERA_OFFSET_Y" Type="int">
+            <Documentation>
+              <Summary>default Camera Offset in y direction</Summary>
+            </Documentation>
+          </Property>
+          <Property Name="CAMERA_OFFSET_Z" Type="int">
+            <Documentation>
+              <Summary>default Camera Offset in z direction</Summary>
+            </Documentation>
+          </Property>
+          <Property Name="CAMERA_ANGLE_XY" Type="double">
+            <Documentation>
+              <Summary>default Camera Angle measured from x to y in [RAD]. 0=camera looks parallel to X PI/2=camera looks prallel to Y</Summary>
+            </Documentation>
+          </Property>
+          <Property Name="CAMERA_ANGLE_YZ" Type="double">
+            <Documentation>
+              <Summary>default Camera Angle measured from y to z in [RAD]. 0=camera looks parallel to Y PI/2=camera looks prallel to Z</Summary>
+            </Documentation>
+          </Property>
+          <Property Name="MODIF_LAST" Type="TIMESTAMP" Nullable="false" Precision="6" devart:DefaultValue="SYSTIMESTAMP">
+            <Documentation>
+              <Summary>Timestamp of the last modification: insert or update. This field is assigned automatically by the data base on insertion. Do NOT set this value manually!</Summary>
+            </Documentation>
+          </Property>
+        </EntityType>
+        <EntityType Name="TRACK_COORD_PIECE">
+          <Documentation>
+            <Summary>Tracking coordinates of pieces in the yard system.</Summary>
+          </Documentation>
+          <Key>
+            <PropertyRef Name="ID_PIECE" />
+          </Key>
+          <Property Name="ID_PIECE" Type="VARCHAR2" Nullable="false" MaxLength="20">
+            <Documentation>
+              <Summary>Piece Id</Summary>
+            </Documentation>
+          </Property>
+          <Property Name="ID_L3" Type="VARCHAR2" MaxLength="32">
+            <Documentation>
+              <Summary>Piece identification of PPS (Production Planning System) (key identification)</Summary>
+            </Documentation>
+          </Property>
+          <Property Name="POS_X" Type="int" Nullable="false">
+            <Documentation>
+              <Summary>X-coordinate of piece head</Summary>
+            </Documentation>
+          </Property>
+          <Property Name="POS_Y" Type="int" Nullable="false">
+            <Documentation>
+              <Summary>Y-coordinate of piece head</Summary>
+            </Documentation>
+          </Property>
+          <Property Name="POS_Z" Type="int" Nullable="false">
+            <Documentation>
+              <Summary>Z-coordinate of piece head</Summary>
+            </Documentation>
+          </Property>
+          <Property Name="X_ALIGNMENT" Type="int" Nullable="false" DefaultValue="2">
+            <Documentation>
+              <Summary>alignment of pieces in x-direction:;0 - downstream;1 - upstream;2 - center</Summary>
+            </Documentation>
+          </Property>
+          <Property Name="Y_ALIGNMENT" Type="int" Nullable="false" DefaultValue="2">
+            <Documentation>
+              <Summary>alignment of pieces in y-direction:;0 - downstream;1 - upstream;2 - center</Summary>
+            </Documentation>
+          </Property>
+          <Property Name="ROTATE_ANGLE" Type="int" Nullable="false" DefaultValue="0">
+            <Documentation>
+              <Summary>rotate angle of piece:;0 - 0 degree;1 - 90 degree;2 - 180 degree;3 - 270 degree</Summary>
+            </Documentation>
+          </Property>
+          <Property Name="TILT_ANGLE" Type="int" Nullable="false" DefaultValue="0">
+            <Documentation>
+              <Summary>tilt angle of piece:;0 - 0 degree;1 - 90 degree (eye to the sky)</Summary>
+            </Documentation>
+          </Property>
+          <Property Name="FLAG_OUT_OF_TRACK" Type="bool" Nullable="false" DefaultValue="False">
+            <Documentation>
+              <Summary>Flag indicating if the piece is still in tracking model.;0 = Piece is somewhere in tracking. Position coordinates are the current ones.;1 = Piece is no longer in tracking. Position coordinates are the last known ones.</Summary>
+            </Documentation>
+          </Property>
+          <Property Name="MODIF_LAST" Type="TIMESTAMP" Nullable="false" Precision="6" devart:DefaultValue="SYSTIMESTAMP">
+            <Documentation>
+              <Summary>Timestamp of the last modification: insert or update. This field is assigned automatically by the data base on insertion. Do NOT set this value manually!</Summary>
+            </Documentation>
+          </Property>
+        </EntityType>
+        <EntityType Name="TRACK_ZONES_PIECE">
+          <Documentation>
+            <Summary>Tracking zones occupied by piece</Summary>
+          </Documentation>
+          <Key>
+            <PropertyRef Name="ID_PIECE" />
+            <PropertyRef Name="ID_ZONE" />
+          </Key>
+          <Property Name="ID_PIECE" Type="VARCHAR2" Nullable="false" MaxLength="20">
+            <Documentation>
+              <Summary>Piece Id</Summary>
+            </Documentation>
+          </Property>
+          <Property Name="ID_ZONE" Type="int" Nullable="false">
+            <Documentation>
+              <Summary>Name Id of tracking zone where Piece with ID_PIECE is placed at Layer Z</Summary>
+            </Documentation>
+          </Property>
+          <Property Name="ZERO_POINT" Type="decimal">
+            <Documentation>
+              <Summary>1= in this zone is the piece zero point laying</Summary>
+            </Documentation>
+          </Property>
+          <Property Name="MODIF_LAST" Type="TIMESTAMP" Nullable="false" Precision="6" devart:DefaultValue="SYSTIMESTAMP">
+            <Documentation>
+              <Summary>Timestamp of the last modification: insert or update. This field is assigned automatically by the data base on insertion. Do NOT set this value manually!</Summary>
+            </Documentation>
+          </Property>
+        </EntityType>
+        <EntityType Name="TRACK_ZONE">
+          <Documentation>
+            <Summary>Tracking zone information</Summary>
+          </Documentation>
+          <Key>
+            <PropertyRef Name="ID_ZONE" />
+          </Key>
+          <Property Name="ID_ZONE" Type="int" Nullable="false">
+            <Documentation>
+              <Summary>Zone Id coded as: YARD_ID*10000000 + AREA_ID*1000000 + SECTION_ID*10000 + COLUMN*100 + ROW*1</Summary>
+            </Documentation>
+          </Property>
+          <Property Name="ZONE" Type="VARCHAR2" Nullable="false" MaxLength="20">
+            <Documentation>
+              <Summary>Zone Id  as a string</Summary>
+            </Documentation>
+          </Property>
+          <Property Name="ZONE_TYPE" Type="VARCHAR2" Nullable="false" MaxLength="1">
+            <Documentation>
+              <Summary>Type of Track Zone: ;Y=Yard ;A=Area ;S=Section ;Z=Zone ;V = Virtual Zone;D = Device</Summary>
+            </Documentation>
+          </Property>
+          <Property Name="YARD" Type="VARCHAR2" Nullable="false" MaxLength="20">
+            <Documentation>
+              <Summary>Identifier of a tracking occupancy yard</Summary>
+            </Documentation>
+          </Property>
+          <Property Name="AREA" Type="VARCHAR2" MaxLength="30">
+            <Documentation>
+              <Summary>Identifier of a tracking occupancy area</Summary>
+            </Documentation>
+          </Property>
+          <Property Name="SECTION" Type="VARCHAR2" MaxLength="20">
+            <Documentation>
+              <Summary>Identifier of a tracking occupancy section.</Summary>
+            </Documentation>
+          </Property>
+          <Property Name="STATUS" Type="int" Nullable="false" DefaultValue="0">
+            <Documentation>
+              <Summary>Zone status: ;0=Normal ;10=Blocked</Summary>
+            </Documentation>
+          </Property>
+          <Property Name="COLOR_BACKGROUND" Type="VARCHAR2" MaxLength="10">
+            <Documentation>
+              <Summary>Hex Code Color Background (e.g. #6600cc)</Summary>
+            </Documentation>
+          </Property>
+          <Property Name="COLOR_FOREGROUND" Type="VARCHAR2" MaxLength="10">
+            <Documentation>
+              <Summary>Hex Code Color ForeGround (e.g. #6600cc)</Summary>
+            </Documentation>
+          </Property>
+          <Property Name="COLOR_FRAME" Type="VARCHAR2" MaxLength="10">
+            <Documentation>
+              <Summary>Hex Code Color Frame (#6600cc)</Summary>
+            </Documentation>
+          </Property>
+          <Property Name="POS_X_MIN" Type="int" Nullable="false">
+            <Documentation>
+              <Summary>X-coordinate of zone begin</Summary>
+            </Documentation>
+          </Property>
+          <Property Name="POS_X_MAX" Type="int" Nullable="false">
+            <Documentation>
+              <Summary>X-coordinate of zone end</Summary>
+            </Documentation>
+          </Property>
+          <Property Name="POS_Y_MIN" Type="int" Nullable="false">
+            <Documentation>
+              <Summary>Y-coordinate of zone begin</Summary>
+            </Documentation>
+          </Property>
+          <Property Name="POS_Y_MAX" Type="int" Nullable="false">
+            <Documentation>
+              <Summary>Y-coordinate of zone end</Summary>
+            </Documentation>
+          </Property>
+          <Property Name="POS_Z_MIN" Type="int" Nullable="false">
+            <Documentation>
+              <Summary>Z-coordinate of zone begin</Summary>
+            </Documentation>
+          </Property>
+          <Property Name="POS_Z_MAX" Type="int" Nullable="false">
+            <Documentation>
+              <Summary>Z-coordinate of zone end</Summary>
+            </Documentation>
+          </Property>
+          <Property Name="DESCRIPTION" Type="VARCHAR2" MaxLength="40">
+            <Documentation>
+              <Summary>Description used by HMI</Summary>
+            </Documentation>
+          </Property>
+          <Property Name="ID_ZONE_PREV_X" Type="int">
+            <Documentation>
+              <Summary>Previous tracking zone in X direction</Summary>
+            </Documentation>
+          </Property>
+          <Property Name="ID_ZONE_PREV_Y" Type="int">
+            <Documentation>
+              <Summary>Previous tracking zone in Y direction</Summary>
+            </Documentation>
+          </Property>
+          <Property Name="ID_ZONE_PREV_Z" Type="int">
+            <Documentation>
+              <Summary>Previous tracking zone in Z direction</Summary>
+            </Documentation>
+          </Property>
+          <Property Name="CAMERA_OFFSET_X" Type="int">
+            <Documentation>
+              <Summary>default Camera Offset in x direction</Summary>
+            </Documentation>
+          </Property>
+          <Property Name="CAMERA_OFFSET_Y" Type="int">
+            <Documentation>
+              <Summary>default Camera Offset in y direction</Summary>
+            </Documentation>
+          </Property>
+          <Property Name="CAMERA_OFFSET_Z" Type="int">
+            <Documentation>
+              <Summary>default Camera Offset in z direction</Summary>
+            </Documentation>
+          </Property>
+          <Property Name="CAMERA_ANGLE_XY" Type="double">
+            <Documentation>
+              <Summary>default Camera Angle measured from x to y in [RAD]. 0=camera looks parallel to X PI/2=camera looks prallel to Y</Summary>
+            </Documentation>
+          </Property>
+          <Property Name="CAMERA_ANGLE_YZ" Type="double">
+            <Documentation>
+              <Summary>default Camera Angle measured from y to z in [RAD]. 0=camera looks parallel to Y PI/2=camera looks prallel to Z</Summary>
+            </Documentation>
+          </Property>
+          <Property Name="PIECE_COUNT_MAX" Type="int" Nullable="false" DefaultValue="1">
+            <Documentation>
+              <Summary>Maximal number of pieces:;  -1=not limited</Summary>
+            </Documentation>
+          </Property>
+          <Property Name="PRIORITY" Type="int" Nullable="false" DefaultValue="5">
+            <Documentation>
+              <Summary>priority of the zone. Higher values mean higher priority</Summary>
+            </Documentation>
+          </Property>
+          <Property Name="X_ALIGNMENT" Type="int" Nullable="false" DefaultValue="2">
+            <Documentation>
+              <Summary>alignment of pieces in x-direction:;0 - downstream;1 - upstream;2 - center</Summary>
+            </Documentation>
+          </Property>
+          <Property Name="Y_ALIGNMENT" Type="int" Nullable="false" DefaultValue="2">
+            <Documentation>
+              <Summary>alignment of pieces in y-direction:;0 - downstream;1 - upstream;2 - center</Summary>
+            </Documentation>
+          </Property>
+          <Property Name="ROTATE_ANGLE" Type="int" Nullable="false" DefaultValue="0">
+            <Documentation>
+              <Summary>rotate angle of piece:;0 - 0 degree;1 - 90 degree;2 - 180 degree;3 - 270 degree</Summary>
+            </Documentation>
+          </Property>
+          <Property Name="TILT_ANGLE" Type="int" Nullable="false" DefaultValue="0">
+            <Documentation>
+              <Summary>tilt angle of piece:;0 - 0 degree;1 - 90 degree (eye to the sky)</Summary>
+            </Documentation>
+          </Property>
+          <Property Name="GEN_EVENT_ENTER" Type="bool" Nullable="false" DefaultValue="True">
+            <Documentation>
+              <Summary>Enables sending event with information about piece entering the tracking zone.</Summary>
+            </Documentation>
+          </Property>
+          <Property Name="GEN_EVENT_EXIT" Type="bool" Nullable="false" DefaultValue="True">
+            <Documentation>
+              <Summary>Enables sending event with information about piece exiting the tracking zone.</Summary>
+            </Documentation>
+          </Property>
+          <Property Name="MODIF_LAST" Type="TIMESTAMP" Nullable="false" Precision="6" devart:DefaultValue="SYSTIMESTAMP">
+            <Documentation>
+              <Summary>Timestamp of the last modification: insert or update. This field is assigned automatically by the data base on insertion. Do NOT set this value manually!</Summary>
+            </Documentation>
+          </Property>
+        </EntityType>
+        <EntityType Name="TRACK_ZONE_DELETED_HIST">
+          <Documentation>
+            <Summary>Track zone deleted history</Summary>
+          </Documentation>
+          <Key>
+            <PropertyRef Name="ID_ZONE" />
+          </Key>
+          <Property Name="ID_ZONE" Type="int" Nullable="false">
+            <Documentation>
+              <Summary>Zone Id coded as: YARD_ID*10000000 + AREA_ID*1000000 + SECTION_ID*10000 + COLUMN*100 + ROW*1</Summary>
+            </Documentation>
+          </Property>
+          <Property Name="MODIF_LAST" Type="TIMESTAMP" Nullable="false" Precision="6" devart:DefaultValue="SYSTIMESTAMP">
+            <Documentation>
+              <Summary>Timestamp of the last modification: insert or update. This field is assigned automatically by the data base on insertion. Do NOT set this value manually!</Summary>
+            </Documentation>
+          </Property>
+        </EntityType>
+        <EntityType Name="TRACK_AREA">
+          <Documentation>
+            <Summary>Tracking coordinates of areas in the yard system.</Summary>
+          </Documentation>
+          <Key>
+            <PropertyRef Name="AREA" />
+          </Key>
+          <Property Name="AREA" Type="VARCHAR2" Nullable="false" MaxLength="10">
+            <Documentation>
+              <Summary>AREA ID</Summary>
+            </Documentation>
+          </Property>
+          <Property Name="YARD" Type="VARCHAR2" Nullable="false" MaxLength="10">
+            <Documentation>
+              <Summary>referenced Yard Id</Summary>
+            </Documentation>
+          </Property>
+          <Property Name="DESCRIPTION" Type="VARCHAR2" MaxLength="40">
+            <Documentation>
+              <Summary>Description of the Area</Summary>
+            </Documentation>
+          </Property>
+          <Property Name="OFFSET_X" Type="int" Nullable="false">
+            <Documentation>
+              <Summary>offset of the area measured from an Origin</Summary>
+            </Documentation>
+          </Property>
+          <Property Name="OFFSET_Y" Type="int" Nullable="false">
+            <Documentation>
+              <Summary>offset of the area measured from an Origin</Summary>
+            </Documentation>
+          </Property>
+          <Property Name="CAMERA_OFFSET_X" Type="int">
+            <Documentation>
+              <Summary>default Camera Offset in x direction</Summary>
+            </Documentation>
+          </Property>
+          <Property Name="CAMERA_OFFSET_Y" Type="int">
+            <Documentation>
+              <Summary>default Camera Offset in y direction</Summary>
+            </Documentation>
+          </Property>
+          <Property Name="CAMERA_OFFSET_Z" Type="int">
+            <Documentation>
+              <Summary>default Camera Offset in z direction</Summary>
+            </Documentation>
+          </Property>
+          <Property Name="CAMERA_ANGLE_XY" Type="double">
+            <Documentation>
+              <Summary>default Camera Angle measured from x to y in [RAD]. 0=camera looks parallel to X PI/2=camera looks prallel to Y</Summary>
+            </Documentation>
+          </Property>
+          <Property Name="CAMERA_ANGLE_YZ" Type="double">
+            <Documentation>
+              <Summary>default Camera Angle measured from y to z in [RAD]. 0=camera looks parallel to Y PI/2=camera looks prallel to Z</Summary>
+            </Documentation>
+          </Property>
+          <Property Name="MODIF_LAST" Type="TIMESTAMP" Nullable="false" Precision="6" devart:DefaultValue="SYSTIMESTAMP">
+            <Documentation>
+              <Summary>Timestamp of the last modification: insert or update. This field is assigned automatically by the data base on insertion. Do NOT set this value manually!</Summary>
+            </Documentation>
+          </Property>
+        </EntityType>
+        <Association Name="FK_39_TRACK_SECTION_TRACK_PK_1">
+          <End Role="TRACK_YARD" Type="YmModel.Store.TRACK_YARD" Multiplicity="1" />
+          <End Role="TRACK_SECTION" Type="YmModel.Store.TRACK_SECTION" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="TRACK_YARD">
+              <PropertyRef Name="YARD" />
+            </Principal>
+            <Dependent Role="TRACK_SECTION">
+              <PropertyRef Name="YARD" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_39_TRACK_SECTION_TRACK_PK_2">
+          <End Role="TRACK_AREA" Type="YmModel.Store.TRACK_AREA" Multiplicity="0..1" />
+          <End Role="TRACK_SECTION" Type="YmModel.Store.TRACK_SECTION" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="TRACK_AREA">
+              <PropertyRef Name="AREA" />
+            </Principal>
+            <Dependent Role="TRACK_SECTION">
+              <PropertyRef Name="AREA" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_42_TRACK_ZONES_PIECE_T_PK_2">
+          <End Role="TRACK_ZONE" Type="YmModel.Store.TRACK_ZONE" Multiplicity="1" />
+          <End Role="TRACK_ZONES_PIECE" Type="YmModel.Store.TRACK_ZONES_PIECE" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="TRACK_ZONE">
+              <PropertyRef Name="ID_ZONE" />
+            </Principal>
+            <Dependent Role="TRACK_ZONES_PIECE">
+              <PropertyRef Name="ID_ZONE" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_41_TRACK_ZONE_TRACK_ZO_PK_4">
+          <End Role="TRACK_ZONE" Type="YmModel.Store.TRACK_ZONE" Multiplicity="0..1" />
+          <End Role="TRACK_ZONE1" Type="YmModel.Store.TRACK_ZONE" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="TRACK_ZONE">
+              <PropertyRef Name="ID_ZONE" />
+            </Principal>
+            <Dependent Role="TRACK_ZONE1">
+              <PropertyRef Name="ID_ZONE_PREV_Z" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_41_TRACK_ZONE_TRACK_ZO_PK_3">
+          <End Role="TRACK_ZONE" Type="YmModel.Store.TRACK_ZONE" Multiplicity="0..1" />
+          <End Role="TRACK_ZONE1" Type="YmModel.Store.TRACK_ZONE" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="TRACK_ZONE">
+              <PropertyRef Name="ID_ZONE" />
+            </Principal>
+            <Dependent Role="TRACK_ZONE1">
+              <PropertyRef Name="ID_ZONE_PREV_Y" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_41_TRACK_ZONE_TRACK_SE_PK_1">
+          <End Role="TRACK_SECTION" Type="YmModel.Store.TRACK_SECTION" Multiplicity="0..1" />
+          <End Role="TRACK_ZONE" Type="YmModel.Store.TRACK_ZONE" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="TRACK_SECTION">
+              <PropertyRef Name="SECTION" />
+            </Principal>
+            <Dependent Role="TRACK_ZONE">
+              <PropertyRef Name="SECTION" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_41_TRACK_ZONE_TRACK_ZO_PK_2">
+          <End Role="TRACK_ZONE" Type="YmModel.Store.TRACK_ZONE" Multiplicity="0..1" />
+          <End Role="TRACK_ZONE1" Type="YmModel.Store.TRACK_ZONE" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="TRACK_ZONE">
+              <PropertyRef Name="ID_ZONE" />
+            </Principal>
+            <Dependent Role="TRACK_ZONE1">
+              <PropertyRef Name="ID_ZONE_PREV_X" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_37_TRACK_AREA_TRACK_YA_PK_1">
+          <End Role="TRACK_YARD" Type="YmModel.Store.TRACK_YARD" Multiplicity="1" />
+          <End Role="TRACK_AREA" Type="YmModel.Store.TRACK_AREA" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="TRACK_YARD">
+              <PropertyRef Name="YARD" />
+            </Principal>
+            <Dependent Role="TRACK_AREA">
+              <PropertyRef Name="YARD" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+      </Schema>
+    </edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="YmModel" Alias="Self" d4p1:ViewGeneration="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:devart="http://devart.com/schemas/edml/ConceptualSchemaExtensions/1.0" xmlns:ed="http://devart.com/schemas/EntityDeveloper/1.0" annotation:UseStrongSpatialTypes="false" xmlns:d4p1="http://devart.com/schemas/edml/ConceptualSchemaExtensions/1.0" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityContainer Name="YmEntities" annotation:LazyLoadingEnabled="true" ed:Guid="44b7aa33-54fc-4a3d-9dc7-3c6040188eba">
+          <EntitySet Name="TrackSections" EntityType="YmModel.TrackSection" />
+          <EntitySet Name="TrackYards" EntityType="YmModel.TrackYard" />
+          <EntitySet Name="TrackCoordPieces" EntityType="YmModel.TrackCoordPiece" />
+          <EntitySet Name="TrackZonesPieces" EntityType="YmModel.TrackZonesPiece" />
+          <EntitySet Name="TrackZones" EntityType="YmModel.TrackZone" />
+          <EntitySet Name="TrackZoneDeletedHists" EntityType="YmModel.TrackZoneDeletedHist" />
+          <EntitySet Name="TrackAreas" EntityType="YmModel.TrackArea" />
+          <AssociationSet Name="FK_39_TRACK_SECTION_TRACK_PK_1Set" Association="YmModel.FK_39_TRACK_SECTION_TRACK_PK_1">
+            <End Role="TrackYard" EntitySet="TrackYards" />
+            <End Role="TrackSections" EntitySet="TrackSections" />
+          </AssociationSet>
+          <AssociationSet Name="FK_39_TRACK_SECTION_TRACK_PK_2Set" Association="YmModel.FK_39_TRACK_SECTION_TRACK_PK_2">
+            <End Role="TrackArea" EntitySet="TrackAreas" />
+            <End Role="TrackSections" EntitySet="TrackSections" />
+          </AssociationSet>
+          <AssociationSet Name="FK_42_TRACK_ZONES_PIECE_T_PK_2Set" Association="YmModel.FK_42_TRACK_ZONES_PIECE_T_PK_2">
+            <End Role="TrackZone" EntitySet="TrackZones" />
+            <End Role="TrackZonesPieces" EntitySet="TrackZonesPieces" />
+          </AssociationSet>
+          <AssociationSet Name="FK_41_TRACK_ZONE_TRACK_ZO_PK_4Set" Association="YmModel.FK_41_TRACK_ZONE_TRACK_ZO_PK_4">
+            <End Role="TrackZone_IdZonePrevZ" EntitySet="TrackZones" />
+            <End Role="TrackZones_IdZonePrevZ" EntitySet="TrackZones" />
+          </AssociationSet>
+          <AssociationSet Name="FK_41_TRACK_ZONE_TRACK_ZO_PK_3Set" Association="YmModel.FK_41_TRACK_ZONE_TRACK_ZO_PK_3">
+            <End Role="TrackZone_IdZonePrevY" EntitySet="TrackZones" />
+            <End Role="TrackZones_IdZonePrevY" EntitySet="TrackZones" />
+          </AssociationSet>
+          <AssociationSet Name="FK_41_TRACK_ZONE_TRACK_SE_PK_1Set" Association="YmModel.FK_41_TRACK_ZONE_TRACK_SE_PK_1">
+            <End Role="TrackSection" EntitySet="TrackSections" />
+            <End Role="TrackZones" EntitySet="TrackZones" />
+          </AssociationSet>
+          <AssociationSet Name="FK_41_TRACK_ZONE_TRACK_ZO_PK_2Set" Association="YmModel.FK_41_TRACK_ZONE_TRACK_ZO_PK_2">
+            <End Role="TrackZone_IdZonePrevX" EntitySet="TrackZones" />
+            <End Role="TrackZones_IdZonePrevX" EntitySet="TrackZones" />
+          </AssociationSet>
+          <AssociationSet Name="FK_37_TRACK_AREA_TRACK_YA_PK_1Set" Association="YmModel.FK_37_TRACK_AREA_TRACK_YA_PK_1">
+            <End Role="TrackYard" EntitySet="TrackYards" />
+            <End Role="TrackAreas" EntitySet="TrackAreas" />
+          </AssociationSet>
+        </EntityContainer>
+        <EntityType Name="TrackSection" ed:Guid="2c72e08f-dc92-4690-ace3-ff4190f18b8a">
+          <Documentation>
+            <Summary>special areas (Slow Cooling Area,…) defined as an rectangle. No overlaps between sections are allowed!</Summary>
+          </Documentation>
+          <Key>
+            <PropertyRef Name="Section" />
+          </Key>
+          <Property Name="Section" Type="String" Nullable="false" MaxLength="20" ed:ValidateMaxLength="20" ed:ValidateRequired="true" ed:Guid="fffc7910-b518-48a2-9aab-265e803ee839">
+            <Documentation>
+              <Summary>Identifier of the occupancy section.</Summary>
+            </Documentation>
+          </Property>
+          <Property Name="Yard" Type="String" Nullable="false" MaxLength="10" ed:ValidateMaxLength="10" ed:ValidateRequired="true" ed:Guid="8c1c2b74-73da-483e-ba87-695f1698fdd6">
+            <Documentation>
+              <Summary>referenced Yard Id</Summary>
+            </Documentation>
+          </Property>
+          <Property Name="Area" Type="String" MaxLength="10" ed:ValidateMaxLength="10" ed:ValidateRequired="false" ed:Guid="700be3f9-9376-408c-8602-71c2feda559f">
+            <Documentation>
+              <Summary>referenced Area</Summary>
+            </Documentation>
+          </Property>
+          <Property Name="Description" Type="String" MaxLength="40" ed:ValidateMaxLength="40" ed:ValidateRequired="false" ed:Guid="407bbf4f-d417-45ca-818e-5516581b723c">
+            <Documentation>
+              <Summary>Description abou the section</Summary>
+            </Documentation>
+          </Property>
+          <Property Name="OffsetX" Type="Int32" Nullable="false" ed:ValidateRequired="true" ed:Guid="fae799b2-eb9e-4578-9781-b6d65a39a80d">
+            <Documentation>
+              <Summary>offset of the area measured from an Origin</Summary>
+            </Documentation>
+          </Property>
+          <Property Name="OffsetY" Type="Int32" Nullable="false" ed:ValidateRequired="true" ed:Guid="f2ef4401-dcb7-4014-bab9-d8e2dcdfce86">
+            <Documentation>
+              <Summary>offset of the area measured from an Origin</Summary>
+            </Documentation>
+          </Property>
+          <Property Name="CameraOffsetX" Type="Int32" ed:ValidateRequired="false" ed:Guid="ceb35ccb-46a5-4340-8fb9-d64e20a33bfd">
+            <Documentation>
+              <Summary>default Camera Offset in x direction</Summary>
+            </Documentation>
+          </Property>
+          <Property Name="CameraOffsetY" Type="Int32" ed:ValidateRequired="false" ed:Guid="4f97d3e1-256e-4e06-bac6-7184d403fc05">
+            <Documentation>
+              <Summary>default Camera Offset in y direction</Summary>
+            </Documentation>
+          </Property>
+          <Property Name="CameraOffsetZ" Type="Int32" ed:ValidateRequired="false" ed:Guid="230160df-f586-4bff-8238-3a55570656ad">
+            <Documentation>
+              <Summary>default Camera Offset in z direction</Summary>
+            </Documentation>
+          </Property>
+          <Property Name="CameraAngleXy" Type="Double" ed:ValidateRequired="false" ed:Guid="db57d58c-23e6-47d7-9a01-bdd0e4608960">
+            <Documentation>
+              <Summary>default Camera Angle measured from x to y in [RAD]. 0=camera looks parallel to X PI/2=camera looks prallel to Y</Summary>
+            </Documentation>
+          </Property>
+          <Property Name="CameraAngleYz" Type="Double" ed:ValidateRequired="false" ed:Guid="db8b32f3-4197-4c44-848e-a422a067b8ff">
+            <Documentation>
+              <Summary>default Camera Angle measured from y to z in [RAD]. 0=camera looks parallel to Y PI/2=camera looks prallel to Z</Summary>
+            </Documentation>
+          </Property>
+          <Property Name="ModifLast" Type="DateTime" Nullable="false" Precision="6" ed:ValidateRequired="true" ed:Guid="33ceb869-b72a-4095-9b96-52ee76316848">
+            <Documentation>
+              <Summary>Timestamp of the last modification: insert or update. This field is assigned automatically by the data base on insertion. Do NOT set this value manually!</Summary>
+            </Documentation>
+          </Property>
+          <NavigationProperty Name="TrackYard" Relationship="YmModel.FK_39_TRACK_SECTION_TRACK_PK_1" FromRole="TrackSections" ToRole="TrackYard" ed:Guid="f098be9e-f5c3-47e2-957b-593f4d555436" />
+          <NavigationProperty Name="TrackArea" Relationship="YmModel.FK_39_TRACK_SECTION_TRACK_PK_2" FromRole="TrackSections" ToRole="TrackArea" ed:Guid="8e4aeca7-bc63-439f-9d92-3d6dc9b97ec9" />
+          <NavigationProperty Name="TrackZones" Relationship="YmModel.FK_41_TRACK_ZONE_TRACK_SE_PK_1" FromRole="TrackSection" ToRole="TrackZones" ed:Guid="6e217093-7195-44cc-810c-e88d06f24f20" />
+        </EntityType>
+        <EntityType Name="TrackYard" ed:Guid="07890678-70c8-4506-ba82-477661cc1a12">
+          <Documentation>
+            <Summary>Tracking coordinates for the yard system</Summary>
+          </Documentation>
+          <Key>
+            <PropertyRef Name="Yard" />
+          </Key>
+          <Property Name="Yard" Type="String" Nullable="false" MaxLength="10" ed:ValidateMaxLength="10" ed:ValidateRequired="true" ed:Guid="80e3a2b0-4e8d-4f3d-a9bb-a1d6453c3477">
+            <Documentation>
+              <Summary>YARD ID. Unique Name of the Yard</Summary>
+            </Documentation>
+          </Property>
+          <Property Name="YardType" Type="String" Nullable="false" MaxLength="2" ed:ValidateMaxLength="2" ed:ValidateRequired="true" ed:Guid="f452dd28-797f-4c72-b922-6160b4340a19">
+            <Documentation>
+              <Summary>S'=Slab 'P'=Plate 'C'=Coil</Summary>
+            </Documentation>
+          </Property>
+          <Property Name="Description" Type="String" MaxLength="40" ed:ValidateMaxLength="40" ed:ValidateRequired="false" ed:Guid="74ab4fd1-387b-4f6d-a856-e216f75b9a3c">
+            <Documentation>
+              <Summary>Description of the Yard</Summary>
+            </Documentation>
+          </Property>
+          <Property Name="OffsetX" Type="Int32" Nullable="false" ed:ValidateRequired="true" ed:Guid="30ba7d40-a6c5-407a-912d-d36b7561e2a0">
+            <Documentation>
+              <Summary>offset of the area measured from an Origin</Summary>
+            </Documentation>
+          </Property>
+          <Property Name="OffsetY" Type="Int32" Nullable="false" ed:ValidateRequired="true" ed:Guid="2cfbe052-27fb-4dce-9566-c1b2b85f17b3">
+            <Documentation>
+              <Summary>offset of the area measured from an Origin</Summary>
+            </Documentation>
+          </Property>
+          <Property Name="CameraOffsetX" Type="Int32" ed:ValidateRequired="false" ed:Guid="e5d39f42-660e-4b6c-83cf-abfec6f2eca8">
+            <Documentation>
+              <Summary>default Camera Offset in x direction</Summary>
+            </Documentation>
+          </Property>
+          <Property Name="CameraOffsetY" Type="Int32" ed:ValidateRequired="false" ed:Guid="0ea011f0-301b-4911-9669-0c77f887713f">
+            <Documentation>
+              <Summary>default Camera Offset in y direction</Summary>
+            </Documentation>
+          </Property>
+          <Property Name="CameraOffsetZ" Type="Int32" ed:ValidateRequired="false" ed:Guid="037853cb-f3b6-4941-afbf-e4893770cf79">
+            <Documentation>
+              <Summary>default Camera Offset in z direction</Summary>
+            </Documentation>
+          </Property>
+          <Property Name="CameraAngleXy" Type="Double" ed:ValidateRequired="false" ed:Guid="fd8f1735-feda-43a9-a276-70f04086542f">
+            <Documentation>
+              <Summary>default Camera Angle measured from x to y in [RAD]. 0=camera looks parallel to X PI/2=camera looks prallel to Y</Summary>
+            </Documentation>
+          </Property>
+          <Property Name="CameraAngleYz" Type="Double" ed:ValidateRequired="false" ed:Guid="2356f16c-0c1c-438c-b173-1dcd831a8625">
+            <Documentation>
+              <Summary>default Camera Angle measured from y to z in [RAD]. 0=camera looks parallel to Y PI/2=camera looks prallel to Z</Summary>
+            </Documentation>
+          </Property>
+          <Property Name="ModifLast" Type="DateTime" Nullable="false" Precision="6" ed:ValidateRequired="true" ed:Guid="7249daf0-b1e7-4a54-88e0-9e52e0c91bfb">
+            <Documentation>
+              <Summary>Timestamp of the last modification: insert or update. This field is assigned automatically by the data base on insertion. Do NOT set this value manually!</Summary>
+            </Documentation>
+          </Property>
+          <NavigationProperty Name="TrackSections" Relationship="YmModel.FK_39_TRACK_SECTION_TRACK_PK_1" FromRole="TrackYard" ToRole="TrackSections" ed:Guid="dd27dd0a-8725-495b-8880-028f0ff3e737" />
+          <NavigationProperty Name="TrackAreas" Relationship="YmModel.FK_37_TRACK_AREA_TRACK_YA_PK_1" FromRole="TrackYard" ToRole="TrackAreas" ed:Guid="e48dcc72-0b5e-48b6-992f-16cb3f2caa60" />
+        </EntityType>
+        <EntityType Name="TrackCoordPiece" ed:Guid="aceaf9a1-dd17-4656-b3ee-62abc5d9e817">
+          <Documentation>
+            <Summary>Tracking coordinates of pieces in the yard system.</Summary>
+          </Documentation>
+          <Key>
+            <PropertyRef Name="IdPiece" />
+          </Key>
+          <Property Name="IdPiece" Type="String" Nullable="false" MaxLength="20" ed:ValidateMaxLength="20" ed:ValidateRequired="true" ed:Guid="cd484af3-2ff4-4b01-a193-ca6987e55474">
+            <Documentation>
+              <Summary>Piece Id</Summary>
+            </Documentation>
+          </Property>
+          <Property Name="IdL3" Type="String" MaxLength="32" ed:ValidateMaxLength="32" ed:ValidateRequired="false" ed:Guid="fb8172ff-23a7-43d0-8c49-9b297eace68d">
+            <Documentation>
+              <Summary>Piece identification of PPS (Production Planning System) (key identification)</Summary>
+            </Documentation>
+          </Property>
+          <Property Name="PosX" Type="Int32" Nullable="false" ed:ValidateRequired="true" ed:Guid="aadc9c6b-837a-42ba-ad57-846812e0cf66">
+            <Documentation>
+              <Summary>X-coordinate of piece head</Summary>
+            </Documentation>
+          </Property>
+          <Property Name="PosY" Type="Int32" Nullable="false" ed:ValidateRequired="true" ed:Guid="f4b64d79-653f-4ffb-9f10-422b72fb0e51">
+            <Documentation>
+              <Summary>Y-coordinate of piece head</Summary>
+            </Documentation>
+          </Property>
+          <Property Name="PosZ" Type="Int32" Nullable="false" ed:ValidateRequired="true" ed:Guid="4b85ccd8-5c5f-4990-80e9-a74636165ba0">
+            <Documentation>
+              <Summary>Z-coordinate of piece head</Summary>
+            </Documentation>
+          </Property>
+          <Property Name="XAlignment" Type="Int32" Nullable="false" DefaultValue="2" ed:ValidateRequired="true" ed:Guid="0514724b-b56a-4c7d-b353-6240d66814c7">
+            <Documentation>
+              <Summary>alignment of pieces in x-direction:;0 - downstream;1 - upstream;2 - center</Summary>
+            </Documentation>
+          </Property>
+          <Property Name="YAlignment" Type="Int32" Nullable="false" DefaultValue="2" ed:ValidateRequired="true" ed:Guid="42075c44-982b-4b6b-95a7-c7c53f0f930c">
+            <Documentation>
+              <Summary>alignment of pieces in y-direction:;0 - downstream;1 - upstream;2 - center</Summary>
+            </Documentation>
+          </Property>
+          <Property Name="RotateAngle" Type="Int32" Nullable="false" DefaultValue="0" ed:ValidateRequired="true" ed:Guid="1a75af7b-45a8-4d8f-8ad2-b47741457099">
+            <Documentation>
+              <Summary>rotate angle of piece:;0 - 0 degree;1 - 90 degree;2 - 180 degree;3 - 270 degree</Summary>
+            </Documentation>
+          </Property>
+          <Property Name="TiltAngle" Type="Int32" Nullable="false" DefaultValue="0" ed:ValidateRequired="true" ed:Guid="fa3ecce7-6662-430f-bb87-4a246adf7fb8">
+            <Documentation>
+              <Summary>tilt angle of piece:;0 - 0 degree;1 - 90 degree (eye to the sky)</Summary>
+            </Documentation>
+          </Property>
+          <Property Name="FlagOutOfTrack" Type="Boolean" Nullable="false" DefaultValue="False" ed:ValidateRequired="true" ed:Guid="737fd401-99e6-4feb-a074-641f7f13278c">
+            <Documentation>
+              <Summary>Flag indicating if the piece is still in tracking model.;0 = Piece is somewhere in tracking. Position coordinates are the current ones.;1 = Piece is no longer in tracking. Position coordinates are the last known ones.</Summary>
+            </Documentation>
+          </Property>
+          <Property Name="ModifLast" Type="DateTime" Nullable="false" Precision="6" ed:ValidateRequired="true" ed:Guid="80ada74d-d5a1-44fb-99e7-7002209db81a">
+            <Documentation>
+              <Summary>Timestamp of the last modification: insert or update. This field is assigned automatically by the data base on insertion. Do NOT set this value manually!</Summary>
+            </Documentation>
+          </Property>
+        </EntityType>
+        <EntityType Name="TrackZonesPiece" ed:Guid="dc01d5dd-155f-444c-bae8-661a6c765695">
+          <Documentation>
+            <Summary>Tracking zones occupied by piece</Summary>
+          </Documentation>
+          <Key>
+            <PropertyRef Name="IdPiece" />
+            <PropertyRef Name="IdZone" />
+          </Key>
+          <Property Name="IdPiece" Type="String" Nullable="false" MaxLength="20" ed:ValidateMaxLength="20" ed:ValidateRequired="true" ed:Guid="200f5d64-a5ee-4e25-8407-14cc2eb74877">
+            <Documentation>
+              <Summary>Piece Id</Summary>
+            </Documentation>
+          </Property>
+          <Property Name="IdZone" Type="Int32" Nullable="false" ed:ValidateRequired="true" ed:Guid="3a8153cd-b4fe-4170-8691-fad807d6d953">
+            <Documentation>
+              <Summary>Name Id of tracking zone where Piece with ID_PIECE is placed at Layer Z</Summary>
+            </Documentation>
+          </Property>
+          <Property Name="ZeroPoint" Type="Decimal" ed:ValidateRequired="false" ed:Guid="4eae9a04-ba61-48bb-9531-e657011306bf">
+            <Documentation>
+              <Summary>1= in this zone is the piece zero point laying</Summary>
+            </Documentation>
+          </Property>
+          <Property Name="ModifLast" Type="DateTime" Nullable="false" Precision="6" ed:ValidateRequired="true" ed:Guid="d2a58612-fc56-43d7-a3cb-6d0a606a4709">
+            <Documentation>
+              <Summary>Timestamp of the last modification: insert or update. This field is assigned automatically by the data base on insertion. Do NOT set this value manually!</Summary>
+            </Documentation>
+          </Property>
+          <NavigationProperty Name="TrackZone" Relationship="YmModel.FK_42_TRACK_ZONES_PIECE_T_PK_2" FromRole="TrackZonesPieces" ToRole="TrackZone" ed:Guid="f465d998-77ba-42f0-afa2-003f6e456c81" />
+        </EntityType>
+        <EntityType Name="TrackZone" ed:Guid="681287e1-ae05-453a-b34b-d7f0b9303c65">
+          <Documentation>
+            <Summary>Tracking zone information</Summary>
+          </Documentation>
+          <Key>
+            <PropertyRef Name="IdZone" />
+          </Key>
+          <Property Name="IdZone" Type="Int32" Nullable="false" ed:ValidateRequired="true" ed:Guid="7e2e43a0-c887-472f-822f-60f7ccea443e">
+            <Documentation>
+              <Summary>Zone Id coded as: YARD_ID*10000000 + AREA_ID*1000000 + SECTION_ID*10000 + COLUMN*100 + ROW*1</Summary>
+            </Documentation>
+          </Property>
+          <Property Name="Zone" Type="String" Nullable="false" MaxLength="20" ed:ValidateMaxLength="20" ed:ValidateRequired="true" ed:Guid="014980a2-a764-4af7-b8a4-c8285e73ad1f">
+            <Documentation>
+              <Summary>Zone Id  as a string</Summary>
+            </Documentation>
+          </Property>
+          <Property Name="ZoneType" Type="String" Nullable="false" MaxLength="1" ed:ValidateMaxLength="1" ed:ValidateRequired="true" ed:Guid="401d2c49-4e2b-4aaf-ab8f-a8b9f85c613c">
+            <Documentation>
+              <Summary>Type of Track Zone: ;Y=Yard ;A=Area ;S=Section ;Z=Zone ;V = Virtual Zone;D = Device</Summary>
+            </Documentation>
+          </Property>
+          <Property Name="Yard" Type="String" Nullable="false" MaxLength="20" ed:ValidateMaxLength="20" ed:ValidateRequired="true" ed:Guid="80a6763f-19d0-4012-86be-33719b862990">
+            <Documentation>
+              <Summary>Identifier of a tracking occupancy yard</Summary>
+            </Documentation>
+          </Property>
+          <Property Name="Area" Type="String" MaxLength="30" ed:ValidateMaxLength="30" ed:ValidateRequired="false" ed:Guid="81b2519d-3b75-4290-aa1f-91587d5f12cf">
+            <Documentation>
+              <Summary>Identifier of a tracking occupancy area</Summary>
+            </Documentation>
+          </Property>
+          <Property Name="Section" Type="String" MaxLength="20" ed:ValidateMaxLength="20" ed:ValidateRequired="false" ed:Guid="131c401e-8f22-43e0-ae2a-176634bd2eac">
+            <Documentation>
+              <Summary>Identifier of a tracking occupancy section.</Summary>
+            </Documentation>
+          </Property>
+          <Property Name="Status" Type="Int32" Nullable="false" DefaultValue="0" ed:ValidateRequired="true" ed:Guid="c52a1e75-b533-4ecc-9a30-19a6244ec64a">
+            <Documentation>
+              <Summary>Zone status: ;0=Normal ;10=Blocked</Summary>
+            </Documentation>
+          </Property>
+          <Property Name="ColorBackground" Type="String" MaxLength="10" ed:ValidateMaxLength="10" ed:ValidateRequired="false" ed:Guid="0e22cbae-fb27-4cd4-8063-11b6c09ebde6">
+            <Documentation>
+              <Summary>Hex Code Color Background (e.g. #6600cc)</Summary>
+            </Documentation>
+          </Property>
+          <Property Name="ColorForeground" Type="String" MaxLength="10" ed:ValidateMaxLength="10" ed:ValidateRequired="false" ed:Guid="c9c6335c-8216-4714-aacb-85f15489c325">
+            <Documentation>
+              <Summary>Hex Code Color ForeGround (e.g. #6600cc)</Summary>
+            </Documentation>
+          </Property>
+          <Property Name="ColorFrame" Type="String" MaxLength="10" ed:ValidateMaxLength="10" ed:ValidateRequired="false" ed:Guid="78322342-f5f8-4566-8782-5948af9fc503">
+            <Documentation>
+              <Summary>Hex Code Color Frame (#6600cc)</Summary>
+            </Documentation>
+          </Property>
+          <Property Name="PosXMin" Type="Int32" Nullable="false" ed:ValidateRequired="true" ed:Guid="404594c3-bcf6-407e-b58e-a5109ccf89bd">
+            <Documentation>
+              <Summary>X-coordinate of zone begin</Summary>
+            </Documentation>
+          </Property>
+          <Property Name="PosXMax" Type="Int32" Nullable="false" ed:ValidateRequired="true" ed:Guid="9a1efc1b-d0a1-4df7-aa33-e7f9b83d0a98">
+            <Documentation>
+              <Summary>X-coordinate of zone end</Summary>
+            </Documentation>
+          </Property>
+          <Property Name="PosYMin" Type="Int32" Nullable="false" ed:ValidateRequired="true" ed:Guid="6b927b0e-7c39-476e-b758-9913a3aa6ff9">
+            <Documentation>
+              <Summary>Y-coordinate of zone begin</Summary>
+            </Documentation>
+          </Property>
+          <Property Name="PosYMax" Type="Int32" Nullable="false" ed:ValidateRequired="true" ed:Guid="424882b7-9ca6-4d30-9f17-29b294ba956b">
+            <Documentation>
+              <Summary>Y-coordinate of zone end</Summary>
+            </Documentation>
+          </Property>
+          <Property Name="PosZMin" Type="Int32" Nullable="false" ed:ValidateRequired="true" ed:Guid="efc87fc3-8ba5-4877-9583-347651414fe8">
+            <Documentation>
+              <Summary>Z-coordinate of zone begin</Summary>
+            </Documentation>
+          </Property>
+          <Property Name="PosZMax" Type="Int32" Nullable="false" ed:ValidateRequired="true" ed:Guid="04957e59-dfce-4232-8f9d-5fecf5eb692b">
+            <Documentation>
+              <Summary>Z-coordinate of zone end</Summary>
+            </Documentation>
+          </Property>
+          <Property Name="Description" Type="String" MaxLength="40" ed:ValidateMaxLength="40" ed:ValidateRequired="false" ed:Guid="4dd7365a-b2e5-4f06-b54c-9d9a4fe8f8ab">
+            <Documentation>
+              <Summary>Description used by HMI</Summary>
+            </Documentation>
+          </Property>
+          <Property Name="IdZonePrevX" Type="Int32" ed:ValidateRequired="false" ed:Guid="774184d6-cece-4f5c-82c0-4af327d0f7ce">
+            <Documentation>
+              <Summary>Previous tracking zone in X direction</Summary>
+            </Documentation>
+          </Property>
+          <Property Name="IdZonePrevY" Type="Int32" ed:ValidateRequired="false" ed:Guid="10c2d4a3-3c0f-4310-9ec3-12aa9a65d7c8">
+            <Documentation>
+              <Summary>Previous tracking zone in Y direction</Summary>
+            </Documentation>
+          </Property>
+          <Property Name="IdZonePrevZ" Type="Int32" ed:ValidateRequired="false" ed:Guid="2dbeba5c-2fca-49ce-aa04-cb8cf671ff16">
+            <Documentation>
+              <Summary>Previous tracking zone in Z direction</Summary>
+            </Documentation>
+          </Property>
+          <Property Name="CameraOffsetX" Type="Int32" ed:ValidateRequired="false" ed:Guid="8a12ee83-3f2c-4a89-b05f-6435a3743abe">
+            <Documentation>
+              <Summary>default Camera Offset in x direction</Summary>
+            </Documentation>
+          </Property>
+          <Property Name="CameraOffsetY" Type="Int32" ed:ValidateRequired="false" ed:Guid="83a58ae1-46cc-4f9c-a5ff-66f31c50f282">
+            <Documentation>
+              <Summary>default Camera Offset in y direction</Summary>
+            </Documentation>
+          </Property>
+          <Property Name="CameraOffsetZ" Type="Int32" ed:ValidateRequired="false" ed:Guid="8162d273-258b-48af-acd5-0819455c8a28">
+            <Documentation>
+              <Summary>default Camera Offset in z direction</Summary>
+            </Documentation>
+          </Property>
+          <Property Name="CameraAngleXy" Type="Double" ed:ValidateRequired="false" ed:Guid="34b9f9a3-4909-4a56-8eae-b7ce58cedc2b">
+            <Documentation>
+              <Summary>default Camera Angle measured from x to y in [RAD]. 0=camera looks parallel to X PI/2=camera looks prallel to Y</Summary>
+            </Documentation>
+          </Property>
+          <Property Name="CameraAngleYz" Type="Double" ed:ValidateRequired="false" ed:Guid="7acff811-152f-4797-8b80-412e3f61fdcc">
+            <Documentation>
+              <Summary>default Camera Angle measured from y to z in [RAD]. 0=camera looks parallel to Y PI/2=camera looks prallel to Z</Summary>
+            </Documentation>
+          </Property>
+          <Property Name="PieceCountMax" Type="Int32" Nullable="false" DefaultValue="1" ed:ValidateRequired="true" ed:Guid="019ab1e6-2d72-40b0-b6e3-0fab4693f667">
+            <Documentation>
+              <Summary>Maximal number of pieces:;  -1=not limited</Summary>
+            </Documentation>
+          </Property>
+          <Property Name="Priority" Type="Int32" Nullable="false" DefaultValue="5" ed:ValidateRequired="true" ed:Guid="fffda4f0-17d3-4b41-ac70-89f2c159c724">
+            <Documentation>
+              <Summary>priority of the zone. Higher values mean higher priority</Summary>
+            </Documentation>
+          </Property>
+          <Property Name="XAlignment" Type="Int32" Nullable="false" DefaultValue="2" ed:ValidateRequired="true" ed:Guid="f5a220c5-64eb-476e-bed6-b77e2a8633d1">
+            <Documentation>
+              <Summary>alignment of pieces in x-direction:;0 - downstream;1 - upstream;2 - center</Summary>
+            </Documentation>
+          </Property>
+          <Property Name="YAlignment" Type="Int32" Nullable="false" DefaultValue="2" ed:ValidateRequired="true" ed:Guid="53ba75a8-6c40-49f7-9a6d-f1bcf7298175">
+            <Documentation>
+              <Summary>alignment of pieces in y-direction:;0 - downstream;1 - upstream;2 - center</Summary>
+            </Documentation>
+          </Property>
+          <Property Name="RotateAngle" Type="Int32" Nullable="false" DefaultValue="0" ed:ValidateRequired="true" ed:Guid="4af9ab03-310e-48f2-a951-041c2744aacb">
+            <Documentation>
+              <Summary>rotate angle of piece:;0 - 0 degree;1 - 90 degree;2 - 180 degree;3 - 270 degree</Summary>
+            </Documentation>
+          </Property>
+          <Property Name="TiltAngle" Type="Int32" Nullable="false" DefaultValue="0" ed:ValidateRequired="true" ed:Guid="e7ab1eba-e657-4342-9a29-ff38ad77b45e">
+            <Documentation>
+              <Summary>tilt angle of piece:;0 - 0 degree;1 - 90 degree (eye to the sky)</Summary>
+            </Documentation>
+          </Property>
+          <Property Name="GenEventEnter" Type="Boolean" Nullable="false" DefaultValue="True" ed:ValidateRequired="true" ed:Guid="5d9b88f9-acfa-49e0-81d6-97a06bfa78e7">
+            <Documentation>
+              <Summary>Enables sending event with information about piece entering the tracking zone.</Summary>
+            </Documentation>
+          </Property>
+          <Property Name="GenEventExit" Type="Boolean" Nullable="false" DefaultValue="True" ed:ValidateRequired="true" ed:Guid="1d27e4ff-7c0f-4940-a746-ffebae22918e">
+            <Documentation>
+              <Summary>Enables sending event with information about piece exiting the tracking zone.</Summary>
+            </Documentation>
+          </Property>
+          <Property Name="ModifLast" Type="DateTime" Nullable="false" Precision="6" ed:ValidateRequired="true" ed:Guid="d1fd3963-6460-4cfa-9799-1f839e7017db">
+            <Documentation>
+              <Summary>Timestamp of the last modification: insert or update. This field is assigned automatically by the data base on insertion. Do NOT set this value manually!</Summary>
+            </Documentation>
+          </Property>
+          <NavigationProperty Name="TrackZonesPieces" Relationship="YmModel.FK_42_TRACK_ZONES_PIECE_T_PK_2" FromRole="TrackZone" ToRole="TrackZonesPieces" ed:Guid="01c7bd3c-2ccd-41dc-8aeb-3d7a32db9d1b" />
+          <NavigationProperty Name="TrackZones_IdZonePrevZ" Relationship="YmModel.FK_41_TRACK_ZONE_TRACK_ZO_PK_4" FromRole="TrackZone_IdZonePrevZ" ToRole="TrackZones_IdZonePrevZ" ed:Guid="9d5bb096-4948-4d3f-908d-7cb5c37707e5" />
+          <NavigationProperty Name="TrackZone_IdZonePrevZ" Relationship="YmModel.FK_41_TRACK_ZONE_TRACK_ZO_PK_4" FromRole="TrackZones_IdZonePrevZ" ToRole="TrackZone_IdZonePrevZ" ed:Guid="513b9fff-27ab-4f99-a06e-ed1a4d6540fe" />
+          <NavigationProperty Name="TrackZones_IdZonePrevY" Relationship="YmModel.FK_41_TRACK_ZONE_TRACK_ZO_PK_3" FromRole="TrackZone_IdZonePrevY" ToRole="TrackZones_IdZonePrevY" ed:Guid="a8fb338e-0ed9-4c03-b884-b9a7342c7803" />
+          <NavigationProperty Name="TrackZone_IdZonePrevY" Relationship="YmModel.FK_41_TRACK_ZONE_TRACK_ZO_PK_3" FromRole="TrackZones_IdZonePrevY" ToRole="TrackZone_IdZonePrevY" ed:Guid="8450d895-1051-4344-b674-74c0a30a6590" />
+          <NavigationProperty Name="TrackSection" Relationship="YmModel.FK_41_TRACK_ZONE_TRACK_SE_PK_1" FromRole="TrackZones" ToRole="TrackSection" ed:Guid="2b7fe1b9-4800-4315-8d83-faec8bcdd5d3" />
+          <NavigationProperty Name="TrackZones_IdZonePrevX" Relationship="YmModel.FK_41_TRACK_ZONE_TRACK_ZO_PK_2" FromRole="TrackZone_IdZonePrevX" ToRole="TrackZones_IdZonePrevX" ed:Guid="267b7ade-8f46-4e7c-848c-b03ce76e712d" />
+          <NavigationProperty Name="TrackZone_IdZonePrevX" Relationship="YmModel.FK_41_TRACK_ZONE_TRACK_ZO_PK_2" FromRole="TrackZones_IdZonePrevX" ToRole="TrackZone_IdZonePrevX" ed:Guid="da7335f4-f92c-41c8-aba8-0fae0941a416" />
+        </EntityType>
+        <EntityType Name="TrackZoneDeletedHist" ed:Guid="c77d98b2-2127-4080-a5e3-d981d2c655f7">
+          <Documentation>
+            <Summary>Track zone deleted history</Summary>
+          </Documentation>
+          <Key>
+            <PropertyRef Name="IdZone" />
+          </Key>
+          <Property Name="IdZone" Type="Int32" Nullable="false" ed:ValidateRequired="true" ed:Guid="521cdbed-d562-42f2-8703-4ab02a2b6ba1">
+            <Documentation>
+              <Summary>Zone Id coded as: YARD_ID*10000000 + AREA_ID*1000000 + SECTION_ID*10000 + COLUMN*100 + ROW*1</Summary>
+            </Documentation>
+          </Property>
+          <Property Name="ModifLast" Type="DateTime" Nullable="false" Precision="6" ed:ValidateRequired="true" ed:Guid="976a8351-00e6-4388-9070-11816eb8f322">
+            <Documentation>
+              <Summary>Timestamp of the last modification: insert or update. This field is assigned automatically by the data base on insertion. Do NOT set this value manually!</Summary>
+            </Documentation>
+          </Property>
+        </EntityType>
+        <EntityType Name="TrackArea" ed:Guid="81850a65-a542-4ea4-8b31-ef122d976e57">
+          <Documentation>
+            <Summary>Tracking coordinates of areas in the yard system.</Summary>
+          </Documentation>
+          <Key>
+            <PropertyRef Name="Area" />
+          </Key>
+          <Property Name="Area" Type="String" Nullable="false" MaxLength="10" ed:ValidateMaxLength="10" ed:ValidateRequired="true" ed:Guid="59116269-ff58-4455-a035-d0def27a3e16">
+            <Documentation>
+              <Summary>AREA ID</Summary>
+            </Documentation>
+          </Property>
+          <Property Name="Yard" Type="String" Nullable="false" MaxLength="10" ed:ValidateMaxLength="10" ed:ValidateRequired="true" ed:Guid="d6f77f96-f01c-40f5-8b61-f6ee9556cfc1">
+            <Documentation>
+              <Summary>referenced Yard Id</Summary>
+            </Documentation>
+          </Property>
+          <Property Name="Description" Type="String" MaxLength="40" ed:ValidateMaxLength="40" ed:ValidateRequired="false" ed:Guid="2c9fd101-e6e2-4137-b87c-f537a61267b3">
+            <Documentation>
+              <Summary>Description of the Area</Summary>
+            </Documentation>
+          </Property>
+          <Property Name="OffsetX" Type="Int32" Nullable="false" ed:ValidateRequired="true" ed:Guid="ec74fb25-43d3-49c3-b75b-72d38c58a46c">
+            <Documentation>
+              <Summary>offset of the area measured from an Origin</Summary>
+            </Documentation>
+          </Property>
+          <Property Name="OffsetY" Type="Int32" Nullable="false" ed:ValidateRequired="true" ed:Guid="7c7437e0-6e15-4954-86f5-3be7720f6d44">
+            <Documentation>
+              <Summary>offset of the area measured from an Origin</Summary>
+            </Documentation>
+          </Property>
+          <Property Name="CameraOffsetX" Type="Int32" ed:ValidateRequired="false" ed:Guid="2dd543d2-6309-4456-881c-4e785046bfcb">
+            <Documentation>
+              <Summary>default Camera Offset in x direction</Summary>
+            </Documentation>
+          </Property>
+          <Property Name="CameraOffsetY" Type="Int32" ed:ValidateRequired="false" ed:Guid="547a1dfa-2691-4825-b268-cc5a7ade40a4">
+            <Documentation>
+              <Summary>default Camera Offset in y direction</Summary>
+            </Documentation>
+          </Property>
+          <Property Name="CameraOffsetZ" Type="Int32" ed:ValidateRequired="false" ed:Guid="cf60528c-9191-48a1-8541-ec1c83339e45">
+            <Documentation>
+              <Summary>default Camera Offset in z direction</Summary>
+            </Documentation>
+          </Property>
+          <Property Name="CameraAngleXy" Type="Double" ed:ValidateRequired="false" ed:Guid="c77513b6-9df8-45f5-a906-28d0ce224cb0">
+            <Documentation>
+              <Summary>default Camera Angle measured from x to y in [RAD]. 0=camera looks parallel to X PI/2=camera looks prallel to Y</Summary>
+            </Documentation>
+          </Property>
+          <Property Name="CameraAngleYz" Type="Double" ed:ValidateRequired="false" ed:Guid="30ebae56-62f4-4a47-92f9-240510f0c8dd">
+            <Documentation>
+              <Summary>default Camera Angle measured from y to z in [RAD]. 0=camera looks parallel to Y PI/2=camera looks prallel to Z</Summary>
+            </Documentation>
+          </Property>
+          <Property Name="ModifLast" Type="DateTime" Nullable="false" Precision="6" ed:ValidateRequired="true" ed:Guid="44180064-d973-4ada-b3e4-8f3591162853">
+            <Documentation>
+              <Summary>Timestamp of the last modification: insert or update. This field is assigned automatically by the data base on insertion. Do NOT set this value manually!</Summary>
+            </Documentation>
+          </Property>
+          <NavigationProperty Name="TrackSections" Relationship="YmModel.FK_39_TRACK_SECTION_TRACK_PK_2" FromRole="TrackArea" ToRole="TrackSections" ed:Guid="20dbccdd-310e-4e6b-80ee-15beed0be685" />
+          <NavigationProperty Name="TrackYard" Relationship="YmModel.FK_37_TRACK_AREA_TRACK_YA_PK_1" FromRole="TrackAreas" ToRole="TrackYard" ed:Guid="ea9a7778-fee8-4707-a1e6-3d4e96991916" />
+        </EntityType>
+        <Association Name="FK_39_TRACK_SECTION_TRACK_PK_1" ed:Guid="a0ddd512-5ffd-4fcc-b210-4d1583637f9b">
+          <End Role="TrackYard" Type="YmModel.TrackYard" Multiplicity="1" />
+          <End Role="TrackSections" Type="YmModel.TrackSection" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="TrackYard">
+              <PropertyRef Name="Yard" />
+            </Principal>
+            <Dependent Role="TrackSections">
+              <PropertyRef Name="Yard" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_39_TRACK_SECTION_TRACK_PK_2" ed:Guid="656f1ca9-3a64-48a8-a60f-bffc7c4e41ef">
+          <End Role="TrackArea" Type="YmModel.TrackArea" Multiplicity="0..1" />
+          <End Role="TrackSections" Type="YmModel.TrackSection" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="TrackArea">
+              <PropertyRef Name="Area" />
+            </Principal>
+            <Dependent Role="TrackSections">
+              <PropertyRef Name="Area" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_42_TRACK_ZONES_PIECE_T_PK_2" ed:Guid="56593eed-889e-4a7a-827b-f6ca24bedd8d">
+          <End Role="TrackZone" Type="YmModel.TrackZone" Multiplicity="1" />
+          <End Role="TrackZonesPieces" Type="YmModel.TrackZonesPiece" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="TrackZone">
+              <PropertyRef Name="IdZone" />
+            </Principal>
+            <Dependent Role="TrackZonesPieces">
+              <PropertyRef Name="IdZone" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_41_TRACK_ZONE_TRACK_ZO_PK_4" ed:Guid="30f565b0-b898-4abf-a889-39ddbd722d62">
+          <End Role="TrackZone_IdZonePrevZ" Type="YmModel.TrackZone" Multiplicity="0..1" />
+          <End Role="TrackZones_IdZonePrevZ" Type="YmModel.TrackZone" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="TrackZone_IdZonePrevZ">
+              <PropertyRef Name="IdZone" />
+            </Principal>
+            <Dependent Role="TrackZones_IdZonePrevZ">
+              <PropertyRef Name="IdZonePrevZ" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_41_TRACK_ZONE_TRACK_ZO_PK_3" ed:Guid="02c534d0-8d82-4f87-9854-ce8ee4f2cf8d">
+          <End Role="TrackZone_IdZonePrevY" Type="YmModel.TrackZone" Multiplicity="0..1" />
+          <End Role="TrackZones_IdZonePrevY" Type="YmModel.TrackZone" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="TrackZone_IdZonePrevY">
+              <PropertyRef Name="IdZone" />
+            </Principal>
+            <Dependent Role="TrackZones_IdZonePrevY">
+              <PropertyRef Name="IdZonePrevY" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_41_TRACK_ZONE_TRACK_SE_PK_1" ed:Guid="c81e2a64-e484-44ec-af95-5343dbf7dda7">
+          <End Role="TrackSection" Type="YmModel.TrackSection" Multiplicity="0..1" />
+          <End Role="TrackZones" Type="YmModel.TrackZone" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="TrackSection">
+              <PropertyRef Name="Section" />
+            </Principal>
+            <Dependent Role="TrackZones">
+              <PropertyRef Name="Section" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_41_TRACK_ZONE_TRACK_ZO_PK_2" ed:Guid="4b99c938-ac68-4aac-a650-5e01553fefd3">
+          <End Role="TrackZone_IdZonePrevX" Type="YmModel.TrackZone" Multiplicity="0..1" />
+          <End Role="TrackZones_IdZonePrevX" Type="YmModel.TrackZone" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="TrackZone_IdZonePrevX">
+              <PropertyRef Name="IdZone" />
+            </Principal>
+            <Dependent Role="TrackZones_IdZonePrevX">
+              <PropertyRef Name="IdZonePrevX" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_37_TRACK_AREA_TRACK_YA_PK_1" ed:Guid="be02650f-f950-4af8-8447-2478c546ad4f">
+          <End Role="TrackYard" Type="YmModel.TrackYard" Multiplicity="1" />
+          <End Role="TrackAreas" Type="YmModel.TrackArea" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="TrackYard">
+              <PropertyRef Name="Yard" />
+            </Principal>
+            <Dependent Role="TrackAreas">
+              <PropertyRef Name="Yard" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- MSL content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="YmEntitiesStoreContainer" CdmEntityContainer="YmEntities">
+          <EntitySetMapping Name="TrackSections">
+            <EntityTypeMapping TypeName="YmModel.TrackSection">
+              <MappingFragment StoreEntitySet="TRACK_SECTIONs">
+                <ScalarProperty Name="Section" ColumnName="SECTION" />
+                <ScalarProperty Name="Yard" ColumnName="YARD" />
+                <ScalarProperty Name="Area" ColumnName="AREA" />
+                <ScalarProperty Name="Description" ColumnName="DESCRIPTION" />
+                <ScalarProperty Name="OffsetX" ColumnName="OFFSET_X" />
+                <ScalarProperty Name="OffsetY" ColumnName="OFFSET_Y" />
+                <ScalarProperty Name="CameraOffsetX" ColumnName="CAMERA_OFFSET_X" />
+                <ScalarProperty Name="CameraOffsetY" ColumnName="CAMERA_OFFSET_Y" />
+                <ScalarProperty Name="CameraOffsetZ" ColumnName="CAMERA_OFFSET_Z" />
+                <ScalarProperty Name="CameraAngleXy" ColumnName="CAMERA_ANGLE_XY" />
+                <ScalarProperty Name="CameraAngleYz" ColumnName="CAMERA_ANGLE_YZ" />
+                <ScalarProperty Name="ModifLast" ColumnName="MODIF_LAST" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="TrackYards">
+            <EntityTypeMapping TypeName="YmModel.TrackYard">
+              <MappingFragment StoreEntitySet="TRACK_YARDs">
+                <ScalarProperty Name="Yard" ColumnName="YARD" />
+                <ScalarProperty Name="YardType" ColumnName="YARD_TYPE" />
+                <ScalarProperty Name="Description" ColumnName="DESCRIPTION" />
+                <ScalarProperty Name="OffsetX" ColumnName="OFFSET_X" />
+                <ScalarProperty Name="OffsetY" ColumnName="OFFSET_Y" />
+                <ScalarProperty Name="CameraOffsetX" ColumnName="CAMERA_OFFSET_X" />
+                <ScalarProperty Name="CameraOffsetY" ColumnName="CAMERA_OFFSET_Y" />
+                <ScalarProperty Name="CameraOffsetZ" ColumnName="CAMERA_OFFSET_Z" />
+                <ScalarProperty Name="CameraAngleXy" ColumnName="CAMERA_ANGLE_XY" />
+                <ScalarProperty Name="CameraAngleYz" ColumnName="CAMERA_ANGLE_YZ" />
+                <ScalarProperty Name="ModifLast" ColumnName="MODIF_LAST" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="TrackCoordPieces">
+            <EntityTypeMapping TypeName="YmModel.TrackCoordPiece">
+              <MappingFragment StoreEntitySet="TRACK_COORD_PIECEs">
+                <ScalarProperty Name="IdPiece" ColumnName="ID_PIECE" />
+                <ScalarProperty Name="IdL3" ColumnName="ID_L3" />
+                <ScalarProperty Name="PosX" ColumnName="POS_X" />
+                <ScalarProperty Name="PosY" ColumnName="POS_Y" />
+                <ScalarProperty Name="PosZ" ColumnName="POS_Z" />
+                <ScalarProperty Name="XAlignment" ColumnName="X_ALIGNMENT" />
+                <ScalarProperty Name="YAlignment" ColumnName="Y_ALIGNMENT" />
+                <ScalarProperty Name="RotateAngle" ColumnName="ROTATE_ANGLE" />
+                <ScalarProperty Name="TiltAngle" ColumnName="TILT_ANGLE" />
+                <ScalarProperty Name="FlagOutOfTrack" ColumnName="FLAG_OUT_OF_TRACK" />
+                <ScalarProperty Name="ModifLast" ColumnName="MODIF_LAST" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="TrackZonesPieces">
+            <EntityTypeMapping TypeName="YmModel.TrackZonesPiece">
+              <MappingFragment StoreEntitySet="TRACK_ZONES_PIECEs">
+                <ScalarProperty Name="IdPiece" ColumnName="ID_PIECE" />
+                <ScalarProperty Name="IdZone" ColumnName="ID_ZONE" />
+                <ScalarProperty Name="ZeroPoint" ColumnName="ZERO_POINT" />
+                <ScalarProperty Name="ModifLast" ColumnName="MODIF_LAST" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="TrackZones">
+            <EntityTypeMapping TypeName="YmModel.TrackZone">
+              <MappingFragment StoreEntitySet="TRACK_ZONEs">
+                <ScalarProperty Name="IdZone" ColumnName="ID_ZONE" />
+                <ScalarProperty Name="Zone" ColumnName="ZONE" />
+                <ScalarProperty Name="ZoneType" ColumnName="ZONE_TYPE" />
+                <ScalarProperty Name="Yard" ColumnName="YARD" />
+                <ScalarProperty Name="Area" ColumnName="AREA" />
+                <ScalarProperty Name="Section" ColumnName="SECTION" />
+                <ScalarProperty Name="Status" ColumnName="STATUS" />
+                <ScalarProperty Name="ColorBackground" ColumnName="COLOR_BACKGROUND" />
+                <ScalarProperty Name="ColorForeground" ColumnName="COLOR_FOREGROUND" />
+                <ScalarProperty Name="ColorFrame" ColumnName="COLOR_FRAME" />
+                <ScalarProperty Name="PosXMin" ColumnName="POS_X_MIN" />
+                <ScalarProperty Name="PosXMax" ColumnName="POS_X_MAX" />
+                <ScalarProperty Name="PosYMin" ColumnName="POS_Y_MIN" />
+                <ScalarProperty Name="PosYMax" ColumnName="POS_Y_MAX" />
+                <ScalarProperty Name="PosZMin" ColumnName="POS_Z_MIN" />
+                <ScalarProperty Name="PosZMax" ColumnName="POS_Z_MAX" />
+                <ScalarProperty Name="Description" ColumnName="DESCRIPTION" />
+                <ScalarProperty Name="IdZonePrevX" ColumnName="ID_ZONE_PREV_X" />
+                <ScalarProperty Name="IdZonePrevY" ColumnName="ID_ZONE_PREV_Y" />
+                <ScalarProperty Name="IdZonePrevZ" ColumnName="ID_ZONE_PREV_Z" />
+                <ScalarProperty Name="CameraOffsetX" ColumnName="CAMERA_OFFSET_X" />
+                <ScalarProperty Name="CameraOffsetY" ColumnName="CAMERA_OFFSET_Y" />
+                <ScalarProperty Name="CameraOffsetZ" ColumnName="CAMERA_OFFSET_Z" />
+                <ScalarProperty Name="CameraAngleXy" ColumnName="CAMERA_ANGLE_XY" />
+                <ScalarProperty Name="CameraAngleYz" ColumnName="CAMERA_ANGLE_YZ" />
+                <ScalarProperty Name="PieceCountMax" ColumnName="PIECE_COUNT_MAX" />
+                <ScalarProperty Name="Priority" ColumnName="PRIORITY" />
+                <ScalarProperty Name="XAlignment" ColumnName="X_ALIGNMENT" />
+                <ScalarProperty Name="YAlignment" ColumnName="Y_ALIGNMENT" />
+                <ScalarProperty Name="RotateAngle" ColumnName="ROTATE_ANGLE" />
+                <ScalarProperty Name="TiltAngle" ColumnName="TILT_ANGLE" />
+                <ScalarProperty Name="GenEventEnter" ColumnName="GEN_EVENT_ENTER" />
+                <ScalarProperty Name="GenEventExit" ColumnName="GEN_EVENT_EXIT" />
+                <ScalarProperty Name="ModifLast" ColumnName="MODIF_LAST" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="TrackZoneDeletedHists">
+            <EntityTypeMapping TypeName="YmModel.TrackZoneDeletedHist">
+              <MappingFragment StoreEntitySet="TRACK_ZONE_DELETED_HISTs">
+                <ScalarProperty Name="IdZone" ColumnName="ID_ZONE" />
+                <ScalarProperty Name="ModifLast" ColumnName="MODIF_LAST" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="TrackAreas">
+            <EntityTypeMapping TypeName="YmModel.TrackArea">
+              <MappingFragment StoreEntitySet="TRACK_AREAs">
+                <ScalarProperty Name="Area" ColumnName="AREA" />
+                <ScalarProperty Name="Yard" ColumnName="YARD" />
+                <ScalarProperty Name="Description" ColumnName="DESCRIPTION" />
+                <ScalarProperty Name="OffsetX" ColumnName="OFFSET_X" />
+                <ScalarProperty Name="OffsetY" ColumnName="OFFSET_Y" />
+                <ScalarProperty Name="CameraOffsetX" ColumnName="CAMERA_OFFSET_X" />
+                <ScalarProperty Name="CameraOffsetY" ColumnName="CAMERA_OFFSET_Y" />
+                <ScalarProperty Name="CameraOffsetZ" ColumnName="CAMERA_OFFSET_Z" />
+                <ScalarProperty Name="CameraAngleXy" ColumnName="CAMERA_ANGLE_XY" />
+                <ScalarProperty Name="CameraAngleYz" ColumnName="CAMERA_ANGLE_YZ" />
+                <ScalarProperty Name="ModifLast" ColumnName="MODIF_LAST" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content -->
+  <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <edmx:Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </edmx:Connection>
+    <edmx:Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="false" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
+      </DesignerInfoPropertySet>
+    </edmx:Options>
+    <edmx:Diagrams>
+      <Diagram Name="Main" />
+    </edmx:Diagrams>
+  </edmx:Designer>
+</edmx:Edmx>

@@ -1,12 +1,18 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
 import Home from '../views/Home.vue'
+import YardOverview from '../views/YardOverview.vue'
 
 Vue.use(VueRouter)
 
 const routes = [
   {
     path: '/',
+    name: 'Yard Overview',
+    component: YardOverview
+  },
+  {
+    path: '/Home',
     name: 'Home',
     component: Home
   },

@@ -60,7 +60,7 @@ const actions = {
 
         let renderer = new THREE.WebGLRenderer({ antialias: true });
         renderer.setClearColor(context.state.clearColor);
-        renderer.setSize(context.state.container.offsetWidth - 2, context.state.container.offsetHeight - 50);
+        renderer.setSize(context.state.container.offsetWidth - 2, context.state.container.offsetHeight - 10);
   
         context.state.container.appendChild(renderer.domElement);
 

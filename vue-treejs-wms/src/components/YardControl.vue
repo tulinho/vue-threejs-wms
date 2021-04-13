@@ -2,26 +2,14 @@
     <div class="yard-main">
         <div id="yard-container" class="yard-container">
           <presentation-menu/>
-          <v-btn v-if="!showMenu" absolute top right color="blue darken-1 white--text"  @click="show(true)">Presentation Menu</v-btn>
+          <v-btn v-if="!showMenu" absolute top right color="primary white--text"  @click="show(true)">Presentation Menu</v-btn>
         </div>
     </div>
 </template>
 
 <script>
-//import * as THREE from "three";
 import { mapState, mapActions } from "vuex";
 import PresentationMenu from "./PresentationMenu";
-
-// import axios from 'axios';
-// axios.get("http://localhost:8081/YardService.svc/TrackAreas")
-//   .then(function (response) {
-//     // handle success
-//     console.log(response.data.value);
-//   })
-//   .catch(function (error) {
-//     // handle error
-//     console.log(error);
-//   })
 
 const computedFromCamera = mapState("camera", {
   zoom: state => state.zoom,
@@ -137,11 +125,6 @@ export default {
 </script>
 
 <style>
-body {
-  margin: 0;
-  height: calc(100vh - 200px);
-}
-
 canvas {
   display: block;
 }
@@ -151,10 +134,10 @@ canvas {
   border: 1px;
   border-color: thistle;
   border-style: solid;
-  height: calc(95vh - 200px);
+  height: calc(100vh - 200px);
   margin: auto;
   margin-top: 10px;
   position: relative;
-  width: 95vw;
+  width: 100%;
 }
 </style>
