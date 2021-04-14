@@ -25,17 +25,12 @@ const computedFromMenu = mapState("menu", {
 });
 
 const cameraMethods = mapActions("camera", ["setContainer","initialize","render", "rotateScene", "moveCamera", "zoomCamera"])
-const yardMethods = mapActions("yard", ["draw", "initializeYard"])
+const yardMethods = mapActions("yard", ["initializeYard"])
 const menuMethods = mapActions("menu", ["show"])
 
 export default {
   components: { PresentationMenu },
-  computed: Object.assign({
-    drawer:{
-      get(){ return true;},
-      set(value){ this.show(value);}
-    }
-  }, computedFromCamera, computedFromYard, computedFromMenu),
+  computed: Object.assign({}, computedFromCamera, computedFromYard, computedFromMenu),
   setup() {},    
   data() {
     return {
@@ -111,15 +106,10 @@ export default {
     this.setContainer(container);
     this.initialize();
     this.initializeYard();
-    //this.draw();
     this.render();
     this.addMouseHandler(container);
   },
   watch: {
-    // zoom (newValue) {
-    //   camera.position.z = newValue;
-    //   camera.updateProjectionMatrix();
-    // }
   }
 };
 </script>

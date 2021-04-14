@@ -21,6 +21,8 @@ export default {
     IdZonePrevX: null,
     IdZonePrevY: null,
     IdZonePrevZ: null,
+    OffsetX: null,
+    OffsetY: null,
     CameraOffsetX: null,
     CameraOffsetY: null,
     CameraOffsetZ: null,
