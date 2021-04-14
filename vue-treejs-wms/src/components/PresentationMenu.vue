@@ -82,7 +82,7 @@ const computedFromYard = mapState("yard", {
 });
 
 const menuMethods = mapActions("menu", ["show", "setLocation", "setSubLocation", "focusSubLocation", "refreshYard", "setSelectedLevel"]);
-const yardMethods = mapActions("yard", ['filterZonesByLevel']);
+const yardMethods = mapActions("drawingYard", ['filterZonesByLevel']);
 
 export default {
   computed: Object.assign({ 

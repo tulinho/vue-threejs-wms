@@ -89,7 +89,7 @@ const actions = {
         this.dispatch('camera/moveCameraTo', point)
     },
     refreshYard(){
-        this.dispatch('yard/refresh');
+        this.dispatch('drawingYard/refresh');
     }
 }
 
