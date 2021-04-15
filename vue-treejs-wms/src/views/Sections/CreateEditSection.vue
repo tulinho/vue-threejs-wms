@@ -3,7 +3,7 @@
     <v-dialog v-model="dialog" persistent scrollable max-width="1000px">
       <v-card>
         <v-toolbar class="primary" dark>
-          <v-toolbar-title>Area</v-toolbar-title>
+          <v-toolbar-title>Section</v-toolbar-title>
         </v-toolbar>
         <v-divider></v-divider>
         <v-card-text class="mt-5">
@@ -11,7 +11,7 @@
             <v-row>
               <v-col cols="2">
                 <v-select
-                  v-model="area.Yard"
+                  v-model="section.Yard"
                   :items="yards"
                   color="primary"
                   item-text="Zone"
@@ -21,25 +21,36 @@
                 ></v-select>
               </v-col>
               <v-col cols="2">
+                <v-select
+                  v-model="section.Area"
+                  :items="areas"
+                  color="primary"
+                  item-text="Zone"
+                  item-value="Zone"
+                  label="Area"
+                  dense
+                ></v-select>
+              </v-col>
+              <v-col cols="2">
                 <v-text-field
                   label="Id"
-                  v-model="area.IdZone"
+                  v-model="section.IdZone"
                   dense
                 ></v-text-field>
               </v-col>
-              <v-col cols="8">
+              <v-col cols="6">
                 <v-text-field
                   label="Name"
-                  v-model="area.Zone"
+                  v-model="section.Zone"
                   dense
                 ></v-text-field>
-              </v-col>
+              </v-col>              
             </v-row>
             <v-row>
               <v-col cols="12">
                 <v-text-field
                   label="Description"
-                  v-model="area.Description"
+                  v-model="section.Description"
                   dense
                 ></v-text-field>
               </v-col>
@@ -58,7 +69,7 @@
                           >
                           <v-color-picker
                             name="color-background"
-                            v-model="area.ColorBackground"
+                            v-model="section.ColorBackground"
                             mode="hexa"
                             class="ma-2"
                           ></v-color-picker>
@@ -71,7 +82,7 @@
                           >
                           <v-color-picker
                             name="color-background"
-                            v-model="area.ColorForeground"
+                            v-model="section.ColorForeground"
                             mode="hexa"
                             class="ma-2"
                           ></v-color-picker>
@@ -82,7 +93,7 @@
                           <label class="ml-7 subtitle-1">Frame Color</label>
                           <v-color-picker
                             name="color-background"
-                            v-model="area.ColorFrame"
+                            v-model="section.ColorFrame"
                             mode="hexa"
                             class="ma-2"
                           ></v-color-picker>
@@ -92,7 +103,7 @@
                     <v-row>
                       <v-col cols="2">
                         <v-text-field
-                          v-model="area.PosXMin"
+                          v-model="section.PosXMin"
                           type="number"
                           label="Pos X Min"
                           dense
@@ -100,7 +111,7 @@
                       </v-col>
                       <v-col cols="2">
                         <v-text-field
-                          v-model="area.PosXMax"
+                          v-model="section.PosXMax"
                           type="number"
                           label="Pos X Max"
                           dense
@@ -108,7 +119,7 @@
                       </v-col>
                       <v-col cols="2">
                         <v-text-field
-                          v-model="area.PosYMin"
+                          v-model="section.PosYMin"
                           type="number"
                           label="Pos Y Min"
                           dense
@@ -116,7 +127,7 @@
                       </v-col>
                       <v-col cols="2">
                         <v-text-field
-                          v-model="area.PosYMax"
+                          v-model="section.PosYMax"
                           type="number"
                           label="Pos Y Max"
                           dense
@@ -124,7 +135,7 @@
                       </v-col>
                       <v-col cols="2">
                         <v-text-field
-                          v-model="area.PosZMin"
+                          v-model="section.PosZMin"
                           type="number"
                           label="Pos Z Min"
                           dense
@@ -132,7 +143,7 @@
                       </v-col>
                       <v-col cols="2">
                         <v-text-field
-                          v-model="area.PosZMax"
+                          v-model="section.PosZMax"
                           type="number"
                           label="Pos Z Max"
                           dense
@@ -147,7 +158,7 @@
                     <v-row>
                       <v-col cols="6">
                         <v-text-field
-                          v-model="area.OffsetX"
+                          v-model="section.OffsetX"
                           type="number"
                           label="Offset X"
                           dense
@@ -155,7 +166,7 @@
                       </v-col>
                       <v-col cols="6">
                         <v-text-field
-                          v-model="area.OffsetY"
+                          v-model="section.OffsetY"
                           type="number"
                           label="Offset Y"
                           dense
@@ -165,7 +176,7 @@
                     <v-row>
                       <v-col cols="4">
                         <v-text-field
-                          v-model="area.CameraOffsetX"
+                          v-model="section.CameraOffsetX"
                           type="number"
                           label="Camera Offset X"
                           dense
@@ -173,7 +184,7 @@
                       </v-col>
                       <v-col cols="4">
                         <v-text-field
-                          v-model="area.CameraOffsetY"
+                          v-model="section.CameraOffsetY"
                           type="number"
                           label="Camera Offset Y"
                           dense
@@ -181,7 +192,7 @@
                       </v-col>
                       <v-col cols="4">
                         <v-text-field
-                          v-model="area.CameraOffsetZ"
+                          v-model="section.CameraOffsetZ"
                           type="number"
                           label="Camera Offset Z"
                           dense
@@ -191,7 +202,7 @@
                     <v-row>
                       <v-col cols="6">
                         <v-text-field
-                          v-model="area.CameraAngleXy"
+                          v-model="section.CameraAngleXy"
                           type="number"
                           label="Camera Angle XY"
                           dense
@@ -199,7 +210,7 @@
                       </v-col>
                       <v-col cols="6">
                         <v-text-field
-                          v-model="area.CameraAngleYz"
+                          v-model="section.CameraAngleYz"
                           type="number"
                           label="Camera Angle YZ"
                           dense
@@ -215,10 +226,10 @@
         <v-divider></v-divider>
         <v-card-actions>
           <v-spacer></v-spacer>
-          <v-btn color="secondary white--text" text @click="cancelAreaEdition"
+          <v-btn color="secondary white--text" text @click="cancelSectionEdition"
             >Cancel</v-btn
           >
-          <v-btn color="secondary white--text" text @click="saveArea"
+          <v-btn color="secondary white--text" text @click="saveSection"
             >Save</v-btn
           >
         </v-card-actions>
@@ -231,16 +242,22 @@
 import { mapState, mapActions } from "vuex";
 
 const computed = mapState("yard", {
-  dialog: (state) => state.showAreaEdition,
-  area: (state) => state.editingArea,
-  yards: (state) => state.yards
+  dialog: (state) => state.showSectionEdition,
+  section: (state) => state.editingSection,
+  yards: (state) => state.yards,
+  areas: (state) => state.areas,
 });
 
-const methods = mapActions("yard", ["cancelAreaEdition", "saveArea"]);
+const methods = mapActions("yard", ["cancelSectionEdition", "saveSection"]);
 
 export default {
   data() {
     return {
+      yardTypes: [
+        { id: "S", description: "Slab" },
+        { id: "P", description: "Plate" },
+        { id: "C", description: "Coil" },
+      ],
     };
   },
   computed,

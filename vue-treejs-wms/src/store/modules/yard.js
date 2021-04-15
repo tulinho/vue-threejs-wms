@@ -1,5 +1,3 @@
-import axios from "axios";
-
 const defaults = require("../.././config/default-yard-config").default;
 
 const state = () => ({
@@ -15,75 +13,11 @@ const state = () => ({
   showAreaEdition: false,
   editingArea: {},
   selectedArea: {},
-  yards: [
-    {
-      IdZone: 999999999,
-      Zone: "YARD1",
-      ZoneType: "Y",
-      ColorBackground: "#F0F0F0",
-      ColorForeground: "#000000",
-      PosXMin: 12000,
-      PosXMax: 432001,
-      PosYMin: 0,
-      PosYMax: 135001,
-      PosZMin: -400,
-      PosZMax: 1250,
-    },
-  ],
-  areas: [
-    {
-      IdZone: 100000000,
-      Zone: "AREA1",
-      ZoneType: "A",
-      ColorBackground: "#FF8686",
-      ColorForeground: "#000000",
-      PosXMin: 72001,
-      PosXMax: 228000,
-      PosYMin: 99001,
-      PosYMax: 135000,
-      PosZMin: 0,
-      PosZMax: 1250,
-    },
-    {
-      IdZone: 200000000,
-      Zone: "AREA2",
-      ZoneType: "A",
-      ColorBackground: "#86FF86",
-      ColorForeground: "#000000",
-      PosXMin: 74001,
-      PosXMax: 432000,
-      PosYMin: 63001,
-      PosYMax: 99000,
-      PosZMin: 0,
-      PosZMax: 1250,
-    },
-    {
-      IdZone: 300000000,
-      Zone: "AREA3",
-      ZoneType: "A",
-      ColorBackground: "#8686FF",
-      ColorForeground: "#000000",
-      PosXMin: 12001,
-      PosXMax: 408000,
-      PosYMin: 36001,
-      PosYMax: 63000,
-      PosZMin: 0,
-      PosZMax: 1250,
-    },
-    {
-      IdZone: 400000000,
-      Zone: "AREA4",
-      ZoneType: "A",
-      ColorBackground: "#868686",
-      ColorForeground: "#000000",
-      PosXMin: 12001,
-      PosXMax: 156000,
-      PosYMin: 1,
-      PosYMax: 36000,
-      PosZMin: 0,
-      PosZMax: 1250,
-    },
-  ],
+  showSectionEdition: false,
+  editingSection: {},
+  selectedSection: {},
+  yards: [],
+  areas: [],
   sections: [],
   zones: [],
 });
@@ -119,84 +53,28 @@ const mutations = {
   setEditingArea(state, payload) {
     state.editingArea = payload;
   },
+  setSelectedSection(state, payload) {
+    state.selectedSection = payload;
+  },
+  setShowSectionEdition(state, payload) {
+    state.showSectionEdition = payload;
+  },
+  setEditingSection(state, payload) {
+    state.editingSection = payload;
+  },
 };
 
 function initializeYardStructure(context, module) {
   let yards = JSON.parse(window.localStorage.getItem("yards"));
   let areas = JSON.parse(window.localStorage.getItem("areas"));
+  let sections = JSON.parse(window.localStorage.getItem("sections"));
   
   context.commit("setYards", yards || []);
   context.commit("setAreas", areas || []);
-  context.commit("setSections", []);
+  context.commit("setSections", sections || []);
   context.commit("setZones", []);
   module.dispatch("drawingYard/draw");
 }
-
-function loadFromDataBase(context, module) {
-  axios
-    .get("http://localhost:8081/YardService.svc/TrackZones")
-    .then(function(response) {
-      let allZones = response.data.value;
-      allZones.forEach((elem) => {
-        elem.ColorForeground = hexToRGBA(
-          elem.ColorForeground.replace(
-            /#([0-9a-zA-Z]{2})([0-9a-zA-Z]{6})/,
-            "#$2"
-          )
-        );
-        elem.ColorBackground = hexToRGBA(
-          elem.ColorBackground.replace(
-            /#([0-9a-zA-Z]{2})([0-9a-zA-Z]{6})/,
-            "#$2"
-          )
-        );
-        elem.ColorFrame = elem.ColorFrame.replace(
-          /#([0-9a-zA-Z]{2})([0-9a-zA-Z]{6})/,
-          "#$2"
-        );
-      });
-      let yards = allZones.filter((m) => m.ZoneType == "Y");
-      let areas = allZones.filter((m) => m.ZoneType == "A");
-      let sections = allZones.filter((m) => m.ZoneType == "S");
-      let zones = allZones.filter((m) => m.ZoneType == "Z");
-      context.commit("setYards", yards);
-      context.commit("setAreas", areas);
-      context.commit("setSections", sections);
-      context.commit("setZones", zones);
-      module.dispatch("drawingYard/draw");
-    })
-    .catch(function(error) {
-      console.log(error);
-    });
-}
-
-const isValidHex = (hex) => /^#([A-Fa-f0-9]{3,4}){1,2}$/.test(hex);
-
-const getChunksFromString = (st, chunkSize) =>
-  st.match(new RegExp(`.{${chunkSize}}`, "g"));
-
-const convertHexUnitTo256 = (hexStr) =>
-  parseInt(hexStr.repeat(2 / hexStr.length), 16);
-
-const getAlphafloat = (a, alpha) => {
-  if (typeof a !== "undefined") {
-    return a / 255;
-  }
-  if (typeof alpha != "number" || alpha < 0 || alpha > 1) {
-    return 1;
-  }
-  return alpha;
-};
-
-const hexToRGBA = (hex, alpha) => {
-  if (!isValidHex(hex)) {
-    throw new Error("Invalid HEX");
-  }
-  const chunkSize = Math.floor((hex.length - 1) / 3);
-  const hexArr = getChunksFromString(hex.slice(1), chunkSize);
-  const [r, g, b, a] = hexArr.map(convertHexUnitTo256);
-  return `rgba(${r}, ${g}, ${b}, ${getAlphafloat(a, alpha)})`;
-};
 
 const actions = {
   selectYard(context, payload) {
@@ -285,17 +163,68 @@ const actions = {
       areas.push(area);
     });
     context.commit("setAreas", areas);
-    context.dispatch("updateAreasInTheStorage");
+    context.dispatch("updateAreaInTheStorage");
     this.dispatch("drawingYard/refresh");
   },
   updateAreaInTheStorage(context) {
     window.localStorage.setItem("areas", JSON.stringify(context.state.areas));
   },
+
+
+
+  
+  selectSection(context, payload) {
+    context.commit("setSelectedSection", payload);
+    context.dispatch("editSection");
+  },
+  addNewSection(context) {
+    context.commit("setEditingSection", Object.assign({}, defaults.section));
+    context.commit("setShowSectionEdition", true);
+  },
+  editSection(context) {
+    context.commit(
+      "setEditingSection",
+      Object.assign({}, defaults.section, context.state.selectedSection)
+    );
+    context.commit("setShowSectionEdition", true);
+  },
+  cancelSectionEdition(context) {
+    context.commit("setEditingSection", {});
+    context.commit("setShowSectionEdition", false);
+  },
+  saveSection(context) {
+    let existingSection = context.state.sections.find(
+      (m) => m.IdZone == context.state.editingSection.IdZone
+    );
+    if (!existingSection) {
+      context.state.sections.push(context.state.editingSection);
+    } else {
+      Object.assign(existingSection, context.state.editingSection);
+    }
+    context.commit("setEditingSectino", {});
+    context.commit("setShowSectionEdition", false);
+    context.dispatch("updateSectionInTheStorage");
+    this.dispatch("drawingYard/refresh");
+  },
+  excludeSections(context, payload) {
+    let sections = [];
+    context.state.sections.forEach((section) => {
+      if (payload.find((m) => m.IdZone == section.IdZone)) return;
+      sections.push(section);
+    });
+    context.commit("setSections", sections);
+    context.dispatch("updateSectionInTheStorage");
+    this.dispatch("drawingYard/refresh");
+  },
+  updateSectionInTheStorage(context) {
+    window.localStorage.setItem("sections", JSON.stringify(context.state.sections));
+  },
+
+
+
+
   initializeYard(context) {
     initializeYardStructure(context, this);
-  },
-  loadFromDataBase(context) {
-    loadFromDataBase(context, this);
   },
 };
 
