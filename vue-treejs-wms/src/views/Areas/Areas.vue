@@ -3,7 +3,7 @@
     <v-col cols="12">
       <v-row justify="end">
         <v-col cols="1" class="text--left">
-          <v-btn icon color="primary" @click="addNewYard">
+          <v-btn icon color="primary" @click="addNewArea">
             <v-icon dark> add </v-icon>
           </v-btn>
         </v-col>
@@ -38,32 +38,32 @@
           ></v-data-table>
         </v-col>
       </v-row>
-      <create-edit-yard />
+      <create-edit-area />
     </v-col>
   </v-row>
 </template>
 
 <script>
 import { mapState, mapActions } from "vuex";
-import CreateEditYard from "./CreateEditYard.vue";
+import CreateEditArea from "./CreateEditArea.vue";
 
 const computed = mapState('yard', {
-  items: (state) => state.yards,
-  selectedYard: (state) => state.selectedYard
+  items: (state) => state.areas
 });
 
-const methods = mapActions('yard', ['addNewYard', 'selectYard', 'excludeYards'])
+const methods = mapActions('yard', ['addNewArea', 'selectArea', 'excludeAreas'])
 
 export default {
-  components: { CreateEditYard },
+  components: { CreateEditArea },
   data() {
     return {
       search: '',
-      title: 'Yards',
+      title: 'Areas',
       searchLabel: "Search",
       headers: [
-        { text: 'Id Yard', align: 'start', width: 100, value: 'IdZone' },
-        { text: 'Yard', align: 'start', value: 'Zone' },
+        { text: 'Id Area', align: 'start', width: 100, value: 'IdZone' },
+        { text: 'Yard', align: 'start', value: 'Yard' },
+        { text: 'Area', align: 'start', value: 'Zone' },
       ],
       selected: []
     };
@@ -71,10 +71,10 @@ export default {
   computed,
   methods: Object.assign({
     select(value){
-        this.selectYard(value);       
+        this.selectArea(value);       
     },
     exclude(){
-      this.excludeYards(this.selected);
+      this.excludeAreas(this.selected);
     }
   }, methods)
 };

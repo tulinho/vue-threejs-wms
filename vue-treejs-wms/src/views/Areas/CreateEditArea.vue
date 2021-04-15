@@ -3,7 +3,7 @@
     <v-dialog v-model="dialog" persistent scrollable max-width="1000px">
       <v-card>
         <v-toolbar class="primary" dark>
-          <v-toolbar-title>Yard</v-toolbar-title>
+          <v-toolbar-title>Area</v-toolbar-title>
         </v-toolbar>
         <v-divider></v-divider>
         <v-card-text class="mt-5">
@@ -12,20 +12,20 @@
               <v-col cols="2">
                 <v-text-field
                   label="Id"
-                  v-model="yard.IdZone"
+                  v-model="area.IdZone"
                   dense
                 ></v-text-field>
               </v-col>
               <v-col cols="6">
                 <v-text-field
                   label="Name"
-                  v-model="yard.Zone"
+                  v-model="area.Zone"
                   dense
                 ></v-text-field>
               </v-col>
               <v-col cols="4">
                 <v-select
-                  v-model="yard.YardType"
+                  v-model="area.YardType"
                   :items="yardTypes"
                   color="primary"
                   item-text="description"
@@ -39,7 +39,7 @@
               <v-col cols="12">
                 <v-text-field
                   label="Description"
-                  v-model="yard.Description"
+                  v-model="area.Description"
                   dense
                 ></v-text-field>
               </v-col>
@@ -58,7 +58,7 @@
                           >
                           <v-color-picker
                             name="color-background"
-                            v-model="yard.ColorBackground"
+                            v-model="area.ColorBackground"
                             mode="hexa"
                             class="ma-2"
                           ></v-color-picker>
@@ -71,7 +71,7 @@
                           >
                           <v-color-picker
                             name="color-background"
-                            v-model="yard.ColorForeground"
+                            v-model="area.ColorForeground"
                             mode="hexa"
                             class="ma-2"
                           ></v-color-picker>
@@ -82,7 +82,7 @@
                           <label class="ml-7 subtitle-1">Frame Color</label>
                           <v-color-picker
                             name="color-background"
-                            v-model="yard.ColorFrame"
+                            v-model="area.ColorFrame"
                             mode="hexa"
                             class="ma-2"
                           ></v-color-picker>
@@ -92,7 +92,7 @@
                     <v-row>
                       <v-col cols="2">
                         <v-text-field
-                          v-model="yard.PosXMin"
+                          v-model="area.PosXMin"
                           type="number"
                           label="Pos X Min"
                           dense
@@ -100,7 +100,7 @@
                       </v-col>
                       <v-col cols="2">
                         <v-text-field
-                          v-model="yard.PosXMax"
+                          v-model="area.PosXMax"
                           type="number"
                           label="Pos X Max"
                           dense
@@ -108,7 +108,7 @@
                       </v-col>
                       <v-col cols="2">
                         <v-text-field
-                          v-model="yard.PosYMin"
+                          v-model="area.PosYMin"
                           type="number"
                           label="Pos Y Min"
                           dense
@@ -116,7 +116,7 @@
                       </v-col>
                       <v-col cols="2">
                         <v-text-field
-                          v-model="yard.PosYMax"
+                          v-model="area.PosYMax"
                           type="number"
                           label="Pos Y Max"
                           dense
@@ -124,7 +124,7 @@
                       </v-col>
                       <v-col cols="2">
                         <v-text-field
-                          v-model="yard.PosZMin"
+                          v-model="area.PosZMin"
                           type="number"
                           label="Pos Z Min"
                           dense
@@ -132,7 +132,7 @@
                       </v-col>
                       <v-col cols="2">
                         <v-text-field
-                          v-model="yard.PosZMax"
+                          v-model="area.PosZMax"
                           type="number"
                           label="Pos Z Max"
                           dense
@@ -147,7 +147,7 @@
                     <v-row>
                       <v-col cols="6">
                         <v-text-field
-                          v-model="yard.OffsetX"
+                          v-model="area.OffsetX"
                           type="number"
                           label="Offset X"
                           dense
@@ -155,7 +155,7 @@
                       </v-col>
                       <v-col cols="6">
                         <v-text-field
-                          v-model="yard.OffsetY"
+                          v-model="area.OffsetY"
                           type="number"
                           label="Offset Y"
                           dense
@@ -165,7 +165,7 @@
                     <v-row>
                       <v-col cols="4">
                         <v-text-field
-                          v-model="yard.CameraOffsetX"
+                          v-model="area.CameraOffsetX"
                           type="number"
                           label="Camera Offset X"
                           dense
@@ -173,7 +173,7 @@
                       </v-col>
                       <v-col cols="4">
                         <v-text-field
-                          v-model="yard.CameraOffsetY"
+                          v-model="area.CameraOffsetY"
                           type="number"
                           label="Camera Offset Y"
                           dense
@@ -181,7 +181,7 @@
                       </v-col>
                       <v-col cols="4">
                         <v-text-field
-                          v-model="yard.CameraOffsetZ"
+                          v-model="area.CameraOffsetZ"
                           type="number"
                           label="Camera Offset Z"
                           dense
@@ -191,7 +191,7 @@
                     <v-row>
                       <v-col cols="6">
                         <v-text-field
-                          v-model="yard.CameraAngleXy"
+                          v-model="area.CameraAngleXy"
                           type="number"
                           label="Camera Angle XY"
                           dense
@@ -199,7 +199,7 @@
                       </v-col>
                       <v-col cols="6">
                         <v-text-field
-                          v-model="yard.CameraAngleYz"
+                          v-model="area.CameraAngleYz"
                           type="number"
                           label="Camera Angle YZ"
                           dense
@@ -215,10 +215,10 @@
         <v-divider></v-divider>
         <v-card-actions>
           <v-spacer></v-spacer>
-          <v-btn color="secondary white--text" text @click="cancelYardEdition"
+          <v-btn color="secondary white--text" text @click="cancelAreaEdition"
             >Cancel</v-btn
           >
-          <v-btn color="secondary white--text" text @click="saveYard"
+          <v-btn color="secondary white--text" text @click="saveArea"
             >Save</v-btn
           >
         </v-card-actions>
@@ -231,11 +231,11 @@
 import { mapState, mapActions } from "vuex";
 
 const computed = mapState("yard", {
-  dialog: (state) => state.showYardEdition,
-  yard: (state) => state.editingYard,
+  dialog: (state) => state.showAreaEdition,
+  area: (state) => state.editingArea,
 });
 
-const methods = mapActions("yard", ["cancelYardEdition", "saveYard"]);
+const methods = mapActions("yard", ["cancelAreaEdition", "saveArea"]);
 
 export default {
   data() {

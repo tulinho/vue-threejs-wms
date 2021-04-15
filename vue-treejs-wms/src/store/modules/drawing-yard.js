@@ -32,8 +32,9 @@ const hexToRGBA = (hex, alpha) => {
   return `rgba(${r}, ${g}, ${b}, ${getAlphafloat(a, alpha)})`;
 };
 
+//TODO: Fix for many yards
 function getDefaultOptions(context) {
-  let yard = context.rootState.yard.yards[0];
+  let yard = context.rootState.yard.yards[0] || {};
   let maxX = yard.PosXMax;
   let maxY = yard.PosYMax;
   let scale = context.rootState.camera.scale;
@@ -271,16 +272,7 @@ const actions = {
     });
   },
   drawZones(context, zones) {
-    let yard = context.rootState.yard.yards[0];
-    let maxX = yard.PosXMax;
-    let maxY = yard.PosYMax;
-    let scale = context.rootState.camera.scale;
-    let options = {
-      scale: scale,
-      offsetX: maxX / (scale * 2),
-      offsetY: maxY / (scale * 2),
-      transparent: false,
-    };
+    let options = getDefaultOptions(context);
     options.opacity = 1;
     options.transparent = false;
     zones.forEach((zone) => {

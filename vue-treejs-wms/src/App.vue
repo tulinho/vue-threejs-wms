@@ -1,17 +1,46 @@
 <template>
   <v-app>
-    <v-app-bar app>
-      <v-toolbar-title>
-        Yard Management
-      </v-toolbar-title>
+    <v-app-bar app dense>
+      <v-toolbar-title class="headline"> Yard Management </v-toolbar-title>
+      <v-spacer></v-spacer>
+      <v-menu bottom left>
+        <template v-slot:activator="{ on, attrs }">
+          <v-btn icon v-bind="attrs" v-on="on">
+            <v-icon>more_vert</v-icon>
+          </v-btn>
+        </template>
+
+        <v-list>
+          <v-list-item @click="showImportDataDialog(true)">
+            <v-list-item-title>Import Yard Data</v-list-item-title>
+          </v-list-item>
+        </v-list>
+      </v-menu>
     </v-app-bar>
     <v-main>
       <v-container fluid>
         <router-view></router-view>
       </v-container>
-    </v-main>    
+      <import-data/>
+    </v-main>
   </v-app>
 </template>
+
+<script>
+import { mapActions } from "vuex";
+import ImportData from './components/ImportData.vue'
+
+const methods = mapActions('importExport', ['showImportDataDialog'])
+
+export default {
+  components: { ImportData },
+  setup() {
+    
+  },
+  methods
+}
+</script>
+
 
 <style>
 #app {

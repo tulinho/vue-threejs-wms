@@ -15,7 +15,9 @@
         </v-expansion-panel>
         <v-expansion-panel>
           <v-expansion-panel-header>AREAS</v-expansion-panel-header>
-          <v-expansion-panel-content></v-expansion-panel-content>
+          <v-expansion-panel-content>
+            <areas />
+          </v-expansion-panel-content>
         </v-expansion-panel>
         <v-expansion-panel>
           <v-expansion-panel-header>SECTIONS</v-expansion-panel-header>
@@ -35,9 +37,10 @@
 
 <script>
 import YardControl from "../components/YardControl.vue";
+import Areas from './Areas/Areas.vue';
 import Yards from "./Yard/Yards.vue";
 export default {
-  components: { YardControl, Yards },
+  components: { YardControl, Yards, Areas },
 };
 </script>
 
