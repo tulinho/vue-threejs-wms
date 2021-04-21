@@ -1,5 +1,5 @@
 
 const source = './dist';
-const target = './target';
+const target = '../docs/target';
 
 module.exports = { source, target }
