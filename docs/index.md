@@ -1,2 +1,3 @@
 ## WMS Layout Manager
-(https://tulinho.github.io/vue-threejs-wms/target/)
+
+[Layout Manager](https://tulinho.github.io/vue-threejs-wms/target/)
