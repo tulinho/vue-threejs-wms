@@ -2,6 +2,16 @@
   <v-row class="mt-2">
     <v-col cols="12">
       <v-row justify="end">
+        <v-col cols="10">
+          <v-text-field
+            v-model="search"
+            append-icon="mdi-magnify"
+            :label="searchLabel"
+            single-line
+            hide-details
+            dense
+          ></v-text-field>
+        </v-col>
         <v-col cols="1" class="text--left">
           <v-btn icon color="primary" @click="addNewYard">
             <v-icon dark> add </v-icon>
@@ -11,18 +21,6 @@
           <v-btn icon color="red" @click="exclude">
             <v-icon dark> close </v-icon>
           </v-btn>
-        </v-col>
-      </v-row>
-      <v-row>
-        <v-col cols="12">
-          <v-text-field
-            v-model="search"
-            append-icon="mdi-magnify"
-            :label="searchLabel"
-            single-line
-            hide-details
-            dense
-          ></v-text-field>
         </v-col>
       </v-row>
       <v-row>

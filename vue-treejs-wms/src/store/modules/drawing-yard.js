@@ -32,6 +32,16 @@ const hexToRGBA = (hex, alpha) => {
   return `rgba(${r}, ${g}, ${b}, ${getAlphafloat(a, alpha)})`;
 };
 
+const hexToRGBAObject = (hex) => {
+  if (!isValidHex(hex)) {
+    throw new Error("Invalid HEX");
+  }
+  const chunkSize = Math.floor((hex.length - 1) / 3);
+  const hexArr = getChunksFromString(hex.slice(1), chunkSize);
+  const [r, g, b, a] = hexArr.map(convertHexUnitTo256);
+  return { r: r, g: g, b: b, a: a };
+};
+
 //TODO: Fix for many yards
 function getDefaultOptions(context) {
   let yard = context.rootState.yard.yards[0] || {};
@@ -161,21 +171,27 @@ function createPlaceholderForZoneElement(elem, options) {
   let height = (elem.PosYMax - elem.PosYMin) / options.scale;
 
   var canvas = document.createElement("canvas");
+  canvas.height = canvas.height / 2;
   var context = canvas.getContext("2d");
 
   context.fillStyle = options.backgroundColor;
   context.fillRect(0, 0, canvas.width, canvas.height);
-  context.fillStyle = options.color;
-  context.font = options.fontsize + "em " + options.fontface;
 
-  let text = elem.Zone.replace(elem.Section, "");
+  context.fillStyle = options.color;
+  context.font = options.fontsize + "px " + options.fontface;
+
+  let text = elem.Zone;
   let textWidth = context.measureText(text).width;
   context.fillText(
     text,
     (canvas.width - textWidth) / 2,
-    canvas.height - (options.fontsize * 12) / 2
+    (canvas.height + options.fontsize) / 2
   );
   var texture = new THREE.CanvasTexture(canvas);
+  if (width * 2 < height) {
+    texture.center = new THREE.Vector2(0.5, 0.5);
+    texture.rotation = Math.PI / 2;
+  }
 
   let geometry = new THREE.PlaneGeometry(width, height);
   let material = new THREE.MeshBasicMaterial({
@@ -194,10 +210,12 @@ function createPlaceholderForZoneElement(elem, options) {
   mesh.position.x = elem.PosXMin / options.scale + width / 2 - options.offsetX;
   mesh.position.z = elem.PosZMin / options.scale;
 
+  let rgba = hexToRGBAObject(elem.ColorFrame);
   var edges = new THREE.EdgesGeometry(mesh.geometry);
   var edgesMaterial = new THREE.LineBasicMaterial({
-    color: elem.ColorFrame,
-    linewidth: 1,
+    color: `rgb(${rgba.r}, ${rgba.g}, ${rgba.b})`,
+    opacity: rgba.a,
+    linewidth: 5,
   });
   var wireframe = new THREE.LineSegments(edges, edgesMaterial);
   wireframe.renderOrder = 4;
@@ -252,7 +270,7 @@ const actions = {
   drawSections(context, options) {
     context.rootState.yard.sections.forEach((section) => {
       let areaBackgroung = context.rootState.yard.areas.find(
-        (m) => m.Area == section.Area
+        (m) => m.Zone == section.Area
       ).ColorBackground;
       let placeHolder = createPlaceholderForYardElement(section, options);
       placeHolder.renderOrder = 3;
@@ -274,10 +292,10 @@ const actions = {
   drawZones(context, zones) {
     let options = getDefaultOptions(context);
     options.opacity = 1;
-    options.transparent = false;
+    options.transparent = true;
     zones.forEach((zone) => {
-      options.fontsize = 10;
-      options.fontface = "Calibri";
+      options.fontsize = 40;
+      options.fontface = "Verdana";
       options.color = zone.ColorForeground;
       options.backgroundColor = zone.ColorBackground;
       let placeHolder = createPlaceholderForZoneElement(zone, options);

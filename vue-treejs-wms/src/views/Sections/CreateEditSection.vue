@@ -155,7 +155,7 @@
                     <v-icon left>settings_input_component</v-icon>Advanced
                   </v-tab>
                   <v-tab-item>
-                    <v-row>
+                    <v-row class="mt-5">
                       <v-col cols="6">
                         <v-text-field
                           v-model="section.OffsetX"
@@ -217,6 +217,24 @@
                         ></v-text-field>
                       </v-col>
                     </v-row>
+                    <v-row>
+                      <v-col cols="6">
+                        <v-text-field
+                          v-model="section.MaxStress"
+                          type="number"
+                          label="Maximum Stress"
+                          dense
+                        ></v-text-field>
+                      </v-col>
+                      <v-col cols="6">
+                        <v-text-field
+                          v-model="section.MaxHeight"
+                          type="number"
+                          label="Maximum Height"
+                          dense
+                        ></v-text-field>
+                      </v-col>
+                    </v-row>
                   </v-tab-item>
                 </v-tabs>
               </v-col>
@@ -253,11 +271,6 @@ const methods = mapActions("yard", ["cancelSectionEdition", "saveSection"]);
 export default {
   data() {
     return {
-      yardTypes: [
-        { id: "S", description: "Slab" },
-        { id: "P", description: "Plate" },
-        { id: "C", description: "Coil" },
-      ],
     };
   },
   computed,

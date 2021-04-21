@@ -3,45 +3,78 @@
     <v-dialog v-model="dialog" persistent scrollable max-width="1000px">
       <v-card>
         <v-toolbar class="primary" dark>
-          <v-toolbar-title>Yard</v-toolbar-title>
+          <v-toolbar-title>Zone</v-toolbar-title>
         </v-toolbar>
         <v-divider></v-divider>
         <v-card-text class="mt-5">
           <v-container>
             <v-row>
               <v-col cols="2">
+                <v-select
+                  v-model="zone.Yard"
+                  :items="yards"
+                  color="primary"
+                  item-text="Zone"
+                  item-value="Zone"
+                  label="Yard"
+                  dense
+                ></v-select>
+              </v-col>
+              <v-col cols="2">
+                <v-select
+                  v-model="zone.Area"
+                  :items="areas"
+                  color="primary"
+                  item-text="Zone"
+                  item-value="Zone"
+                  label="Area"
+                  dense
+                ></v-select>
+              </v-col>
+              <v-col cols="2">
+                <v-select
+                  v-model="zone.Section"
+                  :items="sections"
+                  color="primary"
+                  item-text="Zone"
+                  item-value="Zone"
+                  label="Section"
+                  dense
+                ></v-select>
+              </v-col>
+              <v-col cols="2">
                 <v-text-field
                   label="Id"
-                  v-model="yard.IdZone"
-                  dense
-                ></v-text-field>
-              </v-col>
-              <v-col cols="6">
-                <v-text-field
-                  label="Name"
-                  v-model="yard.Zone"
+                  v-model="zone.IdZone"
                   dense
                 ></v-text-field>
               </v-col>
               <v-col cols="4">
-                <v-select
-                  v-model="yard.YardType"
-                  :items="yardTypes"
-                  color="primary"
-                  item-text="description"
-                  item-value="id"
-                  label="Yard Type"
+                <v-text-field
+                  label="Name"
+                  v-model="zone.Zone"
                   dense
-                ></v-select>
+                ></v-text-field>
               </v-col>
             </v-row>
             <v-row>
-              <v-col cols="12">
+              <v-col cols="10">
                 <v-text-field
                   label="Description"
-                  v-model="yard.Description"
+                  v-model="zone.Description"
                   dense
                 ></v-text-field>
+              </v-col>
+              <v-col cols="2">
+                <v-select
+                  :items="zoneTypes"
+                  v-model="zone.ZoneType"
+                  item-text="name"
+                  item-value="id"
+                  color="primary"
+                  label="Zone Type"
+                  dense
+                ></v-select>
               </v-col>
             </v-row>
             <v-divider></v-divider>
@@ -58,7 +91,7 @@
                           >
                           <v-color-picker
                             name="color-background"
-                            v-model="yard.ColorBackground"
+                            v-model="zone.ColorBackground"
                             mode="hexa"
                             class="ma-2"
                           ></v-color-picker>
@@ -71,7 +104,7 @@
                           >
                           <v-color-picker
                             name="color-background"
-                            v-model="yard.ColorForeground"
+                            v-model="zone.ColorForeground"
                             mode="hexa"
                             class="ma-2"
                           ></v-color-picker>
@@ -82,7 +115,7 @@
                           <label class="ml-7 subtitle-1">Frame Color</label>
                           <v-color-picker
                             name="color-background"
-                            v-model="yard.ColorFrame"
+                            v-model="zone.ColorFrame"
                             mode="hexa"
                             class="ma-2"
                           ></v-color-picker>
@@ -92,7 +125,7 @@
                     <v-row>
                       <v-col cols="2">
                         <v-text-field
-                          v-model="yard.PosXMin"
+                          v-model="zone.PosXMin"
                           type="number"
                           label="Pos X Min"
                           dense
@@ -100,7 +133,7 @@
                       </v-col>
                       <v-col cols="2">
                         <v-text-field
-                          v-model="yard.PosXMax"
+                          v-model="zone.PosXMax"
                           type="number"
                           label="Pos X Max"
                           dense
@@ -108,7 +141,7 @@
                       </v-col>
                       <v-col cols="2">
                         <v-text-field
-                          v-model="yard.PosYMin"
+                          v-model="zone.PosYMin"
                           type="number"
                           label="Pos Y Min"
                           dense
@@ -116,7 +149,7 @@
                       </v-col>
                       <v-col cols="2">
                         <v-text-field
-                          v-model="yard.PosYMax"
+                          v-model="zone.PosYMax"
                           type="number"
                           label="Pos Y Max"
                           dense
@@ -124,7 +157,7 @@
                       </v-col>
                       <v-col cols="2">
                         <v-text-field
-                          v-model="yard.PosZMin"
+                          v-model="zone.PosZMin"
                           type="number"
                           label="Pos Z Min"
                           dense
@@ -132,7 +165,7 @@
                       </v-col>
                       <v-col cols="2">
                         <v-text-field
-                          v-model="yard.PosZMax"
+                          v-model="zone.PosZMax"
                           type="number"
                           label="Pos Z Max"
                           dense
@@ -145,27 +178,9 @@
                   </v-tab>
                   <v-tab-item>
                     <v-row class="mt-5">
-                      <v-col cols="6">
-                        <v-text-field
-                          v-model="yard.OffsetX"
-                          type="number"
-                          label="Offset X"
-                          dense
-                        ></v-text-field>
-                      </v-col>
-                      <v-col cols="6">
-                        <v-text-field
-                          v-model="yard.OffsetY"
-                          type="number"
-                          label="Offset Y"
-                          dense
-                        ></v-text-field>
-                      </v-col>
-                    </v-row>
-                    <v-row>
                       <v-col cols="4">
                         <v-text-field
-                          v-model="yard.CameraOffsetX"
+                          v-model="zone.CameraOffsetX"
                           type="number"
                           label="Camera Offset X"
                           dense
@@ -173,7 +188,7 @@
                       </v-col>
                       <v-col cols="4">
                         <v-text-field
-                          v-model="yard.CameraOffsetY"
+                          v-model="zone.CameraOffsetY"
                           type="number"
                           label="Camera Offset Y"
                           dense
@@ -181,7 +196,7 @@
                       </v-col>
                       <v-col cols="4">
                         <v-text-field
-                          v-model="yard.CameraOffsetZ"
+                          v-model="zone.CameraOffsetZ"
                           type="number"
                           label="Camera Offset Z"
                           dense
@@ -191,7 +206,7 @@
                     <v-row>
                       <v-col cols="6">
                         <v-text-field
-                          v-model="yard.CameraAngleXy"
+                          v-model="zone.CameraAngleXy"
                           type="number"
                           label="Camera Angle XY"
                           dense
@@ -199,7 +214,7 @@
                       </v-col>
                       <v-col cols="6">
                         <v-text-field
-                          v-model="yard.CameraAngleYz"
+                          v-model="zone.CameraAngleYz"
                           type="number"
                           label="Camera Angle YZ"
                           dense
@@ -209,7 +224,7 @@
                     <v-row>
                       <v-col cols="6">
                         <v-text-field
-                          v-model="yard.MaxStress"
+                          v-model="zone.MaxStress"
                           type="number"
                           label="Maximum Stress"
                           dense
@@ -217,7 +232,7 @@
                       </v-col>
                       <v-col cols="6">
                         <v-text-field
-                          v-model="yard.MaxHeight"
+                          v-model="zone.MaxHeight"
                           type="number"
                           label="Maximum Height"
                           dense
@@ -233,10 +248,10 @@
         <v-divider></v-divider>
         <v-card-actions>
           <v-spacer></v-spacer>
-          <v-btn color="secondary white--text" text @click="cancelYardEdition"
+          <v-btn color="secondary white--text" text @click="cancelZoneEdition"
             >Cancel</v-btn
           >
-          <v-btn color="secondary white--text" text @click="saveYard"
+          <v-btn color="secondary white--text" text @click="saveZone"
             >Save</v-btn
           >
         </v-card-actions>
@@ -249,21 +264,19 @@
 import { mapState, mapActions } from "vuex";
 
 const computed = mapState("yard", {
-  dialog: (state) => state.showYardEdition,
-  yard: (state) => state.editingYard,
+  dialog: (state) => state.showZoneEdition,
+  zone: (state) => state.editingZone,
+  yards: (state) => state.yards,
+  areas: (state) => state.areas,
+  sections: (state) => state.sections,
+  zoneTypes: (state) => state.zoneTypes,
 });
 
-const methods = mapActions("yard", ["cancelYardEdition", "saveYard"]);
+const methods = mapActions("yard", ["cancelZoneEdition", "saveZone"]);
 
 export default {
   data() {
-    return {
-      yardTypes: [
-        { id: "S", description: "Slab" },
-        { id: "P", description: "Plate" },
-        { id: "C", description: "Coil" },
-      ],
-    };
+    return {};
   },
   computed,
   methods,

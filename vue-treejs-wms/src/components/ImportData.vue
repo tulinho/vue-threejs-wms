@@ -9,8 +9,23 @@
         <v-card-text class="mt-5">
           <v-container>
             <v-row>
-              <v-col cols="12">
+              <v-col cols="3">
+                <v-select
+                  :items="sources"
+                  v-model="selected"
+                  dense
+                  label="Source"
+                ></v-select>
+              </v-col>
+              <v-col cols="9">
+                <v-file-input
+                  v-if="isImportingFromFile"
+                  label="File"
+                  v-model="filePath"
+                  dense
+                ></v-file-input>
                 <v-text-field
+                  v-if="isImportingFromService"
                   label="Service Url"
                   v-model="serviceUrl"
                   dense
@@ -28,7 +43,10 @@
             @click="showImportDataDialog(false)"
             >Cancel</v-btn
           >
-          <v-btn color="secondary white--text" text @click="loadFromService"
+          <v-btn color="secondary white--text" text v-if="isImportingFromService" @click="loadFromService"
+            >Import</v-btn
+          >
+          <v-btn color="secondary white--text" text v-if="isImportingFromFile" @click="loadFromFile"
             >Import</v-btn
           >
         </v-card-actions>
@@ -43,28 +61,62 @@ import { mapState, mapActions } from "vuex";
 const computedFromImportExport = mapState("importExport", {
   dialog: (state) => state.showImportDialog,
   url: (state) => state.serviceUrl,
+  file: (state) => state.file,
 });
 
 const methods = mapActions("importExport", [
   "showImportDataDialog",
   "setServiceUrl",
   "loadFromService",
+  "setFile",
+  "loadFromFile",
 ]);
 
 export default {
   data() {
-    return {};
+    return {
+      selectedSource: "file",
+      sources: ["file", "service"],
+      isImportingFromFile: true,
+      isImportingFromService: false,
+    };
   },
-  computed: Object.assign({
-    serviceUrl: {
-      get() {
-        return this.url;
+  computed: Object.assign(
+    {
+      selected: {
+        get() {
+          return this.selectedSource;
+        },
+        set(value) {
+          this.selectedSource = value;
+          if (this.selectedSource == "file") {
+            this.isImportingFromFile = true;
+            this.isImportingFromService = false;
+          } else {
+            this.isImportingFromFile = false;
+            this.isImportingFromService = true;
+          }
+        },
       },
-      set(value) {
-        this.setServiceUrl(value);
+      serviceUrl: {
+        get() {
+          return this.url;
+        },
+        set(value) {
+          this.setServiceUrl(value);
+        },
       },
-    }
-  }, computedFromImportExport),
+      filePath: {
+        get() {
+          return this.file;
+        },
+        set(value) {
+          this.setFile(value);
+        },
+      },
+    },
+    computedFromImportExport
+  ),
   methods,
 };
 </script>

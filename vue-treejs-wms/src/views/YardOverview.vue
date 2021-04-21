@@ -14,20 +14,37 @@
           </v-expansion-panel-content>
         </v-expansion-panel>
         <v-expansion-panel>
-          <v-expansion-panel-header>AREAS</v-expansion-panel-header>
+          <v-expansion-panel-header color="primary white--text">
+            <template v-slot:actions>
+              <v-icon color="white"> $expand </v-icon>
+            </template>
+            <div class="white--text">AREAS</div>
+          </v-expansion-panel-header>
           <v-expansion-panel-content>
             <areas />
           </v-expansion-panel-content>
         </v-expansion-panel>
         <v-expansion-panel>
-          <v-expansion-panel-header>SECTIONS</v-expansion-panel-header>
+          <v-expansion-panel-header color="primary white--text">
+            <template v-slot:actions>
+              <v-icon color="white"> $expand </v-icon>
+            </template>
+            <div class="white--text">SECTIONS</div>
+          </v-expansion-panel-header>
           <v-expansion-panel-content>
             <sections />
           </v-expansion-panel-content>
         </v-expansion-panel>
         <v-expansion-panel>
-          <v-expansion-panel-header>ZONES</v-expansion-panel-header>
-          <v-expansion-panel-content></v-expansion-panel-content>
+          <v-expansion-panel-header color="primary white--text">
+            <template v-slot:actions>
+              <v-icon color="white"> $expand </v-icon>
+            </template>
+            <div class="white--text">ZONES</div>
+          </v-expansion-panel-header>
+          <v-expansion-panel-content>
+            <zones />
+          </v-expansion-panel-content>
         </v-expansion-panel>
       </v-expansion-panels>
     </v-col>
@@ -42,8 +59,9 @@ import YardControl from "../components/YardControl.vue";
 import Areas from './Areas/Areas.vue';
 import Sections from './Sections/Sections.vue';
 import Yards from "./Yard/Yards.vue";
+import Zones from './Zones/Zones.vue';
 export default {
-  components: { YardControl, Yards, Areas, Sections },
+  components: { YardControl, Yards, Areas, Sections, Zones },
 };
 </script>
 
