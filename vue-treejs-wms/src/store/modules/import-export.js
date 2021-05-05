@@ -14,7 +14,7 @@ const state = () => ({
   showImportDialog: false,
   showExportDialog: false,
   serviceUrl: "",
-  file:'',
+  file: "",
 });
 
 const mutations = {
@@ -27,9 +27,9 @@ const mutations = {
   setShowExportDialog(state, payload) {
     state.showExportDialog = payload;
   },
-  setFile(state, payload){
+  setFile(state, payload) {
     state.file = payload;
-  }
+  },
 };
 
 function loadFromService(context, module) {
@@ -70,29 +70,27 @@ function loadFromService(context, module) {
 }
 
 function loadFromFile(context, module) {
-  
   let reader = new FileReader();
   let file = context.state.file;
   reader.readAsText(file, "UTF-8");
-  reader.onload = function (evt) {
-      let content = JSON.parse(evt.target.result);
-      let yards = content.yards;
-      let areas = content.areas;
-      let sections = content.sections;
-      let zones = content.zones;
-      module.commit("yard/setYards", yards);
-      module.commit("yard/setAreas", areas);
-      module.commit("yard/setSections", sections);
-      module.commit("yard/setZones", zones);
-      module.dispatch("yard/updateLocalStorage");
-      module.dispatch("drawingYard/clearScene");
-      module.dispatch("drawingYard/draw");
-      context.commit("setShowImportDialog", false);
-  }
-  reader.onerror = function () {
-      console.log("error reading file");
-  }
-  
+  reader.onload = function(evt) {
+    let content = JSON.parse(evt.target.result);
+    let yards = content.yards;
+    let areas = content.areas;
+    let sections = content.sections;
+    let zones = content.zones;
+    module.commit("yard/setYards", yards);
+    module.commit("yard/setAreas", areas);
+    module.commit("yard/setSections", sections);
+    module.commit("yard/setZones", zones);
+    module.dispatch("yard/updateLocalStorage");
+    module.dispatch("drawingYard/clearScene");
+    module.dispatch("drawingYard/draw");
+    context.commit("setShowImportDialog", false);
+  };
+  reader.onerror = function() {
+    console.log("error reading file");
+  };
 }
 
 function exportJson(context) {
@@ -111,8 +109,8 @@ function exportJson(context) {
   document.body.removeChild(fileLink);
 }
 
-function formatYardScript(yard){
-  return defaults.InsertYardScript.format(
+function formatYardScript(yard, script) {
+  return script.format(
     yard.Zone,
     yard.YardType,
     yard.Description,
@@ -126,8 +124,8 @@ function formatYardScript(yard){
   );
 }
 
-function formatAreaScript(area){
-  return defaults.InsertAreaScript.format(
+function formatAreaScript(area, script) {
+  return script.format(
     area.Zone,
     area.Yard,
     area.Description,
@@ -141,8 +139,8 @@ function formatAreaScript(area){
   );
 }
 
-function formatSectionScript(section){
-  return defaults.InsertSectionScript.format(
+function formatSectionScript(section, script) {
+  return script.format(
     section.Zone,
     section.Yard,
     section.Area,
@@ -157,27 +155,27 @@ function formatSectionScript(section){
   );
 }
 
-function formatZoneInsertScript(zone){
+function formatZoneScript(zone, script) {
   let regex = /#([0-9a-zA-Z]{6})([0-9a-zA-Z]{2})/;
-  let pattern = '#$2$1';
-  return defaults.InsertZoneScript.format(
+  let pattern = "#$2$1";
+  return script.format(
     zone.IdZone,
     zone.Zone,
     zone.ZoneType,
     zone.Yard,
-    (zone.Area ? `'${zone.Area}'` : null),
-    (zone.Section ? `'${zone.Section}'` : null),
+    zone.Area ? `'${zone.Area}'` : null,
+    zone.Section ? `'${zone.Section}'` : null,
     zone.Status,
-    zone.ColorBackground.replace(regex,pattern),
-    zone.ColorForeground.replace(regex,pattern),
-    zone.ColorFrame.replace(regex,pattern),
+    zone.ColorBackground.replace(regex, pattern),
+    zone.ColorForeground.replace(regex, pattern),
+    zone.ColorFrame.replace(regex, pattern),
     zone.PosXMin,
     zone.PosXMax,
     zone.PosYMin,
     zone.PosYMax,
     zone.PosZMin,
     zone.PosZMax,
-    zone.Description,
+    (zone.Description || "").replace("null", ""),
     zone.IdZonePrevX,
     zone.IdZonePrevY,
     zone.IdZonePrevZ,
@@ -192,50 +190,91 @@ function formatZoneInsertScript(zone){
     zone.YAlignment,
     zone.RotateAngle,
     zone.TiltAngle,
-    (zone.GenEventEnter ? 1 : 0),
-    (zone.GenEventExit ? 1 : 0),
+    zone.GenEventEnter ? 1 : 0,
+    zone.GenEventExit ? 1 : 0,
     zone.MaxStress,
     zone.MaxHeight
   );
 }
 
-function buildScriptFileContent(context){
+function buildInsertScriptFileContent(context) {
+  let sqlScripts = {
+    yardScript: defaults.InsertYardScript,
+    areaScript: defaults.InsertAreaScript,
+    sectionScript: defaults.InsertSectionScript,
+    zoneScript: defaults.InsertZoneScript,
+  };
+  return buildScript(context, sqlScripts);
+}
+
+function buildUpdateScriptFileContent(context) {
+  let sqlScripts = {
+    yardScript: defaults.UpdateYardScript,
+    areaScript: defaults.UpdateAreaScript,
+    sectionScript: defaults.UpdateSectionScript,
+    zoneScript: defaults.UpdateZoneScript,
+  };
+  return buildScript(context, sqlScripts);
+}
+
+function buildScript(context, sqlScripts) {
   let script = [];
+  script.push(` -- YARDS`);
   context.rootState.yard.yards.forEach((yard) => {
     yard = Object.assign({}, defaults.yard, yard);
-    let sql = formatYardScript(yard);
+    let sql = formatYardScript(yard, sqlScripts.yardScript);
     script.push(sql);
-    sql = formatZoneInsertScript(yard);
+    sql = formatZoneScript(yard, sqlScripts.zoneScript);
     script.push(sql);
   });
-  
+
+  script.push(` -- AREAS`);
   context.rootState.yard.areas.forEach((area) => {
     area = Object.assign({}, defaults.area, area);
-    let sql = formatAreaScript(area);
+    let sql = formatAreaScript(area, sqlScripts.areaScript);
     script.push(sql);
-    sql = formatZoneInsertScript(area);
+    sql = formatZoneScript(area, sqlScripts.zoneScript);
     script.push(sql);
   });
-  
+
+  script.push(` -- SECTIONS`);
   context.rootState.yard.sections.forEach((section) => {
     section = Object.assign({}, defaults.section, section);
     section.Section = section.Zone;
-    let sql = formatSectionScript(section);
+    let sql = formatSectionScript(section, sqlScripts.sectionScript);
     script.push(sql);
-    sql = formatZoneInsertScript(section);
+    sql = formatZoneScript(section, sqlScripts.zoneScript);
     script.push(sql);
   });
-  
-  context.rootState.yard.zones.forEach((zone) => {
+
+  script.push(` -- ZONES`);
+  let currentSection = "##";
+  let zones = context.rootState.yard.zones.sort((m, n) =>
+    m.IdZone < n.IdZone ? -1 : 1
+  );
+  zones.forEach((zone) => {
     zone = Object.assign({}, defaults.zone, zone);
-    let sql = formatZoneInsertScript(zone);
+    if (currentSection != zone.Section) {
+      currentSection = zone.Section;
+      script.push(` -- Zones of ${zone.Section}`);
+    }
+    let sql = formatZoneScript(zone, sqlScripts.zoneScript);
     script.push(sql);
   });
   return script.join("\n");
 }
 
-function exportScript(context) {
-  let script = buildScriptFileContent(context);
+function exportInsertScript(context) {
+  let script = buildInsertScriptFileContent(context);
+  exportScriptFile(script);
+}
+
+function exportUpdateScript(context) {
+  let script = buildUpdateScriptFileContent(context);
+  exportScriptFile(script);
+}
+
+function exportScriptFile(script) {
   let fileURL = window.URL.createObjectURL(new Blob([script]));
   let fileLink = document.createElement("a");
   fileLink.href = fileURL;
@@ -248,8 +287,8 @@ function exportScript(context) {
 const actions = {
   showImportDataDialog(context, payload) {
     context.commit("setShowImportDialog", payload);
-    context.commit('setFile', '');
-    context.commit('setServiceUrl', '');
+    context.commit("setFile", "");
+    context.commit("setServiceUrl", "");
   },
   setServiceUrl(context, payload) {
     context.commit("setServiceUrl", payload);
@@ -257,8 +296,8 @@ const actions = {
   loadFromService(context) {
     loadFromService(context, this);
   },
-  setFile(context, payload){
-    context.commit('setFile', payload);
+  setFile(context, payload) {
+    context.commit("setFile", payload);
   },
   loadFromFile(context) {
     loadFromFile(context, this);
@@ -268,7 +307,8 @@ const actions = {
   },
   exportData(context, payload) {
     if (payload == "json") exportJson(context);
-    else exportScript(context);
+    else if (payload == "script insert") exportInsertScript(context);
+    else exportUpdateScript(context);
     context.dispatch("showExportDataDialog", false);
   },
 };
