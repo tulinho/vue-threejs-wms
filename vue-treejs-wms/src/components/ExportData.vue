@@ -52,7 +52,7 @@ export default {
   data() {
     return {
       exportType: "",
-      exportTypes: ["json", "script"],
+      exportTypes: ["json", "script insert", "script update"],
     };
   },
   computed: Object.assign({}, computedFromImportExport),
