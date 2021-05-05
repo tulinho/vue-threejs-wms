@@ -47,6 +47,7 @@
           </v-expansion-panel-content>
         </v-expansion-panel>
       </v-expansion-panels>
+      <create-edit-zone/>
     </v-col>
     <v-col cols="8">
       <yard-control />
@@ -60,8 +61,9 @@ import Areas from './Areas/Areas.vue';
 import Sections from './Sections/Sections.vue';
 import Yards from "./Yard/Yards.vue";
 import Zones from './Zones/Zones.vue';
+import CreateEditZone from './Zones/CreateEditZone.vue';
 export default {
-  components: { YardControl, Yards, Areas, Sections, Zones },
+  components: { YardControl, Yards, Areas, Sections, Zones, CreateEditZone },
 };
 </script>
 

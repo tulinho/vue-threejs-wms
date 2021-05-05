@@ -42,14 +42,12 @@
         </v-col>
       </v-row>
       <create-zones-by-batch/>
-      <create-edit-zone/>
     </v-col>
   </v-row>
 </template>
 
 <script>
 import { mapState, mapActions } from "vuex";
-import CreateEditZone from './CreateEditZone.vue';
 import CreateZonesByBatch from './CreateZonesByBatch.vue';
 
 const computed = mapState('yard', {
@@ -59,7 +57,7 @@ const computed = mapState('yard', {
 const methods = mapActions('yard', ['addNewZone','addZonesByBatch', 'selectZone', 'excludeZones'])
 
 export default {
-  components: { CreateZonesByBatch, CreateEditZone },
+  components: { CreateZonesByBatch },
   data() {
     return {
       search: '',
