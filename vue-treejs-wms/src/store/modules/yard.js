@@ -68,7 +68,7 @@ const mutations = {
   },
   setEditingSection(state, payload) {
     state.editingSection = payload;
-  },  
+  },
   setSelectedZone(state, payload) {
     state.selectedZone = payload;
   },
@@ -91,7 +91,7 @@ function initializeYardStructure(context, module) {
   let areas = JSON.parse(window.localStorage.getItem("areas"));
   let sections = JSON.parse(window.localStorage.getItem("sections"));
   let zones = JSON.parse(window.localStorage.getItem("zones"));
-  
+
   context.commit("setYards", yards || []);
   context.commit("setAreas", areas || []);
   context.commit("setSections", sections || []);
@@ -192,7 +192,7 @@ const actions = {
   },
   updateAreaInTheStorage(context) {
     window.localStorage.setItem("areas", JSON.stringify(context.state.areas));
-  },  
+  },
   selectSection(context, payload) {
     context.commit("setSelectedSection", payload);
     context.dispatch("editSection");
@@ -238,7 +238,10 @@ const actions = {
     this.dispatch("drawingYard/refresh");
   },
   updateSectionInTheStorage(context) {
-    window.localStorage.setItem("sections", JSON.stringify(context.state.sections));
+    window.localStorage.setItem(
+      "sections",
+      JSON.stringify(context.state.sections)
+    );
   },
   addNewZone(context) {
     context.commit("setEditingZone", Object.assign({}, defaults.zone));
@@ -282,7 +285,7 @@ const actions = {
     this.dispatch("drawingYard/refresh");
   },
   saveZones(context, zones) {
-    zones.forEach(zone => context.state.zones.push(zone));
+    zones.forEach((zone) => context.state.zones.push(zone));
     context.commit("setEditingZoneModel", {});
     context.commit("setShowZoneBatchEdition", false);
     context.dispatch("updateZonesInTheStorage");
@@ -301,14 +304,23 @@ const actions = {
   updateZonesInTheStorage(context) {
     window.localStorage.setItem("zones", JSON.stringify(context.state.zones));
   },
-  updateLocalStorage(context){
+  updateLocalStorage(context) {
     window.localStorage.setItem("yards", JSON.stringify(context.state.yards));
     window.localStorage.setItem("areas", JSON.stringify(context.state.areas));
-    window.localStorage.setItem("sections", JSON.stringify(context.state.sections));
+    window.localStorage.setItem(
+      "sections",
+      JSON.stringify(context.state.sections)
+    );
     window.localStorage.setItem("zones", JSON.stringify(context.state.zones));
   },
   initializeYard(context) {
     initializeYardStructure(context, this);
+  },
+  selectZoneFromPosition(context, payload) {
+    let selectedZone = context.state.zones.find((zone) => zone.IdZone == payload.IdZone);
+    if (!selectedZone) return;
+    context.commit("setSelectedZone", selectedZone);
+    context.dispatch("editZone");
   },
 };
 

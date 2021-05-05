@@ -1,106 +1,157 @@
 <template>
-    <div class="yard-main">
-        <div id="yard-container" class="yard-container">
-          <presentation-menu/>
-          <v-btn v-if="!showMenu" absolute top right color="primary white--text"  @click="show(true)">Presentation Menu</v-btn>
-        </div>
+  <div class="yard-main">
+    <div id="yard-container" class="yard-container">
+      <presentation-menu />
+      <v-btn
+        v-if="!showMenu"
+        absolute
+        top
+        right
+        color="primary white--text"
+        @click="show(true)"
+        >Presentation Menu</v-btn
+      >
     </div>
+  </div>
 </template>
 
 <script>
 import { mapState, mapActions } from "vuex";
 import PresentationMenu from "./PresentationMenu";
 
-const computedFromCamera = mapState("camera", {
-  zoom: state => state.zoom,
-  scale: state => state.scale,
-  scene: state => state.scene
-})
-const computedFromYard = mapState("yard", {
-  yards: state => state.yards,
-  areas: state => state.areas
-})
 const computedFromMenu = mapState("menu", {
-  showMenu: (state) => state.showMenu
+  showMenu: (state) => state.showMenu,
 });
 
-const cameraMethods = mapActions("camera", ["setContainer","initialize","render", "rotateScene", "moveCamera", "zoomCamera"])
-const yardMethods = mapActions("yard", ["initializeYard"])
-const menuMethods = mapActions("menu", ["show"])
+const computedFromCamera = mapState("camera", {
+  pointer: (state) => state.pointer,
+  container: (state) => state.container,
+  renderer: (state) => state.renderer,
+});
+
+const cameraMethods = mapActions("camera", [
+  "setContainer",
+  "initialize",
+  "render",
+  "rotateScene",
+  "moveCamera",
+  "zoomCamera",
+  "clickElement"
+]);
+const yardMethods = mapActions("yard", [
+  "initializeYard",
+  "selectZoneFromPosition",
+]);
+const menuMethods = mapActions("menu", ["show"]);
 
 export default {
   components: { PresentationMenu },
-  computed: Object.assign({}, computedFromCamera, computedFromYard, computedFromMenu),
-  setup() {},    
+  computed: Object.assign({}, computedFromMenu, computedFromCamera),
+  setup() {},
   data() {
     return {
-      mouseDown : false,
-      mouseX : 0,
-      mouseY : 0
+      mouseDown: false,
+      mouseX: 0,
+      mouseY: 0,
     };
   },
-  methods: Object.assign({
-    addMouseHandler(canvas) {
-      var self = this;
-      canvas.addEventListener(
-        "mousemove",
-        function (e) {
-          self.onMouseMove(e);
-        },
-        false
-      );
-      canvas.addEventListener(
-        "mousedown",
-        function (e) {
-          self.onMouseDown(e);
-        },
-        false
-      );
-      canvas.addEventListener(
-        "mouseup",
-        function (e) {
-          self.onMouseUp(e);
-        },
-        false
-      );
-      canvas.addEventListener("mousewheel", function(event){
-        self.zoomCamera(event.wheelDeltaY);
-      }, false);
+  methods: Object.assign(
+    {
+      addMouseHandler(canvas) {
+        var self = this;
+        canvas.addEventListener(
+          "mousemove",
+          function (e) {
+            self.onMouseMove(e);
+          },
+          false
+        );
+        canvas.addEventListener(
+          "mousedown",
+          function (e) {
+            self.onMouseDown(e);
+          },
+          false
+        );
+        canvas.addEventListener(
+          "mouseup",
+          function (e) {
+            self.onMouseUp(e);
+          },
+          false
+        );
+        canvas.addEventListener(
+          "mousewheel",
+          function (event) {
+            self.zoomCamera(event.wheelDeltaY);
+          },
+          false
+        );
+        canvas.addEventListener(
+          "dblclick",
+          function (e) {
+            self.onDoubleClick(e);
+          },
+          false
+        );
+      },
+
+      onMouseMove(evt) {
+        let canvasBounds = this.renderer.context.canvas.getBoundingClientRect();
+        this.pointer.x =
+          ((evt.clientX - canvasBounds.left) /
+            (canvasBounds.right - canvasBounds.left)) *
+            2 -
+          1;
+        this.pointer.y =
+          -(
+            (evt.clientY - canvasBounds.top) /
+            (canvasBounds.bottom - canvasBounds.top)
+          ) *
+            2 +
+          1;        
+
+        if (!this.mouseDown) {
+          return;
+        }
+
+        evt.preventDefault();
+
+        let deltaX = evt.clientX - this.mouseX,
+          deltaY = evt.clientY - this.mouseY;
+        this.mouseX = evt.clientX;
+        this.mouseY = evt.clientY;
+
+        if (evt.shiftKey) {
+          this.rotateScene({ deltaX, deltaY });
+        } else {
+          this.moveCamera({ deltaX, deltaY });
+        }
+      },
+
+      onMouseDown(evt) {
+        evt.preventDefault();
+
+        this.mouseDown = true;
+        this.mouseX = evt.clientX;
+        this.mouseY = evt.clientY;
+      },
+
+      onMouseUp(evt) {
+        evt.preventDefault();
+
+        this.mouseDown = false;
+      },
+
+      onDoubleClick(evt) {
+        evt.preventDefault();
+        this.clickElement(this.selectZoneFromPosition);
+      },
     },
-
-    onMouseMove(evt) {
-      if (!this.mouseDown) {
-        return;
-      }
-
-      evt.preventDefault();
-
-      let deltaX = evt.clientX - this.mouseX,
-        deltaY = evt.clientY - this.mouseY;
-      this.mouseX = evt.clientX;
-      this.mouseY = evt.clientY;
-
-      if (evt.shiftKey) {
-        this.rotateScene({deltaX, deltaY});
-      } else {
-        this.moveCamera({deltaX, deltaY});
-      }
-    },
-
-    onMouseDown(evt) {
-      evt.preventDefault();
-
-      this.mouseDown = true;
-      this.mouseX = evt.clientX;
-      this.mouseY = evt.clientY;
-    },
-
-    onMouseUp(evt) {
-      evt.preventDefault();
-
-      this.mouseDown = false;
-    },
-  }, cameraMethods, menuMethods, yardMethods),
+    cameraMethods,
+    menuMethods,
+    yardMethods
+  ),
   mounted() {
     let container = document.getElementById("yard-container");
     this.setContainer(container);
@@ -109,8 +160,7 @@ export default {
     this.render();
     this.addMouseHandler(container);
   },
-  watch: {
-  }
+  watch: {},
 };
 </script>
 
