@@ -254,7 +254,6 @@ const actions = {
     context.dispatch("drawZones", allZones);
   },
   drawYard(context) {
-    //let yard = context.rootState.yard.yards[0];
     let options = getDefaultOptions(context);
     context.rootState.yard.yards.forEach((yard) => {
       let yardPlaceholder = createPlaceholderForYardElement(yard, options);
