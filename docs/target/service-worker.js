@@ -14,7 +14,7 @@
 importScripts("https://storage.googleapis.com/workbox-cdn/releases/4.3.1/workbox-sw.js");
 
 importScripts(
-  "/precache-manifest.873514d9619b32ab0212264b2f02c5d3.js"
+  "/precache-manifest.243fddbd47159116692be949093d9168.js"
 );
 
 workbox.core.setCacheNameDetails({prefix: "wms-yard-management"});
