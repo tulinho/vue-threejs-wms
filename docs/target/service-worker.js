@@ -14,7 +14,7 @@
 importScripts("https://storage.googleapis.com/workbox-cdn/releases/4.3.1/workbox-sw.js");
 
 importScripts(
-  "/precache-manifest.243fddbd47159116692be949093d9168.js"
+  "/vue-threejs-wms/target/precache-manifest.8d32b1c3b74568245977a619a7f75658.js"
 );
 
 workbox.core.setCacheNameDetails({prefix: "wms-yard-management"});
