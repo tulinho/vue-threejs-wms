@@ -137,15 +137,26 @@ function createSectionLabel(text, parameters) {
   if (parameters === undefined) parameters = {};
 
   var canvas = document.createElement("canvas");
+  canvas.height = canvas.height / 2;
   var context = canvas.getContext("2d");
 
   context.fillStyle = parameters.backgroundColor;
   context.fillRect(0, 0, canvas.width, canvas.height);
-  context.fillStyle = parameters.color;
-  context.font = parameters.fontsize + "em " + parameters.fontface;
-  context.fillText(text, 0, canvas.height - parameters.fontsize, canvas.width);
 
+  context.fillStyle = parameters.color;
+  context.font = parameters.fontsize + "px " + parameters.fontface;  
+  let textWidth = context.measureText(text).width;
+  context.fillText(
+    text,
+    (canvas.width - textWidth) / 2,
+    (canvas.height + parameters.fontsize) / 2
+  );  
   var texture = new THREE.CanvasTexture(canvas);
+  if (parameters.width < parameters.height) {
+    texture.center = new THREE.Vector2(0.5, 0.5);
+    texture.rotation = Math.PI / 2;
+  }
+
   var material = new THREE.MeshBasicMaterial({ map: texture });
   let geometry = new THREE.BoxGeometry(
     parameters.width,
@@ -276,13 +287,13 @@ const actions = {
       placeHolder.renderOrder = 3;
       context.rootState.camera.scene.add(placeHolder);
 
-      let fontSize = 14;
+      let fontSize = 30;
       let parameters = {
         fontsize: fontSize,
         color: section.ColorForeground,
         backgroundColor: areaBackgroung,
-        width: fontSize * 0.75 * section.Zone.length,
-        height: fontSize,
+        width: (section.PosXMax - section.PosXMin)/options.scale,
+        height: (section.PosYMax - section.PosYMin)/options.scale,
       };
       let label = createSectionLabel(section.Zone, parameters);
       label.renderOrder = 3;
