@@ -178,7 +178,7 @@
                   </v-tab>
                   <v-tab-item>
                     <v-row class="mt-5">
-                      <v-col cols="4">
+                      <v-col cols="3">
                         <v-text-field
                           v-model="zone.CameraOffsetX"
                           type="number"
@@ -186,7 +186,7 @@
                           dense
                         ></v-text-field>
                       </v-col>
-                      <v-col cols="4">
+                      <v-col cols="3">
                         <v-text-field
                           v-model="zone.CameraOffsetY"
                           type="number"
@@ -194,11 +194,19 @@
                           dense
                         ></v-text-field>
                       </v-col>
-                      <v-col cols="4">
+                      <v-col cols="3">
                         <v-text-field
                           v-model="zone.CameraOffsetZ"
                           type="number"
                           label="Camera Offset Z"
+                          dense
+                        ></v-text-field>
+                      </v-col>
+                      <v-col cols="3">
+                        <v-text-field
+                          v-model="zone.PieceCountMax"
+                          type="number"
+                          label="Piece Count Max"
                           dense
                         ></v-text-field>
                       </v-col>

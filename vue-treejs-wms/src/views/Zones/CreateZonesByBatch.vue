@@ -49,7 +49,7 @@
                   v-model="layer"
                   dense
                 ></v-text-field>
-              </v-col>           
+              </v-col>
             </v-row>
             <v-row>
               <v-col cols="3">
@@ -59,7 +59,7 @@
                   v-model="rows"
                   dense
                 ></v-text-field>
-              </v-col>  
+              </v-col>
               <v-col cols="3">
                 <v-text-field
                   label="Columns"
@@ -67,7 +67,7 @@
                   v-model="columns"
                   dense
                 ></v-text-field>
-              </v-col>  
+              </v-col>
               <v-col cols="3">
                 <v-text-field
                   label="Zone Id Pattern"
@@ -91,7 +91,7 @@
                   v-model="width"
                   dense
                 ></v-text-field>
-              </v-col>  
+              </v-col>
               <v-col cols="2">
                 <v-text-field
                   label="Length"
@@ -99,7 +99,7 @@
                   v-model="length"
                   dense
                 ></v-text-field>
-              </v-col>  
+              </v-col>
               <v-col cols="2">
                 <v-text-field
                   label="Height"
@@ -107,7 +107,7 @@
                   v-model="height"
                   dense
                 ></v-text-field>
-              </v-col>  
+              </v-col>
               <v-col cols="3">
                 <v-text-field
                   label="Initial Row"
@@ -115,7 +115,7 @@
                   v-model="initialRow"
                   dense
                 ></v-text-field>
-              </v-col> 
+              </v-col>
               <v-col cols="3">
                 <v-text-field
                   label="Initial Column"
@@ -123,7 +123,7 @@
                   v-model="initialColumn"
                   dense
                 ></v-text-field>
-              </v-col>              
+              </v-col>
             </v-row>
             <v-row>
               <v-col cols="2">
@@ -133,7 +133,7 @@
                   v-model="initialXCoord"
                   dense
                 ></v-text-field>
-              </v-col>  
+              </v-col>
               <v-col cols="2">
                 <v-text-field
                   label="Initial Y"
@@ -141,7 +141,7 @@
                   v-model="initialYCoord"
                   dense
                 ></v-text-field>
-              </v-col>  
+              </v-col>
               <v-col cols="2">
                 <v-text-field
                   label="Initial Z"
@@ -149,7 +149,7 @@
                   v-model="initialZCoord"
                   dense
                 ></v-text-field>
-              </v-col>  
+              </v-col>
               <v-col cols="3">
                 <v-text-field
                   label="Row Gap"
@@ -157,7 +157,7 @@
                   v-model="rowGap"
                   dense
                 ></v-text-field>
-              </v-col> 
+              </v-col>
               <v-col cols="3">
                 <v-text-field
                   label="Column Gap"
@@ -217,8 +217,8 @@
                     <v-icon left>settings_input_component</v-icon>Advanced
                   </v-tab>
                   <v-tab-item>
-                    <v-row>
-                      <v-col cols="6">
+                    <v-row class="mt-5">
+                      <v-col cols="4">
                         <v-text-field
                           v-model="zoneModel.OffsetX"
                           type="number"
@@ -226,11 +226,19 @@
                           dense
                         ></v-text-field>
                       </v-col>
-                      <v-col cols="6">
+                      <v-col cols="4">
                         <v-text-field
                           v-model="zoneModel.OffsetY"
                           type="number"
                           label="Offset Y"
+                          dense
+                        ></v-text-field>
+                      </v-col>
+                      <v-col cols="4">
+                        <v-text-field
+                          v-model="zoneModel.PieceCountMax"
+                          type="number"
+                          label="Piece Count Max"
                           dense
                         ></v-text-field>
                       </v-col>
@@ -288,7 +296,10 @@
         <v-divider></v-divider>
         <v-card-actions>
           <v-spacer></v-spacer>
-          <v-btn color="secondary white--text" text @click="cancelZoneBatchCreation"
+          <v-btn
+            color="secondary white--text"
+            text
+            @click="cancelZoneBatchCreation"
             >Cancel</v-btn
           >
           <v-btn color="secondary white--text" text @click="generateZones"
@@ -311,129 +322,205 @@ const computedFromYard = mapState("yard", {
   sections: (state) => state.sections,
 });
 
-const computedFromZoneCreationBatch = mapState('zoneBatch',{
-    getYard: (state) => state.yard,
-    getArea: (state) => state.area,
-    getSection: (state) => state.section,
-    getLayer: (state) => state.layer,
-    getRows: (state) => state.rows,
-    getColumns: (state) => state.columns,
-    getIdZonePattern: (state) => state.idZonePattern,
-    getZonePattern: (state) => state.zonePattern,
-    getWidth: (state) => state.width,
-    getLength: (state) => state.length,
-    getHeight: (state) => state.height,
-    getInitialRow: (state) => state.initialRow,
-    getInitialColumn: (state) => state.initialColumn,
-    getInitialXCoord: (state) => state.initialXCoord,
-    getInitialYCoord: (state) => state.initialYCoord,
-    getInitialZCoord: (state) => state.initialZCoord,
-    getRowGap: (state) => state.rowGap,
-    getColumnGap: (state) => state.columnGap    
+const computedFromZoneCreationBatch = mapState("zoneBatch", {
+  getYard: (state) => state.yard,
+  getArea: (state) => state.area,
+  getSection: (state) => state.section,
+  getLayer: (state) => state.layer,
+  getRows: (state) => state.rows,
+  getColumns: (state) => state.columns,
+  getIdZonePattern: (state) => state.idZonePattern,
+  getZonePattern: (state) => state.zonePattern,
+  getWidth: (state) => state.width,
+  getLength: (state) => state.length,
+  getHeight: (state) => state.height,
+  getInitialRow: (state) => state.initialRow,
+  getInitialColumn: (state) => state.initialColumn,
+  getInitialXCoord: (state) => state.initialXCoord,
+  getInitialYCoord: (state) => state.initialYCoord,
+  getInitialZCoord: (state) => state.initialZCoord,
+  getRowGap: (state) => state.rowGap,
+  getColumnGap: (state) => state.columnGap,
 });
 
 const methodsFromYard = mapActions("yard", ["cancelZoneBatchCreation"]);
 const methodsFromZoneCreationBatch = mapActions("zoneBatch", [
-    "setYard", 
-    "setArea",
-    "setSection",
-    "setLayer",
-    "setRows",
-    "setColumns",
-    "setIdZonePattern",
-    "setZonePattern",
-    "setInitialRow",
-    "setInitialColumn",
-    "setWidth",
-    "setLength",
-    "setHeight",
-    "setInitialXCoord",
-    "setInitialYCoord",
-    "setInitialZCoord",
-    "setRowGap",
-    "setColumnGap",
-    "generateZones",
-    ]);
+  "setYard",
+  "setArea",
+  "setSection",
+  "setLayer",
+  "setPieceCountMax",
+  "setRows",
+  "setColumns",
+  "setIdZonePattern",
+  "setZonePattern",
+  "setInitialRow",
+  "setInitialColumn",
+  "setWidth",
+  "setLength",
+  "setHeight",
+  "setInitialXCoord",
+  "setInitialYCoord",
+  "setInitialZCoord",
+  "setRowGap",
+  "setColumnGap",
+  "generateZones",
+]);
 
 export default {
   data() {
-    return {
-    };
+    return {};
   },
-  computed: Object.assign({
-      yard:{
-          get() { return this.getYard; },
-          set(value) { this.setYard(value); }
+  computed: Object.assign(
+    {
+      yard: {
+        get() {
+          return this.getYard;
+        },
+        set(value) {
+          this.setYard(value);
+        },
       },
-      area:{
-          get() { return this.getArea; },
-          set(value) { this.setArea(value); }
+      area: {
+        get() {
+          return this.getArea;
+        },
+        set(value) {
+          this.setArea(value);
+        },
       },
-      section:{
-          get() { return this.getSection; },
-          set(value) { this.setSection(value); }
+      section: {
+        get() {
+          return this.getSection;
+        },
+        set(value) {
+          this.setSection(value);
+        },
       },
-      layer:{
-          get() { return this.getLayer; },
-          set(value) { this.setLayer(value); }
+      layer: {
+        get() {
+          return this.getLayer;
+        },
+        set(value) {
+          this.setLayer(value);
+        },
       },
-      rows:{
-          get() { return this.getRows; },
-          set(value) { this.setRows(value); }
+      rows: {
+        get() {
+          return this.getRows;
+        },
+        set(value) {
+          this.setRows(value);
+        },
       },
-      columns:{
-          get() { return this.getColumns; },
-          set(value) { this.setColumns(value); }
+      columns: {
+        get() {
+          return this.getColumns;
+        },
+        set(value) {
+          this.setColumns(value);
+        },
       },
-      idZonePattern:{
-          get() { return this.getIdZonePattern; },
-          set(value) { this.setIdZonePattern(value); }
+      idZonePattern: {
+        get() {
+          return this.getIdZonePattern;
+        },
+        set(value) {
+          this.setIdZonePattern(value);
+        },
       },
-      zonePattern:{
-          get() { return this.getZonePattern; },
-          set(value) { this.setZonePattern(value); }
+      zonePattern: {
+        get() {
+          return this.getZonePattern;
+        },
+        set(value) {
+          this.setZonePattern(value);
+        },
       },
-      width:{
-          get() { return this.getWidth; },
-          set(value) { this.setWidth(value); }
+      width: {
+        get() {
+          return this.getWidth;
+        },
+        set(value) {
+          this.setWidth(value);
+        },
       },
-      length:{
-          get() { return this.getLength; },
-          set(value) { this.setLength(value); }
+      length: {
+        get() {
+          return this.getLength;
+        },
+        set(value) {
+          this.setLength(value);
+        },
       },
-      height:{
-          get() { return this.getHeight; },
-          set(value) { this.setHeight(value); }
+      height: {
+        get() {
+          return this.getHeight;
+        },
+        set(value) {
+          this.setHeight(value);
+        },
       },
-      initialRow:{
-          get() { return this.getInitialRow; },
-          set(value) { this.setInitialRow(value); }
+      initialRow: {
+        get() {
+          return this.getInitialRow;
+        },
+        set(value) {
+          this.setInitialRow(value);
+        },
       },
-      initialColumn:{
-          get() { return this.getInitialColumn; },
-          set(value) { this.setInitialColumn(value); }
+      initialColumn: {
+        get() {
+          return this.getInitialColumn;
+        },
+        set(value) {
+          this.setInitialColumn(value);
+        },
       },
-      initialXCoord:{
-          get() { return this.getInitialXCoord; },
-          set(value) { this.setInitialXCoord(value); }
+      initialXCoord: {
+        get() {
+          return this.getInitialXCoord;
+        },
+        set(value) {
+          this.setInitialXCoord(value);
+        },
       },
-      initialYCoord:{
-          get() { return this.getInitialYCoord; },
-          set(value) { this.setInitialYCoord(value); }
+      initialYCoord: {
+        get() {
+          return this.getInitialYCoord;
+        },
+        set(value) {
+          this.setInitialYCoord(value);
+        },
       },
-      initialZCoord:{
-          get() { return this.getInitialZCoord; },
-          set(value) { this.setInitialZCoord(value); }
+      initialZCoord: {
+        get() {
+          return this.getInitialZCoord;
+        },
+        set(value) {
+          this.setInitialZCoord(value);
+        },
       },
-      rowGap:{
-          get() { return this.getRowGap; },
-          set(value) { this.setRowGap(value); }
+      rowGap: {
+        get() {
+          return this.getRowGap;
+        },
+        set(value) {
+          this.setRowGap(value);
+        },
       },
-      columnGap:{
-          get() { return this.getColumnGap; },
-          set(value) { this.setColumnGap(value); }
+      columnGap: {
+        get() {
+          return this.getColumnGap;
+        },
+        set(value) {
+          this.setColumnGap(value);
+        },
       },
-  }, computedFromYard, computedFromZoneCreationBatch),
+    },
+    computedFromYard,
+    computedFromZoneCreationBatch
+  ),
   methods: Object.assign({}, methodsFromYard, methodsFromZoneCreationBatch),
 };
 </script>
