@@ -2,7 +2,7 @@ const state = () => ({
   yard: "",
   area: "",
   section: undefined,
-  layer: 1,
+  layer: 0,
   rows: 1,
   columns: 1,
   idZonePattern: "",
