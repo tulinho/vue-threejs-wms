@@ -280,7 +280,7 @@ const actions = {
   drawSections(context, options) {
     context.rootState.yard.sections.forEach((section) => {
       let areaBackgroung = context.rootState.yard.areas.find(
-        (m) => m.Zone == section.Area
+        (m) => section.Area.includes(m.Zone) 
       ).ColorBackground;
       let placeHolder = createPlaceholderForYardElement(section, options);
       placeHolder.renderOrder = 3;

@@ -63,7 +63,7 @@ export default {
       title: "Section",
       searchLabel: "Search",
       headers: [
-        { text: "Id Section", align: "start", width: 100, value: "IdZone" },
+        { text: "Id Section", align: "start", width: 120, value: "IdZone" },
         { text: "Yard", align: "start", value: "Yard" },
         { text: "Area", align: "start", value: "Area" },
         { text: "Section", align: "start", value: "Zone" },

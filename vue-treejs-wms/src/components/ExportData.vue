@@ -11,12 +11,21 @@
             <v-row>
               <v-col cols="12">
                 <v-select
-                  v-model="exportType"
+                  v-model="selected"
                   :items="exportTypes"
                   color="primary"
                   label="Export Type"
                   dense
                 ></v-select>
+              </v-col>
+            </v-row>
+            <v-row v-if="isExportingFromService">
+              <v-col cols="12">
+                <v-text-field
+                  label="Service Url"
+                  v-model="serviceUrl"
+                  dense
+                ></v-text-field>
               </v-col>
             </v-row>
           </v-container>
@@ -30,7 +39,10 @@
             @click="showExportDataDialog(false)"
             >Cancel</v-btn
           >
-          <v-btn color="secondary white--text" text @click="exportData(exportType)"
+          <v-btn
+            color="secondary white--text"
+            text
+            @click="exportData(exportType)"
             >Export</v-btn
           >
         </v-card-actions>
@@ -44,18 +56,49 @@ import { mapState, mapActions } from "vuex";
 
 const computedFromImportExport = mapState("importExport", {
   dialog: (state) => state.showExportDialog,
+  url: (state) => state.serviceUrl,
 });
 
-const methods = mapActions('importExport', ['showExportDataDialog', 'exportData']);
+const methods = mapActions("importExport", [
+  "showExportDataDialog",
+  "exportData",
+  "setServiceUrl",
+]);
 
 export default {
   data() {
     return {
       exportType: "",
-      exportTypes: ["json", "script insert", "script update"],
+      isExportingFromService: false,
+      exportTypes: ["json", "script insert", "script update", "using service"],
     };
   },
-  computed: Object.assign({}, computedFromImportExport),
+  computed: Object.assign(
+    {
+      selected: {
+        get() {
+          return this.exportType;
+        },
+        set(value) {
+          this.exportType = value;
+          if (this.exportType == "using service") {
+            this.isExportingFromService = true;
+          } else {
+            this.isExportingFromService = false;
+          }
+        },
+      },
+      serviceUrl: {
+        get() {
+          return this.url;
+        },
+        set(value) {
+          this.setServiceUrl(value);
+        },
+      },
+    },
+    computedFromImportExport
+  ),
   methods,
 };
 </script>
