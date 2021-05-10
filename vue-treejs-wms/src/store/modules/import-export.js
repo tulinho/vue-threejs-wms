@@ -34,7 +34,7 @@ const mutations = {
 
 function loadFromService(context, module) {
   axios
-    .get(context.state.serviceUrl)
+    .get(context.state.serviceUrl + '/TrackZones')
     .then(function(response) {
       let allZones = response.data.value;
       allZones.forEach((elem) => {
@@ -284,11 +284,171 @@ function exportScriptFile(script) {
   document.body.removeChild(fileLink);
 }
 
+function exportScriptFileFromService(context) {
+  axios
+    .get(context.state.serviceUrl + '/TrackZones')
+    .then(function(response) {
+      let allZones = response.data.value;
+      allZones.forEach((elem) => {
+        elem.ColorForeground = elem.ColorForeground.replace(
+          /#([0-9a-zA-Z]{2})([0-9a-zA-Z]{6})/,
+          "#$2$1"
+        );
+        elem.ColorBackground = elem.ColorBackground.replace(
+          /#([0-9a-zA-Z]{2})([0-9a-zA-Z]{6})/,
+          "#$2$1"
+        );
+        elem.ColorFrame = elem.ColorFrame.replace(
+          /#([0-9a-zA-Z]{2})([0-9a-zA-Z]{6})/,
+          "#$2$1"
+        );
+      });
+      let yards = allZones.filter((m) => m.ZoneType == "Y");
+      let areas = allZones.filter((m) => m.ZoneType == "A");
+      let sections = allZones.filter((m) => m.ZoneType == "S");
+      let zones = allZones.filter((m) => m.ZoneType == "Z");
+      let sqlScripts = {
+        yardScript: defaults.DeleteYardScript,
+        areaScript: defaults.DeleteAreaScript,
+        sectionScript: defaults.DeleteSectionScript,
+        zoneScript: defaults.DeleteZoneScript,
+      };
+
+      let script = [];
+      
+      script.push(` -- DELETING ZONES`);
+      zones.forEach((zone) => {
+        let existingZone = context.rootState.yard.zones.find(
+          (m) => m.IdZone == zone.IdZone
+        );
+        if (existingZone) return;
+        let sql = formatZoneScript(zone, sqlScripts.zoneScript);
+        script.push(sql);
+      });
+
+      script.push(` -- DELETING SECTIONS`);
+      sections.forEach((section) => {
+        let existingSection = context.rootState.yard.sections.find(
+          (m) => m.IdZone == section.IdZone
+        );
+        if (existingSection) return;
+        let sql = formatZoneScript(section, sqlScripts.zoneScript);
+        script.push(sql);
+        sql = formatSectionScript(section, sqlScripts.sectionScript);
+        script.push(sql);
+      });
+
+      script.push(` -- DELETING AREAS`);
+      areas.forEach((area) => {
+        let existingArea = context.rootState.yard.areas.find(
+          (m) => m.IdZone == area.IdZone
+        );
+        if (existingArea) return;
+        let sql = formatZoneScript(area, sqlScripts.zoneScript);
+        script.push(sql);
+        sql = formatAreaScript(area, sqlScripts.areaScript);
+        script.push(sql);
+      });
+
+      script.push(` -- DELETING YARDS`);
+      yards.forEach((yard) => {
+        let existingYard = context.rootState.yard.yards.find(
+          (m) => m.IdZone == yard.IdZone
+        );
+        if (existingYard) return;
+        let sql = formatZoneScript(yard, sqlScripts.zoneScript);
+        script.push(sql);
+        sql = formatYardScript(yard, sqlScripts.yardScript);
+        script.push(sql);
+      });
+
+
+
+      script.push(` -- YARDS`);
+      context.rootState.yard.yards.forEach((yard) => {
+        let existingYard = yards.find(m => m.IdZone == yard.IdZone);
+        if(existingYard){
+          sqlScripts.yardScript = defaults.UpdateYardScript;
+          sqlScripts.zoneScript = defaults.UpdateZoneScript;
+        } else{
+          sqlScripts.yardScript = defaults.InsertYardScript;
+          sqlScripts.zoneScript = defaults.InsertZoneScript;
+        }
+        yard = Object.assign({}, defaults.yard, yard);
+        let sql = formatYardScript(yard, sqlScripts.yardScript);
+        script.push(sql);
+        sql = formatZoneScript(yard, sqlScripts.zoneScript);
+        script.push(sql);
+      });
+    
+      script.push(` -- AREAS`);
+      context.rootState.yard.areas.forEach((area) => {
+        let existingArea = areas.find(m => m.IdZone == area.IdZone);
+        if(existingArea){
+          sqlScripts.areaScript = defaults.UpdateAreaScript;
+          sqlScripts.zoneScript = defaults.UpdateZoneScript;
+        } else{
+          sqlScripts.areaScript = defaults.InsertAreaScript;
+          sqlScripts.zoneScript = defaults.InsertZoneScript;
+        }
+        area = Object.assign({}, defaults.area, area);
+        let sql = formatAreaScript(area, sqlScripts.areaScript);
+        script.push(sql);
+        sql = formatZoneScript(area, sqlScripts.zoneScript);
+        script.push(sql);
+      });
+    
+      script.push(` -- SECTIONS`);
+      context.rootState.yard.sections.forEach((section) => {
+        let existingSection = sections.find(m => m.IdZone == section.IdZone);
+        if(existingSection){
+          sqlScripts.sectionScript = defaults.UpdateSectionScript;
+          sqlScripts.zoneScript = defaults.UpdateZoneScript;
+        } else{
+          sqlScripts.sectionScript = defaults.InsertSectionScript;
+          sqlScripts.zoneScript = defaults.InsertZoneScript;
+        }
+        section = Object.assign({}, defaults.section, section);
+        section.Section = section.Zone;
+        let sql = formatSectionScript(section, sqlScripts.sectionScript);
+        script.push(sql);
+        sql = formatZoneScript(section, sqlScripts.zoneScript);
+        script.push(sql);
+      });
+    
+      script.push(` -- ZONES`);
+      let currentSection = "##";
+      let zonesSorted = context.rootState.yard.zones.sort((m, n) =>
+        m.IdZone < n.IdZone ? -1 : 1
+      );
+      zonesSorted.forEach((zone) => {
+        let existingZone = zones.find(m => m.IdZone == zone.IdZone);
+        if(existingZone){
+          sqlScripts.zoneScript = defaults.UpdateZoneScript;
+        } else{
+          sqlScripts.zoneScript = defaults.InsertZoneScript;
+        }
+        zone = Object.assign({}, defaults.zone, zone);
+        if (currentSection != zone.Section) {
+          currentSection = zone.Section;
+          script.push(` -- Zones of ${zone.Section}`);
+        }
+        let sql = formatZoneScript(zone, sqlScripts.zoneScript);
+        script.push(sql);
+      });
+
+      exportScriptFile(script.join('\n'));
+    })
+    .catch(function(error) {
+      console.log(error);
+    });
+}
+
 const actions = {
   showImportDataDialog(context, payload) {
     context.commit("setShowImportDialog", payload);
     context.commit("setFile", "");
-    context.commit("setServiceUrl", "");
+    context.commit("setServiceUrl", defaults.serviceUrl);
   },
   setServiceUrl(context, payload) {
     context.commit("setServiceUrl", payload);
@@ -308,7 +468,8 @@ const actions = {
   exportData(context, payload) {
     if (payload == "json") exportJson(context);
     else if (payload == "script insert") exportInsertScript(context);
-    else exportUpdateScript(context);
+    else if (payload == "script update") exportUpdateScript(context);
+    else exportScriptFileFromService(context);
     context.dispatch("showExportDataDialog", false);
   },
 };

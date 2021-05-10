@@ -7,6 +7,9 @@
     </template>
 
     <v-list>
+      <v-list-item @click="showValidations">
+        <v-list-item-title>Validate Model</v-list-item-title>
+      </v-list-item>
       <v-list-item @click="showImportDataDialog(true)">
         <v-list-item-title>Import Yard Data</v-list-item-title>
       </v-list-item>
@@ -24,7 +27,11 @@ const methods = mapActions("importExport", ["showImportDataDialog", "showExportD
 
 export default {
   setup() {},
-  methods,
+  methods: Object.assign({
+    showValidations(){
+      this.$store.dispatch('validation/setShowDialog', true);
+    }
+  },methods),
 };
 </script>
 

@@ -1,22 +1,27 @@
-import Vue from 'vue'
-import Vuex from 'vuex'
-import menu from './modules/menu'
-import camera from './modules/camera'
-import yard from './modules/yard'
-import drawingYard from './modules/drawing-yard'
-import importExport from "./modules/import-export"
-import zoneBatch from './modules/zone-batch'
+import Vue from "vue";
+import Vuex from "vuex";
+import menu from "./modules/menu";
+import camera from "./modules/camera";
+import yard from "./modules/yard";
+import drawingYard from "./modules/drawing-yard";
+import importExport from "./modules/import-export";
+import zoneBatch from "./modules/zone-batch";
+import validation from "./modules/validation";
 
-Vue.use(Vuex)
+Vue.use(Vuex);
 
 export default new Vuex.Store({
-  modules:{menu,camera,yard,drawingYard, importExport, zoneBatch},
-  state: {
+  modules: {
+    menu,
+    camera,
+    yard,
+    drawingYard,
+    importExport,
+    zoneBatch,
+    validation,
   },
-  getters: {
-  },
-  mutations: {
-  },
-  actions: {
-  }
-})
+  state: {},
+  getters: {},
+  mutations: {},
+  actions: {},
+});

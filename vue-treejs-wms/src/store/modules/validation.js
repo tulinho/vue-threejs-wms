@@ -1,21 +1,33 @@
-import * as THREE from "three";
-
 const state = () => ({
   message: "No errors",
+  showDialog: false
 });
 
 const mutations = {
   setMessage(state, payload) {
     state.message = payload;
   },
+  setShowDialog(state, payload) {
+    state.showDialog = payload;
+  },
 };
 
 const actions = {
-  validate(context, payload) {
+  setShowDialog(context, payload){
+    if(payload)
+      context.dispatch('validate');
+    context.commit('setShowDialog', payload);
+  },
+  validate(context){
+    context.dispatch('getValidationMessage')
+    .then((message) => context.commit('setMessage', message));
+    
+  },
+  getValidationMessage(context) {
     let yards = context.rootState.yard.yards;
     let areas = context.rootState.yard.areas;
-    let sections = context.rootState.yard.yards;
-    let zones = context.rootState.yard.yards;
+    let sections = context.rootState.yard.sections;
+    let zones = context.rootState.yard.zones;
 
     let elements = [];
     elements = elements.concat(yards);
@@ -23,7 +35,7 @@ const actions = {
     elements = elements.concat(sections);
     elements = elements.concat(zones);
 
-    let findDuplicateIds = (arr) =>
+    let findDuplicatedIds = (arr) =>
       arr.filter((item1) =>
         arr.some(
           (item2) =>
@@ -31,9 +43,9 @@ const actions = {
             arr.indexOf(item2) != arr.lastIndexOf(item1)
         )
       );
-    let duplicatedIds = findDuplicateIds(elements);
+    let duplicatedIds = findDuplicatedIds(elements);
 
-    let findDuplicateZones = (arr) =>
+    let findDuplicatedZones = (arr) =>
       arr.filter((item1) =>
         arr.some(
           (item2) =>
@@ -41,17 +53,17 @@ const actions = {
             arr.indexOf(item2) != arr.lastIndexOf(item1)
         )
       );
-    let duplicatedZones = findDuplicateZones(elements);
+    let duplicatedZones = findDuplicatedZones(elements);
 
     let areasWithWrongDimmentions = [];
     let sectionsWithWrongDimmentions = [];
     let zonesWithWrongDimmentions = [];
 
     let fitInside = (parent, child) =>
-      parent.PosXMin <= child.PosXMin &&
-      parent.PosXMax >= child.PosXMax &&
-      parent.PosYMin <= child.PosYMin &&
-      parent.PosYMax >= child.PosYMax;
+      parseInt(parent.PosXMin) <= parseInt(child.PosXMin) &&
+      parseInt(parent.PosXMax) >= parseInt(child.PosXMax) &&
+      parseInt(parent.PosYMin) <= parseInt(child.PosYMin) &&
+      parseInt(parent.PosYMax) >= parseInt(child.PosYMax);
     yards.forEach((yard) => {
       let areasAux = areas.filter(
         (item) => item.Yard == yard.Zone && !fitInside(yard, item)
@@ -76,15 +88,38 @@ const actions = {
       messages.push("There's no duplicated IDs.");
     else{
       messages.push("The following IDs are duplicated:");
-      duplicatedIds.forEach(elem => messages.push(`ID: ${elem.IdZone}, Name: ${elem.Zone}`));
+      duplicatedIds.forEach(elem => messages.push(`  - ID: ${elem.IdZone}, Name: ${elem.Zone}`));
     }
     
     if(!duplicatedZones.length)
       messages.push("There's no duplicated names.");
     else{
       messages.push("The following names are duplicated:");
-      duplicatedZones.forEach(elem => messages.push(`ID: ${elem.IdZone}, Name: ${elem.Zone}`));
+      duplicatedZones.forEach(elem => messages.push(`  - ID: ${elem.IdZone}, Name: ${elem.Zone}`));
+    }    
+    
+    if(!areasWithWrongDimmentions.length)
+      messages.push("All area's dimmentions are consistent.");
+    else{
+      messages.push("The following areas are inconsistent:");
+      areasWithWrongDimmentions.forEach(elem => messages.push(`  - ID: ${elem.IdZone}, Name: ${elem.Zone}, Parent: ${elem.Yard}`));
+    }    
+    
+    if(!sectionsWithWrongDimmentions.length)
+      messages.push("All section's dimmentions are consistent.");
+    else{
+      messages.push("The following sections are inconsistent:");
+      sectionsWithWrongDimmentions.forEach(elem => messages.push(`  - ID: ${elem.IdZone}, Name: ${elem.Zone}, Parent: ${elem.Area}`));
+    }    
+    
+    if(!zonesWithWrongDimmentions.length)
+      messages.push("All zone's dimmentions are consistent.");
+    else{
+      messages.push("The following zones are inconsistent:");
+      zonesWithWrongDimmentions.forEach(elem => messages.push(`  - ID: ${elem.IdZone}, Name: ${elem.Zone}, Parent: ${elem.Section}`));
     }
+
+    return messages.join('\n');
 
   },
 };

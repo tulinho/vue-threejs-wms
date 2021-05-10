@@ -11,6 +11,7 @@
       </v-container>
       <import-data />
       <export-data />
+      <yard-validation/>
     </v-main>
   </v-app>
 </template>
@@ -20,11 +21,12 @@ import { mapActions } from "vuex";
 import ExportData from "./components/ExportData.vue";
 import ImportData from "./components/ImportData.vue";
 import ToolbarMenu from "./components/ToolbarMenu.vue";
+import YardValidation from './components/YardValidation.vue';
 
 const methods = mapActions("importExport", ["showImportDataDialog"]);
 
 export default {
-  components: { ImportData, ToolbarMenu, ExportData },
+  components: { ImportData, ToolbarMenu, ExportData, YardValidation },
   setup() {},
   methods,
 };
