@@ -9,6 +9,26 @@ const state = () => ({
     { id: "D", name: "Device" },
     { id: "V", name: "Virtual" },
   ],
+  rotateAngleTypes: [
+    {id: 0, name: '0 degrees'},
+    {id: 1, name: '90 degrees'},
+    {id: 2, name: '180 degrees'},
+    {id: 3, name: '270 degrees'}
+  ],
+  tiltAngleTypes: [
+    {id: 0, name: '0 degrees'},
+    {id: 1, name: '90 degrees'}
+  ],
+  xAlignmentTypes: [
+    {id: 0, name: 'downstream'},
+    {id: 1, name: 'upstream'},
+    {id: 2, name: 'center'}
+  ],
+  yAlignmentTypes: [
+    {id: 0, name: 'downstream'},
+    {id: 1, name: 'upstream'},
+    {id: 2, name: 'center'}
+  ],
   showYardEdition: false,
   editingYard: {},
   selectedYard: {},

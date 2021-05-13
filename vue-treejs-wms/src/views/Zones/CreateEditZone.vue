@@ -179,6 +179,52 @@
                   <v-tab-item>
                     <v-row class="mt-5">
                       <v-col cols="3">
+                        <v-select
+                          v-model="zone.XAlignment"
+                          :items="xAlignments"
+                          color="primary"
+                          item-text="name"
+                          item-value="id"
+                          label="Alignment in x-direction"
+                          dense
+                        ></v-select>
+                      </v-col>
+                      <v-col cols="3">
+                        <v-select
+                          v-model="zone.YAlignment"
+                          :items="yAlignments"
+                          color="primary"
+                          item-text="name"
+                          item-value="id"
+                          label="Alignment in y-direction"
+                          dense
+                        ></v-select>
+                      </v-col>
+                      <v-col cols="3">
+                        <v-select
+                          v-model="zone.RotateAngle"
+                          :items="rotateAngles"
+                          color="primary"
+                          item-text="name"
+                          item-value="id"
+                          label="Rotate Angles"
+                          dense
+                        ></v-select>
+                      </v-col>
+                      <v-col cols="3">
+                        <v-select
+                          v-model="zone.TiltAngle"
+                          :items="tiltAngles"
+                          color="primary"
+                          item-text="name"
+                          item-value="id"
+                          label="Tilt Angles"
+                          dense
+                        ></v-select>
+                      </v-col>
+                    </v-row>
+                    <v-row>
+                      <v-col cols="3">
                         <v-text-field
                           v-model="zone.CameraOffsetX"
                           type="number"
@@ -278,6 +324,10 @@ const computed = mapState("yard", {
   areas: (state) => state.areas,
   sections: (state) => state.sections,
   zoneTypes: (state) => state.zoneTypes,
+  xAlignments: (state) => state.xAlignmentTypes,
+  yAlignments: (state) => state.yAlignmentTypes,
+  rotateAngles: (state) => state.rotateAngleTypes,
+  tiltAngles: (state) => state.tiltAngleTypes,
 });
 
 const methods = mapActions("yard", ["cancelZoneEdition", "saveZone"]);

@@ -13,6 +13,9 @@ if (!String.prototype.format) {
 const state = () => ({
   showImportDialog: false,
   showExportDialog: false,
+  showSaveZonesDialog: false,
+  selectedZonesToSave: [],
+  saveZonesResponse: '',
   serviceUrl: "",
   file: "",
 });
@@ -30,11 +33,20 @@ const mutations = {
   setFile(state, payload) {
     state.file = payload;
   },
+  setShowSaveZonesDialog(state, payload) {
+    state.showSaveZonesDialog = payload;
+  },
+  setSelectedZonesToSave(state, payload){
+    state.selectedZonesToSave = payload;
+  },
+  setSaveZonesResponse(state, payload) {
+    state.saveZonesResponse = payload;
+  },
 };
 
 function loadFromService(context, module) {
   axios
-    .get(context.state.serviceUrl + '/TrackZones')
+    .get(context.state.serviceUrl + "/TrackZones")
     .then(function(response) {
       let allZones = response.data.value;
       allZones.forEach((elem) => {
@@ -286,23 +298,9 @@ function exportScriptFile(script) {
 
 function exportScriptFileFromService(context) {
   axios
-    .get(context.state.serviceUrl + '/TrackZones')
+    .get(context.state.serviceUrl + "/TrackZones")
     .then(function(response) {
       let allZones = response.data.value;
-      allZones.forEach((elem) => {
-        elem.ColorForeground = elem.ColorForeground.replace(
-          /#([0-9a-zA-Z]{2})([0-9a-zA-Z]{6})/,
-          "#$2$1"
-        );
-        elem.ColorBackground = elem.ColorBackground.replace(
-          /#([0-9a-zA-Z]{2})([0-9a-zA-Z]{6})/,
-          "#$2$1"
-        );
-        elem.ColorFrame = elem.ColorFrame.replace(
-          /#([0-9a-zA-Z]{2})([0-9a-zA-Z]{6})/,
-          "#$2$1"
-        );
-      });
       let yards = allZones.filter((m) => m.ZoneType == "Y");
       let areas = allZones.filter((m) => m.ZoneType == "A");
       let sections = allZones.filter((m) => m.ZoneType == "S");
@@ -315,7 +313,7 @@ function exportScriptFileFromService(context) {
       };
 
       let script = [];
-      
+
       script.push(` -- DELETING ZONES`);
       zones.forEach((zone) => {
         let existingZone = context.rootState.yard.zones.find(
@@ -362,15 +360,13 @@ function exportScriptFileFromService(context) {
         script.push(sql);
       });
 
-
-
       script.push(` -- YARDS`);
       context.rootState.yard.yards.forEach((yard) => {
-        let existingYard = yards.find(m => m.IdZone == yard.IdZone);
-        if(existingYard){
+        let existingYard = yards.find((m) => m.IdZone == yard.IdZone);
+        if (existingYard) {
           sqlScripts.yardScript = defaults.UpdateYardScript;
           sqlScripts.zoneScript = defaults.UpdateZoneScript;
-        } else{
+        } else {
           sqlScripts.yardScript = defaults.InsertYardScript;
           sqlScripts.zoneScript = defaults.InsertZoneScript;
         }
@@ -380,14 +376,14 @@ function exportScriptFileFromService(context) {
         sql = formatZoneScript(yard, sqlScripts.zoneScript);
         script.push(sql);
       });
-    
+
       script.push(` -- AREAS`);
       context.rootState.yard.areas.forEach((area) => {
-        let existingArea = areas.find(m => m.IdZone == area.IdZone);
-        if(existingArea){
+        let existingArea = areas.find((m) => m.IdZone == area.IdZone);
+        if (existingArea) {
           sqlScripts.areaScript = defaults.UpdateAreaScript;
           sqlScripts.zoneScript = defaults.UpdateZoneScript;
-        } else{
+        } else {
           sqlScripts.areaScript = defaults.InsertAreaScript;
           sqlScripts.zoneScript = defaults.InsertZoneScript;
         }
@@ -397,14 +393,14 @@ function exportScriptFileFromService(context) {
         sql = formatZoneScript(area, sqlScripts.zoneScript);
         script.push(sql);
       });
-    
+
       script.push(` -- SECTIONS`);
       context.rootState.yard.sections.forEach((section) => {
-        let existingSection = sections.find(m => m.IdZone == section.IdZone);
-        if(existingSection){
+        let existingSection = sections.find((m) => m.IdZone == section.IdZone);
+        if (existingSection) {
           sqlScripts.sectionScript = defaults.UpdateSectionScript;
           sqlScripts.zoneScript = defaults.UpdateZoneScript;
-        } else{
+        } else {
           sqlScripts.sectionScript = defaults.InsertSectionScript;
           sqlScripts.zoneScript = defaults.InsertZoneScript;
         }
@@ -415,17 +411,17 @@ function exportScriptFileFromService(context) {
         sql = formatZoneScript(section, sqlScripts.zoneScript);
         script.push(sql);
       });
-    
+
       script.push(` -- ZONES`);
       let currentSection = "##";
       let zonesSorted = context.rootState.yard.zones.sort((m, n) =>
         m.IdZone < n.IdZone ? -1 : 1
       );
       zonesSorted.forEach((zone) => {
-        let existingZone = zones.find(m => m.IdZone == zone.IdZone);
-        if(existingZone){
+        let existingZone = zones.find((m) => m.IdZone == zone.IdZone);
+        if (existingZone) {
           sqlScripts.zoneScript = defaults.UpdateZoneScript;
-        } else{
+        } else {
           sqlScripts.zoneScript = defaults.InsertZoneScript;
         }
         zone = Object.assign({}, defaults.zone, zone);
@@ -437,14 +433,80 @@ function exportScriptFileFromService(context) {
         script.push(sql);
       });
 
-      exportScriptFile(script.join('\n'));
+      exportScriptFile(script.join("\n"));
     })
     .catch(function(error) {
       console.log(error);
     });
 }
 
+function exportZones(context) {
+  let zones = context.state.selectedZonesToSave;
+  if (!zones || !zones.length) return;
+  axios
+    .get(context.state.serviceUrl + "/TrackZones")
+    .then(function(response) {
+      let allZones = response.data.value;
+      let existingZones = allZones.filter((m) => m.ZoneType == "Z");
+
+      let zonesToInsert = zones.filter(
+        (m) => !existingZones.find((n) => m.IdZone == n.IdZone)
+      );
+      let zonesToUpdate = zones.filter((m) =>
+        existingZones.find((n) => m.IdZone == n.IdZone)
+      );
+
+      let promises = [];
+      zonesToUpdate.forEach((zone) => promises.push(updateZone(context, zone)));
+      zonesToInsert.forEach((zone) => promises.push(insertZone(context, zone)));
+      Promise.all(promises).then((m) => {
+        let message = m.map(m => m.status).every(m => m == 204) ? 'Success' : 'Error';
+        context.commit('setSaveZonesResponse', message);        
+      })
+      .catch((error) => {
+        console.log(error);
+        context.commit('setSaveZonesResponse', error);
+      });
+    })
+    .catch((error) => {
+      console.log(error);
+      context.commit('setSaveZonesResponse', error);
+    });
+}
+
+function updateZone(context, zone) {
+  zone = Object.assign({}, defaults.zone, zone);
+  formatZoneProperties(zone);
+  return axios.put(
+    context.state.serviceUrl + `/TrackZones(${zone.IdZone})`,
+    zone
+  );
+}
+
+function formatZoneProperties(zone) {
+  let regex = /#([0-9a-zA-Z]{6})([0-9a-zA-Z]{2})/;
+  let pattern = "#$2$1";
+  zone.ColorBackground = zone.ColorBackground.replace(regex, pattern);
+  zone.ColorForeground = zone.ColorForeground.replace(regex, pattern);
+  zone.ColorFrame = zone.ColorFrame.replace(regex, pattern);
+  zone.Description = (zone.Description || "").replace("null", "");
+}
+
+function insertZone(context, zone) {
+  zone = Object.assign({}, defaults.zone, zone);
+  formatZoneProperties(zone);
+  return axios.post(context.state.serviceUrl + `/TrackZones`, zone);
+}
+
 const actions = {
+  showSaveZonesDialog(context, payload) {
+    context.commit("setShowSaveZonesDialog", payload);
+    context.commit("setServiceUrl", defaults.serviceUrl);
+    context.commit('setSaveZonesResponse', '');
+  },
+  selectZonesToBeSaved(context, payload) {
+    context.commit("setSelectedZonesToSave", payload);
+  },
   showImportDataDialog(context, payload) {
     context.commit("setShowImportDialog", payload);
     context.commit("setFile", "");
@@ -471,6 +533,9 @@ const actions = {
     else if (payload == "script update") exportUpdateScript(context);
     else exportScriptFileFromService(context);
     context.dispatch("showExportDataDialog", false);
+  },
+  exportZones(context) {
+    exportZones(context);
   },
 };
 
