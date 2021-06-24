@@ -9,6 +9,7 @@ const state = () => ({
 		{ id: "D", name: "Device" },
 		{ id: "V", name: "Virtual" },
 		{ id: "B", name: "Borders" },
+		{ id: "P", name: "Production" },
 	],
 	rotateAngleTypes: [
 		{ id: 0, name: "0 degrees" },
