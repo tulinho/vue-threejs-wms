@@ -16,7 +16,7 @@ const state = () => ({
 	showSaveZonesDialog: false,
 	selectedZonesToSave: [],
 	saveZonesResponse: "",
-	serviceUrl: "",
+	serviceUrl: defaults.serviceUrl,
 	file: "",
 });
 
@@ -312,6 +312,7 @@ function exportScriptFileFromService(context) {
 				areaScript: defaults.DeleteAreaScript,
 				sectionScript: defaults.DeleteSectionScript,
 				zoneScript: defaults.DeleteZoneScript,
+				zoneConstraintsScripts: defaults.DeleteZoneConstraintsScript,
 			};
 
 			let script = [];
@@ -322,7 +323,12 @@ function exportScriptFileFromService(context) {
 					(m) => m.IdZone == zone.IdZone
 				);
 				if (existingZone) return;
-				let sql = formatZoneScript(zone, sqlScripts.zoneScript);
+				let sql = formatZoneScript(
+					zone,
+					sqlScripts.zoneConstraintsScripts
+				);
+				script.push(sql);
+				sql = formatZoneScript(zone, sqlScripts.zoneScript);
 				script.push(sql);
 			});
 

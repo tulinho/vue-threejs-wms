@@ -5,13 +5,13 @@
     <edmx:StorageModels>
       <Schema Namespace="YmModel.Store" Alias="Self" Provider="Devart.Data.Oracle" ProviderManifestToken="Oracle, 19.0.0.0" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:devart="http://devart.com/schemas/edml/StorageSchemaExtensions/1.0" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
         <EntityContainer Name="YmEntitiesStoreContainer">
-          <EntitySet Name="TRACK_AREAs" EntityType="YmModel.Store.TRACK_AREA" store:Type="Tables" Schema="SYM" Table="TRACK_AREA" />
-          <EntitySet Name="TRACK_COORD_PIECEs" EntityType="YmModel.Store.TRACK_COORD_PIECE" store:Type="Tables" Schema="SYM" Table="TRACK_COORD_PIECE" />
-          <EntitySet Name="TRACK_SECTIONs" EntityType="YmModel.Store.TRACK_SECTION" store:Type="Tables" Schema="SYM" Table="TRACK_SECTION" />
-          <EntitySet Name="TRACK_YARDs" EntityType="YmModel.Store.TRACK_YARD" store:Type="Tables" Schema="SYM" Table="TRACK_YARD" />
-          <EntitySet Name="TRACK_ZONEs" EntityType="YmModel.Store.TRACK_ZONE" store:Type="Tables" Schema="SYM" Table="TRACK_ZONE" />
-          <EntitySet Name="TRACK_ZONES_PIECEs" EntityType="YmModel.Store.TRACK_ZONES_PIECE" store:Type="Tables" Schema="SYM" Table="TRACK_ZONES_PIECE" />
-          <EntitySet Name="TRACK_ZONE_DELETED_HISTs" EntityType="YmModel.Store.TRACK_ZONE_DELETED_HIST" store:Type="Tables" Schema="SYM" Table="TRACK_ZONE_DELETED_HIST" />
+          <EntitySet Name="TRACK_AREAs" EntityType="YmModel.Store.TRACK_AREA" store:Type="Tables" Schema="CYM" Table="TRACK_AREA" />
+          <EntitySet Name="TRACK_COORD_PIECEs" EntityType="YmModel.Store.TRACK_COORD_PIECE" store:Type="Tables" Schema="CYM" Table="TRACK_COORD_PIECE" />
+          <EntitySet Name="TRACK_SECTIONs" EntityType="YmModel.Store.TRACK_SECTION" store:Type="Tables" Schema="CYM" Table="TRACK_SECTION" />
+          <EntitySet Name="TRACK_YARDs" EntityType="YmModel.Store.TRACK_YARD" store:Type="Tables" Schema="CYM" Table="TRACK_YARD" />
+          <EntitySet Name="TRACK_ZONEs" EntityType="YmModel.Store.TRACK_ZONE" store:Type="Tables" Schema="CYM" Table="TRACK_ZONE" />
+          <EntitySet Name="TRACK_ZONES_PIECEs" EntityType="YmModel.Store.TRACK_ZONES_PIECE" store:Type="Tables" Schema="CYM" Table="TRACK_ZONES_PIECE" />
+          <EntitySet Name="TRACK_ZONE_DELETED_HISTs" EntityType="YmModel.Store.TRACK_ZONE_DELETED_HIST" store:Type="Tables" Schema="CYM" Table="TRACK_ZONE_DELETED_HIST" />
           <AssociationSet Name="FK_37_TRACK_AREA_TRACK_YA_PK_1" Association="YmModel.Store.FK_37_TRACK_AREA_TRACK_YA_PK_1">
             <End Role="TRACK_YARD" EntitySet="TRACK_YARDs" />
             <End Role="TRACK_AREA" EntitySet="TRACK_AREAs" />
@@ -479,16 +479,6 @@
               <Summary>Timestamp of the last modification: insert or update. This field is assigned automatically by the data base on insertion. Do NOT set this value manually!</Summary>
             </Documentation>
           </Property>
-          <Property Name="MAX_STRESS" Type="int" Nullable="false" DefaultValue="300000">
-            <Documentation>
-              <Summary>Max pile weight per Kg/m²</Summary>
-            </Documentation>
-          </Property>
-          <Property Name="MAX_HEIGHT" Type="int" Nullable="false" DefaultValue="2500">
-            <Documentation>
-              <Summary>Max pile height mm</Summary>
-            </Documentation>
-          </Property>
         </EntityType>
         <EntityType Name="TRACK_ZONES_PIECE">
           <Documentation>
@@ -508,7 +498,7 @@
               <Summary>Name Id of tracking zone where Piece with ID_PIECE is placed at Layer Z</Summary>
             </Documentation>
           </Property>
-          <Property Name="ID_RULE" Type="decimal" Nullable="false" DefaultValue="1">
+          <Property Name="ZERO_POINT" Type="decimal">
             <Documentation>
               <Summary>1= in this zone is the piece zero point laying</Summary>
             </Documentation>
@@ -1120,16 +1110,6 @@
               <Summary>Timestamp of the last modification: insert or update. This field is assigned automatically by the data base on insertion. Do NOT set this value manually!</Summary>
             </Documentation>
           </Property>
-          <Property Name="MaxStress" Type="Int32" Nullable="false" DefaultValue="300000" ed:ValidateRequired="true" ed:Guid="478340d0-8466-470f-a8df-b381ba35a380">
-            <Documentation>
-              <Summary>Max pile weight per Kg/m²</Summary>
-            </Documentation>
-          </Property>
-          <Property Name="MaxHeight" Type="Int32" Nullable="false" DefaultValue="2500" ed:ValidateRequired="true" ed:Guid="eafa25eb-c738-4fc4-9061-0a72fb3c5ca0">
-            <Documentation>
-              <Summary>Max pile height mm</Summary>
-            </Documentation>
-          </Property>
           <NavigationProperty Name="TrackZones_IdZonePrevX" Relationship="YmModel.FK_41_TRACK_ZONE_TRACK_ZO_PK_2" FromRole="TrackZone_IdZonePrevX" ToRole="TrackZones_IdZonePrevX" ed:Guid="39fa014d-0b5c-4849-b00e-05a0386248bd" />
           <NavigationProperty Name="TrackZone_IdZonePrevX" Relationship="YmModel.FK_41_TRACK_ZONE_TRACK_ZO_PK_2" FromRole="TrackZones_IdZonePrevX" ToRole="TrackZone_IdZonePrevX" ed:Guid="1c7c7ac6-49bd-488b-9ecd-7baa1d9e1028" />
           <NavigationProperty Name="TrackSection" Relationship="YmModel.FK_41_TRACK_ZONE_TRACK_SE_PK_1" FromRole="TrackZones" ToRole="TrackSection" ed:Guid="8f53b50c-a7b9-4d2a-9a68-ba9d2e37cbdf" />
@@ -1157,7 +1137,7 @@
               <Summary>Name Id of tracking zone where Piece with ID_PIECE is placed at Layer Z</Summary>
             </Documentation>
           </Property>
-          <Property Name="IdRule" Type="Decimal" Nullable="false" DefaultValue="1" ed:ValidateRequired="true" ed:Guid="0351daf2-2224-4352-a58f-100fe0a5c2d7">
+          <Property Name="ZeroPoint" Type="Decimal" ed:ValidateRequired="false" ed:Guid="d06c094e-833f-4c9f-831c-8e449591c334">
             <Documentation>
               <Summary>1= in this zone is the piece zero point laying</Summary>
             </Documentation>
@@ -1395,8 +1375,6 @@
                 <ScalarProperty Name="GenEventEnter" ColumnName="GEN_EVENT_ENTER" />
                 <ScalarProperty Name="GenEventExit" ColumnName="GEN_EVENT_EXIT" />
                 <ScalarProperty Name="ModifLast" ColumnName="MODIF_LAST" />
-                <ScalarProperty Name="MaxStress" ColumnName="MAX_STRESS" />
-                <ScalarProperty Name="MaxHeight" ColumnName="MAX_HEIGHT" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
@@ -1405,8 +1383,8 @@
               <MappingFragment StoreEntitySet="TRACK_ZONES_PIECEs">
                 <ScalarProperty Name="IdPiece" ColumnName="ID_PIECE" />
                 <ScalarProperty Name="IdZone" ColumnName="ID_ZONE" />
-                <ScalarProperty Name="IdRule" ColumnName="ID_RULE" />
                 <ScalarProperty Name="ModifLast" ColumnName="MODIF_LAST" />
+                <ScalarProperty Name="ZeroPoint" ColumnName="ZERO_POINT" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>

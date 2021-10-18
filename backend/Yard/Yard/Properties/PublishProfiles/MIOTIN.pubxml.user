@@ -4,7 +4,7 @@ https://go.microsoft.com/fwlink/?LinkID=208121.
 -->
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <PropertyGroup>
-    <_PublishTargetUrl>\\10.182.50.56\yard_l2_app\YardStructureService</_PublishTargetUrl>
+    <_PublishTargetUrl>\\10.80.117.31\c$\inetpub\YARD_L2_APP\YardStructureService</_PublishTargetUrl>
   </PropertyGroup>
   <ItemGroup>
     <File Include="bin/de/Microsoft.Data.Edm.resources.dll">
@@ -146,10 +146,10 @@ https://go.microsoft.com/fwlink/?LinkID=208121.
       <publishTime>08/13/2018 23:22:38</publishTime>
     </File>
     <File Include="bin/Yard.dll">
-      <publishTime>05/10/2021 16:21:42</publishTime>
+      <publishTime>07/20/2021 12:55:54</publishTime>
     </File>
     <File Include="bin/Yard.pdb">
-      <publishTime>05/10/2021 16:21:42</publishTime>
+      <publishTime>07/20/2021 12:55:54</publishTime>
     </File>
     <File Include="bin/zh-Hans/Microsoft.Data.Edm.resources.dll">
       <publishTime>08/13/2018 23:22:12</publishTime>
@@ -185,16 +185,16 @@ https://go.microsoft.com/fwlink/?LinkID=208121.
       <publishTime>04/08/2021 11:51:35</publishTime>
     </File>
     <File Include="Web.config">
-      <publishTime>05/10/2021 16:21:47</publishTime>
+      <publishTime>07/20/2021 12:55:54</publishTime>
     </File>
     <File Include="YardService.svc">
       <publishTime>04/08/2021 11:42:05</publishTime>
     </File>
     <File Include="YMModel.Diagram1.view">
-      <publishTime>05/04/2021 21:57:50</publishTime>
+      <publishTime>07/20/2021 12:51:53</publishTime>
     </File>
     <File Include="YMModel.edps">
-      <publishTime>05/04/2021 21:57:50</publishTime>
+      <publishTime>07/20/2021 12:51:54</publishTime>
     </File>
   </ItemGroup>
 </Project>

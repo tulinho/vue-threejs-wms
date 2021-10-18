@@ -1,14 +1,14 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <EntityDeveloper Version="6.5.823.0">
   <ModelSettings xmlns:ed="http://devart.com/schemas/EntityDeveloper/1.0" AppConnectionStringName="YMEntitiesConnectionString" ConnectionStringInAppConfig="True" RegenareteConnectionStringInAppConfig="True" TargetFramework="Net45" DetectTPTInheritance="False" EntityFrameworkVersion="Version6" IncludeForeignKeysInModel="true" DetectFunctionBasedColumnDefault="false">
-    <Connection ConnectionString="User Id=SYM;Password=SYM;Server=JSW_PROD;Persist Security Info=True" Provider="Devart.Data.Oracle" />
+    <Connection ConnectionString="User Id=CYM;Password=CYM;Server=MIOTIN_PROD;Persist Security Info=True" Provider="Devart.Data.Oracle" />
     <Generation />
     <DatabaseFirstNamingRules>
       <EntitySet PluralizationName="Pluralize" />
       <Class UseSchemaAsPrefix="False" PluralizeCollectionNavigationPropertyName="True" AddConstraintColumnsToNavigationPropertyName="False" RemoveUnderscores="True" AddUnderscores="False" RemoveInvalidCharacters="True" CodeCase="Capitalized" AddPrefix="" AddSuffix="" RemovePrefixes="" RemoveSuffixes="" PluralizationName="Unchanged" />
       <Property RemoveUnderscores="True" AddUnderscores="False" RemoveInvalidCharacters="True" CodeCase="Capitalized" AddPrefix="" AddSuffix="" RemovePrefixes="" RemoveSuffixes="" PluralizationName="Unchanged" />
     </DatabaseFirstNamingRules>
-    <ModelFirst StorageSynchronizationEnabled="False" TargetSchema="SYM" TargetProviderName="Devart.Data.Oracle">
+    <ModelFirst StorageSynchronizationEnabled="False" TargetSchema="CYM" TargetProviderName="Devart.Data.Oracle">
       <TargetServer Server="Oracle" />
       <ModelFirstNamingRules>
         <Table RemoveUnderscores="False" AddUnderscores="False" RemoveInvalidCharacters="True" CodeCase="Unchanged" AddPrefix="" AddSuffix="" RemovePrefixes="" RemoveSuffixes="" PluralizationName="Pluralize" />
@@ -67,5 +67,21 @@
       </Template>
     </Templates>
     <AttributeAssemblies />
+    <UpdateFromDatabaseExcludes>
+      <Exclude Name="ID_PIECE" Table="CYM.TRACK_COORD_PIECE" Type="Column" />
+      <Exclude Name="ID_L3" Table="CYM.TRACK_COORD_PIECE" Type="Column" />
+      <Exclude Name="POS_X" Table="CYM.TRACK_COORD_PIECE" Type="Column" />
+      <Exclude Name="POS_Y" Table="CYM.TRACK_COORD_PIECE" Type="Column" />
+      <Exclude Name="POS_Z" Table="CYM.TRACK_COORD_PIECE" Type="Column" />
+      <Exclude Name="X_ALIGNMENT" Table="CYM.TRACK_COORD_PIECE" Type="Column" />
+      <Exclude Name="Y_ALIGNMENT" Table="CYM.TRACK_COORD_PIECE" Type="Column" />
+      <Exclude Name="ROTATE_ANGLE" Table="CYM.TRACK_COORD_PIECE" Type="Column" />
+      <Exclude Name="TILT_ANGLE" Table="CYM.TRACK_COORD_PIECE" Type="Column" />
+      <Exclude Name="FLAG_OUT_OF_TRACK" Table="CYM.TRACK_COORD_PIECE" Type="Column" />
+      <Exclude Name="MODIF_LAST" Table="CYM.TRACK_COORD_PIECE" Type="Column" />
+      <Exclude Name="PK_21_TRACK_COORD_PIECE" Table="CYM.TRACK_COORD_PIECE" Type="Constraint" />
+      <Exclude Name="FK_38_TRACK_COORD_PIECE_P_PK_1" Table="CYM.TRACK_COORD_PIECE" Type="Constraint" />
+      <Exclude Name="FK_38_TRACK_COORD_PIECE_P_PK_1" Table="CYM.TRACK_COORD_PIECE" Type="Constraint" />
+    </UpdateFromDatabaseExcludes>
   </ModelSettings>
 </EntityDeveloper>
