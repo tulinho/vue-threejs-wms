@@ -20,7 +20,7 @@ namespace Yard
     {
         public static void InitializeService(DataServiceConfiguration config)
         {
-            config.SetEntitySetAccessRule("*", EntitySetRights.AllRead);
+            config.SetEntitySetAccessRule("*", EntitySetRights.All);
             config.DataServiceBehavior.MaxProtocolVersion = DataServiceProtocolVersion.V3;
             config.UseVerboseErrors = true;
         }

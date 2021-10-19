@@ -167,6 +167,11 @@ export default {
 <style>
 canvas {
   display: block;
+  cursor: grab;
+}
+
+canvas:active{
+  cursor: grabbing;
 }
 
 .yard-container {
