@@ -1,8 +1,14 @@
 import * as THREE from "three";
 
-const state = () => ({});
+const state = () => ({
+	visibleZoneTypes: []
+});
 
-const mutations = {};
+const mutations = {
+	setVisibleZoneTypes(state, payload) {
+		state.visibleZoneTypes = payload;
+	}
+};
 
 const isValidHex = (hex) => /^#([A-Fa-f0-9]{3,4}){1,2}$/.test(hex);
 
@@ -52,7 +58,7 @@ function getDefaultOptions(context) {
 		scale: scale,
 		offsetX: maxX / (scale * 2),
 		offsetY: maxY / (scale * 2),
-		transparent: false,
+		transparent: false
 	};
 	return options;
 }
@@ -63,7 +69,7 @@ function createPlaceholderForYardElement(elem, options) {
 		offsetX: 0,
 		offsetY: 0,
 		transparent: true,
-		opacity: 1,
+		opacity: 1
 	};
 	options = Object.assign({}, defaults, options);
 
@@ -77,7 +83,7 @@ function createPlaceholderForYardElement(elem, options) {
 		depthTest: false,
 		depthWrite: false,
 		color: hexToRGBA(elem.ColorBackground),
-		side: THREE.DoubleSide,
+		side: THREE.DoubleSide
 	});
 	let mesh = new THREE.Mesh(geometry, material);
 	mesh.name = `${elem.ZoneType}_${elem.Zone}`;
@@ -92,7 +98,7 @@ function createPlaceholderForYardElement(elem, options) {
 	var edges = new THREE.EdgesGeometry(mesh.geometry);
 	var edgesMaterial = new THREE.LineBasicMaterial({
 		color: hexToRGBA(elem.ColorFrame),
-		linewidth: 1,
+		linewidth: 1
 	});
 	var wireframe = new THREE.LineSegments(edges, edgesMaterial);
 	wireframe.renderOrder = 4;
@@ -106,7 +112,7 @@ function createAreaLabel(text, parameters) {
 		color: "#000000",
 		fontface: "Arial",
 		fontsize: 15,
-		backgroundColor: "#ffffff",
+		backgroundColor: "#ffffff"
 	};
 	parameters = Object.assign({}, defaults, parameters);
 	if (parameters === undefined) parameters = {};
@@ -138,7 +144,7 @@ function createSectionLabel(text, parameters) {
 		color: "#000000",
 		fontface: "Arial",
 		fontsize: 15,
-		backgroundColor: "#ffffff",
+		backgroundColor: "#ffffff"
 	};
 	parameters = Object.assign({}, defaults, parameters);
 	if (parameters === undefined) parameters = {};
@@ -181,7 +187,7 @@ function createPlaceholderForZoneElement(elem, options) {
 		offsetX: 0,
 		offsetY: 0,
 		transparent: true,
-		opacity: 1,
+		opacity: 1
 	};
 	options = Object.assign({}, defaults, options);
 
@@ -218,7 +224,7 @@ function createPlaceholderForZoneElement(elem, options) {
 		opacity: options.opacity,
 		depthTest: false,
 		depthWrite: false,
-		side: THREE.FrontSide,
+		side: THREE.FrontSide
 	});
 	let mesh = new THREE.Mesh(geometry, material);
 	mesh.name = `${elem.ZoneType}_${elem.Zone}`;
@@ -235,7 +241,7 @@ function createPlaceholderForZoneElement(elem, options) {
 	var edgesMaterial = new THREE.LineBasicMaterial({
 		color: `rgb(${rgba.r}, ${rgba.g}, ${rgba.b})`,
 		opacity: rgba.a,
-		linewidth: 5,
+		linewidth: 5
 	});
 	var wireframe = new THREE.LineSegments(edges, edgesMaterial);
 	wireframe.renderOrder = 4;
@@ -293,7 +299,7 @@ function createPlaceholderForBorderElement(elem, options) {
 		opacity: options.opacity,
 		depthTest: false,
 		depthWrite: false,
-		side: THREE.DoubleSide,
+		side: THREE.DoubleSide
 	});
 	let mesh = new THREE.Mesh(geometry, material);
 	mesh.name = `${elem.ZoneType}_${elem.Zone}`;
@@ -308,7 +314,7 @@ function createPlaceholderForBorderElement(elem, options) {
 	var edgesMaterial = new THREE.LineBasicMaterial({
 		color: `rgb(${rgba.r}, ${rgba.g}, ${rgba.b})`,
 		opacity: rgba.a,
-		linewidth: 5,
+		linewidth: 5
 	});
 	var wireframe = new THREE.LineSegments(edges, edgesMaterial);
 	wireframe.renderOrder = 4;
@@ -329,24 +335,32 @@ const actions = {
 		context.dispatch("drawSections", options);
 		//zones
 		let allZones = context.rootState.yard.zones.sort((m, n) =>
-			m.IdZone < n.IdZone ? -1 : 1
+			parseInt(m.IdZone) < parseInt(n.IdZone) ? -1 : 1
 		);
 		allZones = allZones.filter((m) => m.ZoneType != "B");
 		context.dispatch("drawZones", allZones);
 		context.dispatch("drawBorders", options);
 	},
-	drawYard(context) {
-		let options = getDefaultOptions(context);
-		context.rootState.yard.yards.forEach((yard) => {
+	drawYard({ rootState, state }) {
+		let shouldDrawYards =
+			!state.visibleZoneTypes.length ||
+			state.visibleZoneTypes.find((m) => m.id === "Y");
+		if (!shouldDrawYards) return;
+		let options = getDefaultOptions({ rootState });
+		rootState.yard.yards.forEach((yard) => {
 			let yardPlaceholder = createPlaceholderForYardElement(
 				yard,
 				options
 			);
 			yardPlaceholder.renderOrder = 1;
-			context.rootState.camera.scene.add(yardPlaceholder);
+			rootState.camera.scene.add(yardPlaceholder);
 		});
 	},
 	drawAreas(context, options) {
+		let shouldDrawAreas =
+			!context.state.visibleZoneTypes.length ||
+			context.state.visibleZoneTypes.find((m) => m.id === "A");
+		if (!shouldDrawAreas) return;
 		context.rootState.yard.areas.forEach((area) => {
 			let placeHolder = createPlaceholderForYardElement(area, options);
 			placeHolder.renderOrder = 2;
@@ -355,7 +369,7 @@ const actions = {
 			let parameters = {
 				fontsize: 14,
 				color: area.ColorForeground,
-				backgroundColor: area.ColorBackground,
+				backgroundColor: area.ColorBackground
 			};
 			let label = createAreaLabel(area.Zone, parameters);
 			label.renderOrder = 3;
@@ -363,6 +377,10 @@ const actions = {
 		});
 	},
 	drawSections(context, options) {
+		let shouldDrawSections =
+			!context.state.visibleZoneTypes.length ||
+			context.state.visibleZoneTypes.find((m) => m.id === "S");
+		if (!shouldDrawSections) return;
 		context.rootState.yard.sections.forEach((section) => {
 			let areaBackgroung = context.rootState.yard.areas.find((m) =>
 				section.Area.includes(m.Zone)
@@ -377,7 +395,7 @@ const actions = {
 				color: section.ColorForeground,
 				backgroundColor: areaBackgroung,
 				width: (section.PosXMax - section.PosXMin) / options.scale,
-				height: (section.PosYMax - section.PosYMin) / options.scale,
+				height: (section.PosYMax - section.PosYMin) / options.scale
 			};
 			let label = createSectionLabel(section.Zone, parameters);
 			label.renderOrder = 3;
@@ -385,6 +403,13 @@ const actions = {
 		});
 	},
 	drawZones(context, zones) {
+		let visibleZoneTypes = context.state.visibleZoneTypes;
+		if (visibleZoneTypes.length) {
+			zones = zones.filter((m) =>
+				visibleZoneTypes.find((n) => n.id == m.ZoneType)
+			);
+		}
+
 		let options = getDefaultOptions(context);
 		options.opacity = 1;
 		options.transparent = true;
@@ -399,6 +424,10 @@ const actions = {
 		});
 	},
 	drawBorders(context, options) {
+		let shouldDrawBorders =
+			!context.state.visibleZoneTypes.length ||
+			context.state.visibleZoneTypes.find((m) => m.id === "B");
+		if (!shouldDrawBorders) return;
 		options = options || getDefaultOptions(context);
 		options.opacity = 1;
 		options.transparent = true;
@@ -442,6 +471,9 @@ const actions = {
 		let zones = allZones.filter((obj) => obj.IdZone % 10 == level);
 		context.dispatch("drawZones", zones);
 	},
+	setVisibleZoneTypes(context, zoneTypes) {
+		context.commit("setVisibleZoneTypes", zoneTypes || []);
+	}
 };
 
 const getters = {};
@@ -451,5 +483,5 @@ export default {
 	state,
 	getters,
 	actions,
-	mutations,
+	mutations
 };
