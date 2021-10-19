@@ -9,8 +9,8 @@
       <v-container fluid>
         <router-view></router-view>
       </v-container>
-      <import-data />
-      <export-data />
+      <import-data/>
+      <export-data/>
       <yard-validation/>
     </v-main>
   </v-app>
@@ -18,15 +18,15 @@
 
 <script>
 import { mapActions } from "vuex";
+import ToolbarMenu from "./components/ToolbarMenu.vue";
 import ExportData from "./components/ExportData.vue";
 import ImportData from "./components/ImportData.vue";
-import ToolbarMenu from "./components/ToolbarMenu.vue";
 import YardValidation from './components/YardValidation.vue';
 
 const methods = mapActions("importExport", ["showImportDataDialog"]);
 
 export default {
-  components: { ImportData, ToolbarMenu, ExportData, YardValidation },
+  components: { ToolbarMenu, ImportData, ExportData, YardValidation },
   setup() {},
   methods,
 };
@@ -34,6 +34,9 @@ export default {
 
 
 <style>
+html{
+  overflow: hidden;
+}
 #app {
   font-family: Avenir, Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;

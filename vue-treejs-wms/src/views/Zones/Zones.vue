@@ -2,7 +2,7 @@
   <v-row class="mt-2">
     <v-col cols="12">
       <v-row justify="end">
-        <v-col cols="9">
+        <v-col cols="8">
           <v-text-field
             v-model="search"
             append-icon="mdi-magnify"
@@ -11,6 +11,11 @@
             hide-details
             dense
           ></v-text-field>
+        </v-col>
+        <v-col cols="1" class="text--left">
+          <v-btn icon color="primary" @click="exportZones">
+            <v-icon dark> file_upload </v-icon>
+          </v-btn>
         </v-col>
         <v-col cols="1" class="text--left">
           <v-btn icon color="primary" @click="addZonesByBatch">
@@ -41,7 +46,8 @@
           ></v-data-table>
         </v-col>
       </v-row>
-      <create-zones-by-batch/>
+      <create-zones-by-batch />
+      <save-zones-dialog />
     </v-col>
   </v-row>
 </template>
@@ -49,6 +55,7 @@
 <script>
 import { mapState, mapActions } from "vuex";
 import CreateZonesByBatch from './CreateZonesByBatch.vue';
+import SaveZonesDialog from './SaveZonesDialog.vue';
 
 const computed = mapState('yard', {
   items: (state) => state.zones
@@ -57,9 +64,9 @@ const computed = mapState('yard', {
 const methods = mapActions('yard', ['addNewZone','addZonesByBatch', 'selectZone', 'excludeZones'])
 
 export default {
-  components: { CreateZonesByBatch },
+  components: { CreateZonesByBatch, SaveZonesDialog},
   data() {
-    return {
+    return {    
       search: '',
       title: 'Section',
       searchLabel: "Search",
@@ -80,6 +87,10 @@ export default {
     },
     exclude(){
       this.excludeZones(this.selected);
+    },
+    exportZones(){
+      this.$store.dispatch("importExport/selectZonesToBeSaved", this.selected);
+      this.$store.dispatch("importExport/showSaveZonesDialog", true);
     }
   }, methods)
 };
