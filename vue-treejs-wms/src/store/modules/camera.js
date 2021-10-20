@@ -125,7 +125,7 @@ function render(context) {
 
 			INTERSECTED = intersected;
 			INTERSECTED.currentHex = INTERSECTED.material.color.getHex();
-			INTERSECTED.material.color.setHex(0x8e8e93);
+			INTERSECTED.material.color.setHex(0xd2d2d7);
 		}
 	} else {
 		if (INTERSECTED)

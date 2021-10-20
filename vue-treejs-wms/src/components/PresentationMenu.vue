@@ -97,7 +97,7 @@ const computedFromMenu = mapState("menu", {
 const computedFromYard = mapState("yard", {
 	zoneTypes: (state) => state.zoneTypes,
 });
-const computedFromDrawingYard = mapState("yard", {
+const computedFromDrawingYard = mapState("drawingYard", {
 	visZoneTypes: (state) => state.visibleZoneTypes,
 });
 
