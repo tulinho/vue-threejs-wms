@@ -55,9 +55,11 @@ function getDefaultOptions(context) {
 	let maxY = yard.PosYMax;
 	let scale = context.rootState.camera.scale;
 	let options = {
+		fontface: "Verdana",
 		scale: scale,
 		offsetX: maxX / (scale * 2),
 		offsetY: maxY / (scale * 2),
+		opacity: 1,
 		transparent: false
 	};
 	return options;
@@ -107,115 +109,19 @@ function createPlaceholderForYardElement(elem, options) {
 	return mesh;
 }
 
-function createAreaLabel(text, parameters) {
-	let defaults = {
-		color: "#000000",
-		fontface: "Arial",
-		fontsize: 15,
-		backgroundColor: "#ffffff"
-	};
-	parameters = Object.assign({}, defaults, parameters);
-	if (parameters === undefined) parameters = {};
-
-	var canvas = document.createElement("canvas");
-	var context = canvas.getContext("2d");
-
-	context.fillStyle = parameters.backgroundColor;
-	context.fillRect(0, 0, canvas.width, canvas.height);
-	context.fillStyle = parameters.color;
-	context.font = "Bold " + parameters.fontsize + "em " + parameters.fontface;
-	context.fillText(
-		text,
-		0,
-		canvas.height - parameters.fontsize,
-		canvas.width
-	);
-
-	var texture = new THREE.CanvasTexture(canvas);
-	var material = new THREE.MeshBasicMaterial({ map: texture });
-	let geometry = new THREE.BoxGeometry(72, 36, 0.001);
-	let mesh = new THREE.Mesh(geometry, material);
-
-	return mesh;
-}
-
-function createSectionLabel(text, parameters) {
-	let defaults = {
-		color: "#000000",
-		fontface: "Arial",
-		fontsize: 15,
-		backgroundColor: "#ffffff"
-	};
-	parameters = Object.assign({}, defaults, parameters);
-	if (parameters === undefined) parameters = {};
-
-	var canvas = document.createElement("canvas");
-	canvas.height = canvas.height / 2;
-	var context = canvas.getContext("2d");
-
-	context.fillStyle = parameters.backgroundColor;
-	context.fillRect(0, 0, canvas.width, canvas.height);
-
-	context.fillStyle = parameters.color;
-	context.font = parameters.fontsize + "px " + parameters.fontface;
-	let textWidth = context.measureText(text).width;
-	context.fillText(
-		text,
-		(canvas.width - textWidth) / 2,
-		(canvas.height + parameters.fontsize) / 2
-	);
-	var texture = new THREE.CanvasTexture(canvas);
-	if (parameters.width < parameters.height) {
-		texture.center = new THREE.Vector2(0.5, 0.5);
-		texture.rotation = Math.PI / 2;
-	}
-
-	var material = new THREE.MeshBasicMaterial({ map: texture });
-	let geometry = new THREE.BoxGeometry(
-		parameters.width,
-		parameters.height,
-		0.001
-	);
-	let mesh = new THREE.Mesh(geometry, material);
-
-	return mesh;
-}
-
 function createPlaceholderForZoneElement(elem, options) {
 	let defaults = {
-		scale: 100,
 		offsetX: 0,
-		offsetY: 0,
-		transparent: true,
-		opacity: 1
+		offsetY: 0
 	};
 	options = Object.assign({}, defaults, options);
 
 	let width = (elem.PosXMax - elem.PosXMin) / options.scale;
 	let height = (elem.PosYMax - elem.PosYMin) / options.scale;
+	options.width = width;
+	options.height = height;
 
-	var canvas = document.createElement("canvas");
-	canvas.height = canvas.height / 2;
-	var context = canvas.getContext("2d");
-
-	context.fillStyle = options.backgroundColor;
-	context.fillRect(0, 0, canvas.width, canvas.height);
-
-	context.fillStyle = options.color;
-	context.font = options.fontsize + "px " + options.fontface;
-
-	let text = elem.Zone;
-	let textWidth = context.measureText(text).width;
-	context.fillText(
-		text,
-		(canvas.width - textWidth) / 2,
-		(canvas.height + options.fontsize) / 2
-	);
-	var texture = new THREE.CanvasTexture(canvas);
-	if (width * 2 < height) {
-		texture.center = new THREE.Vector2(0.5, 0.5);
-		texture.rotation = Math.PI / 2;
-	}
+	const texture = getLabelCanvasTexture({ elem, options });
 
 	let geometry = new THREE.PlaneGeometry(width, height);
 	let material = new THREE.MeshBasicMaterial({
@@ -248,6 +154,35 @@ function createPlaceholderForZoneElement(elem, options) {
 	mesh.add(wireframe);
 
 	return mesh;
+}
+
+function getLabelCanvasTexture({ elem, options }) {
+	var canvas = document.createElement("canvas");
+	canvas.height = canvas.height / 2;
+	var canvasContext = canvas.getContext("2d");
+
+	canvasContext.fillStyle = options.backgroundColor;
+	canvasContext.fillRect(0, 0, canvas.width, canvas.height);
+
+	canvasContext.fillStyle = elem.ColorForeground;
+	canvasContext.font = options.fontsize + "pt " + options.fontface;
+
+	let text = elem.Zone;
+	let textWidth = canvasContext.measureText(text).width;
+	let maxWidth = canvas.width * 0.5;
+	textWidth = Math.min(textWidth, maxWidth);
+	canvasContext.fillText(
+		text,
+		(canvas.width - textWidth) / 2,
+		(canvas.height + options.fontsize) / 2,
+		canvas.width * 0.5
+	);
+	var texture = new THREE.CanvasTexture(canvas);
+	if ((options.width * 3) / 2 < options.height) {
+		texture.center = new THREE.Vector2(0.5, 0.5);
+		texture.rotation = Math.PI / 2;
+	}
+	return texture;
 }
 
 function createPlaceholderForBorderElement(elem, options) {
@@ -334,10 +269,7 @@ const actions = {
 		options.transparent = true;
 		context.dispatch("drawSections", options);
 		//zones
-		let allZones = context.rootState.yard.zones.sort((m, n) =>
-			parseInt(m.IdZone) < parseInt(n.IdZone) ? -1 : 1
-		);
-		allZones = allZones.filter((m) => m.ZoneType != "B");
+		let allZones = context.rootState.yard.zones;
 		context.dispatch("drawZones", allZones);
 		context.dispatch("drawBorders", options);
 	},
@@ -361,19 +293,13 @@ const actions = {
 			!context.state.visibleZoneTypes.length ||
 			context.state.visibleZoneTypes.find((m) => m.id === "A");
 		if (!shouldDrawAreas) return;
+
+		options.fontsize = 20;
 		context.rootState.yard.areas.forEach((area) => {
-			let placeHolder = createPlaceholderForYardElement(area, options);
+			options.backgroundColor = area.ColorBackground;
+			let placeHolder = createPlaceholderForZoneElement(area, options);
 			placeHolder.renderOrder = 2;
 			context.rootState.camera.scene.add(placeHolder);
-
-			let parameters = {
-				fontsize: 14,
-				color: area.ColorForeground,
-				backgroundColor: area.ColorBackground
-			};
-			let label = createAreaLabel(area.Zone, parameters);
-			label.renderOrder = 3;
-			placeHolder.add(label);
 		});
 	},
 	drawSections(context, options) {
@@ -381,25 +307,18 @@ const actions = {
 			!context.state.visibleZoneTypes.length ||
 			context.state.visibleZoneTypes.find((m) => m.id === "S");
 		if (!shouldDrawSections) return;
+
+		options.opacity = 0.95;
+		options.transparent = true;
+		options.fontsize = 16;
 		context.rootState.yard.sections.forEach((section) => {
 			let areaBackgroung = context.rootState.yard.areas.find((m) =>
 				section.Area.includes(m.Zone)
 			).ColorBackground;
-			let placeHolder = createPlaceholderForYardElement(section, options);
+			options.backgroundColor = areaBackgroung;
+			let placeHolder = createPlaceholderForZoneElement(section, options);
 			placeHolder.renderOrder = 3;
 			context.rootState.camera.scene.add(placeHolder);
-
-			let fontSize = 30;
-			let parameters = {
-				fontsize: fontSize,
-				color: section.ColorForeground,
-				backgroundColor: areaBackgroung,
-				width: (section.PosXMax - section.PosXMin) / options.scale,
-				height: (section.PosYMax - section.PosYMin) / options.scale
-			};
-			let label = createSectionLabel(section.Zone, parameters);
-			label.renderOrder = 3;
-			placeHolder.add(label);
 		});
 	},
 	drawZones(context, zones) {
@@ -410,16 +329,20 @@ const actions = {
 			);
 		}
 
+		let allZones = zones.sort((m, n) =>
+			parseInt(m.IdZone) < parseInt(n.IdZone) ? -1 : 1
+		);
+		allZones = allZones.filter((m) => m.ZoneType != "B");
+
 		let options = getDefaultOptions(context);
 		options.opacity = 1;
 		options.transparent = true;
-		zones.forEach((zone) => {
-			options.fontsize = 40;
-			options.fontface = "Verdana";
-			options.color = zone.ColorForeground;
+		options.fontsize = 40;
+		let renderOrder = 4;
+		allZones.forEach((zone) => {
 			options.backgroundColor = zone.ColorBackground;
 			let placeHolder = createPlaceholderForZoneElement(zone, options);
-			placeHolder.renderOrder = 4;
+			placeHolder.renderOrder = renderOrder++;
 			context.rootState.camera.scene.add(placeHolder);
 		});
 	},
