@@ -1,7 +1,7 @@
 self.__precacheManifest = (self.__precacheManifest || []).concat([
   {
-    "revision": "3004c0f8f45a742926eb",
-    "url": "/vue-threejs-wms/target/css/app.2ab15dd6.css"
+    "revision": "aa938479ff61be3b3aed",
+    "url": "/vue-threejs-wms/target/css/app.e1d57d44.css"
   },
   {
     "revision": "1873d448c503b4ade5cf",
@@ -28,7 +28,7 @@ self.__precacheManifest = (self.__precacheManifest || []).concat([
     "url": "/vue-threejs-wms/target/img/logo.82b9c7a5.png"
   },
   {
-    "revision": "ec76bfc6978bb1c676ac15269bdad741",
+    "revision": "710ec91cfa59da2237932b3fc40b2570",
     "url": "/vue-threejs-wms/target/index.html"
   },
   {
@@ -36,8 +36,8 @@ self.__precacheManifest = (self.__precacheManifest || []).concat([
     "url": "/vue-threejs-wms/target/js/about.df48b54a.js"
   },
   {
-    "revision": "3004c0f8f45a742926eb",
-    "url": "/vue-threejs-wms/target/js/app.9b76a3c3.js"
+    "revision": "aa938479ff61be3b3aed",
+    "url": "/vue-threejs-wms/target/js/app.ca10a3a1.js"
   },
   {
     "revision": "1873d448c503b4ade5cf",
