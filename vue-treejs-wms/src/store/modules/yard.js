@@ -9,27 +9,27 @@ const state = () => ({
 		{ id: "D", name: "Device" },
 		{ id: "V", name: "Virtual" },
 		{ id: "B", name: "Borders" },
-		{ id: "P", name: "Production" },
+		{ id: "P", name: "Production" }
 	],
 	rotateAngleTypes: [
 		{ id: 0, name: "0 degrees" },
 		{ id: 1, name: "90 degrees" },
 		{ id: 2, name: "180 degrees" },
-		{ id: 3, name: "270 degrees" },
+		{ id: 3, name: "270 degrees" }
 	],
 	tiltAngleTypes: [
 		{ id: 0, name: "0 degrees" },
-		{ id: 1, name: "90 degrees" },
+		{ id: 1, name: "90 degrees" }
 	],
 	xAlignmentTypes: [
 		{ id: 0, name: "downstream" },
 		{ id: 1, name: "upstream" },
-		{ id: 2, name: "center" },
+		{ id: 2, name: "center" }
 	],
 	yAlignmentTypes: [
 		{ id: 0, name: "downstream" },
 		{ id: 1, name: "upstream" },
-		{ id: 2, name: "center" },
+		{ id: 2, name: "center" }
 	],
 	showYardEdition: false,
 	editingYard: {},
@@ -49,7 +49,7 @@ const state = () => ({
 	areas: [],
 	sections: [],
 	zones: [],
-	borders: [],
+	borders: []
 });
 
 const mutations = {
@@ -109,7 +109,7 @@ const mutations = {
 	},
 	setEditingZoneModel(state, payload) {
 		state.editingZoneModel = payload;
-	},
+	}
 };
 
 function initializeYardStructure(context, module) {
@@ -378,7 +378,7 @@ const actions = {
 		if (!selectedZone) return;
 		context.commit("setSelectedZone", selectedZone);
 		context.dispatch("editZone");
-	},
+	}
 };
 
 const getters = {};
@@ -388,5 +388,5 @@ export default {
 	state,
 	getters,
 	actions,
-	mutations,
+	mutations
 };
